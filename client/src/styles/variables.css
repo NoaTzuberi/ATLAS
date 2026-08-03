@@ -1,0 +1,77 @@
+:root {
+  /* Colors — Core Palette */
+  --color-navy-950: #0b1929;
+  --color-navy-900: #0f2133;
+  --color-navy-800: #142a3d;
+
+  --color-orange-500: #ff7a1a;
+  --color-orange-hover: #ff9645;
+  --color-orange-active: #e56a0f;
+
+  /* Supporting accent only — achievements, highlights, premium moments.
+     Do not use for primary buttons or main CTAs. */
+  --color-amber-500: #d9a24c;
+  --color-amber-soft: rgba(217, 162, 76, 0.16);
+
+  --color-neutral-100: #f5f6f8;
+  --color-neutral-300: #c7cdd6;
+  --color-neutral-500: #8a93a3;
+
+  --color-border: rgba(245, 246, 248, 0.12);
+  --color-border-strong: rgba(245, 246, 248, 0.24);
+
+  /* Semantic backgrounds — components should use these, not raw navy values */
+  --background-primary: var(--color-navy-950);
+  --background-secondary: var(--color-navy-900);
+
+  /* Glass Surfaces */
+  --surface-glass-bg: rgba(255, 255, 255, 0.06);
+  --surface-glass-bg-strong: rgba(255, 255, 255, 0.1);
+  --surface-glass-blur: 16px;
+  --surface-glass-border: rgba(255, 255, 255, 0.14);
+
+  /* Spacing (8px base scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 96px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(3, 8, 15, 0.35);
+  --shadow-md: 0 8px 24px rgba(3, 8, 15, 0.45);
+  --shadow-lg: 0 16px 48px rgba(3, 8, 15, 0.55);
+  --shadow-xl: 0 24px 64px rgba(3, 8, 15, 0.65);
+
+  /* Typography */
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+
+  --font-size-xs: 13px;
+  --font-size-sm: 15px;
+  --font-size-base: 17px;
+  --font-size-lg: 20px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 36px;
+  --font-size-3xl: 48px;
+  --font-size-4xl: 64px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --letter-spacing-normal: 0;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-tighter: -0.03em;
+
+  --line-height-tight: 1.15;
+  --line-height-base: 1.5;
+}
