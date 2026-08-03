@@ -29,10 +29,11 @@ Before implementing any feature, read the relevant documentation.
 
 Main documents:
 
-/docs/01_PRODUCT_REQUIREMENTS.md
+/docs/01_PRD.md
+/docs/02_PRODUCT_SPECIFICATION.md
 /docs/03_TECHNICAL_ARCHITECTURE.md
 /docs/04_DATABASE_SCHEMA.md
-/docs/05_AI_AGENT_SPECIFICATION.md
+/docs/05_AI_AGENT_SPEC.md
 /docs/06_RAG_KNOWLEDGE_PLAN.md
 /docs/07_DEVELOPMENT_ROADMAP.md
 /docs/08_TASK_BACKLOG.md
@@ -58,23 +59,25 @@ Development order:
 
 Foundation
 ↓
-Architecture
+Frontend Architecture
 ↓
 Authentication
 ↓
-User Profile
+Onboarding + Personalization
 ↓
-Exercise System
+Exercise Library
 ↓
 Workout System
 ↓
-Progress
+Workout Execution Mode
 ↓
-AI Coach
+Progress Tracking
 ↓
-RAG
+AI Coach + RAG
 ↓
 Premium Experience
+↓
+Deployment
 
 ⸻
 
