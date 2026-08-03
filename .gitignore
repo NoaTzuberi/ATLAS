@@ -1,0 +1,19 @@
+# Environment variables (global safety net — client/ and server/ also ignore their own)
+.env
+.env.local
+.env.*.local
+
+# Dependencies (global safety net)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Logs
+*.log
