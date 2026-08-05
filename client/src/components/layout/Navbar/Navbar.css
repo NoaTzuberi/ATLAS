@@ -1,0 +1,35 @@
+.navbar {
+  width: 100%;
+  background-color: var(--surface-glass-bg);
+  border-bottom: 1px solid var(--surface-glass-border);
+  backdrop-filter: blur(var(--surface-glass-blur));
+  -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+}
+
+.navbar-inner {
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+}
+
+.navbar-logo {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-100);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.navbar-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-300);
+}

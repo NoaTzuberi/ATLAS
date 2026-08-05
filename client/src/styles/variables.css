@@ -13,6 +13,9 @@
   --color-amber-500: #d9a24c;
   --color-amber-soft: rgba(217, 162, 76, 0.16);
 
+  --color-error-500: #e85d5d;
+  --color-error-soft: rgba(232, 93, 93, 0.16);
+
   --color-neutral-100: #f5f6f8;
   --color-neutral-300: #c7cdd6;
   --color-neutral-500: #8a93a3;
@@ -44,6 +47,12 @@
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 24px;
+
+  /* Layout */
+  --container-max-width: 1200px;
+
+  /* Opacity */
+  --opacity-disabled: 0.5;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(3, 8, 15, 0.35);
