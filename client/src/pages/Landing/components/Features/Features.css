@@ -1,0 +1,20 @@
+.features {
+  background-color: var(--background-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.features-grid .glass-card {
+  transition:
+    transform var(--transition-base) var(--ease-standard),
+    box-shadow var(--transition-base) var(--ease-standard);
+}
+
+.features-grid .glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}

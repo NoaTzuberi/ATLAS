@@ -1,0 +1,31 @@
+.protected-route-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-gate-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: var(--z-modal);
+  pointer-events: none;
+}
+
+.auth-gate-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.auth-gate-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}

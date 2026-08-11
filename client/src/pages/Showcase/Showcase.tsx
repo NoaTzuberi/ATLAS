@@ -1,9 +1,11 @@
-import { Navbar } from '../../components/layout/Navbar/Navbar';
+import { useState } from 'react';
+import { PageLayout } from '../../components/layout/PageLayout/PageLayout';
 import { Container } from '../../components/layout/Container/Container';
 import { Section } from '../../components/layout/Section/Section';
 import { GlassCard } from '../../components/common/GlassCard/GlassCard';
 import { Button } from '../../components/common/Button/Button';
 import { Badge } from '../../components/common/Badge/Badge';
+import { Modal } from '../../components/common/Modal/Modal';
 import './Showcase.css';
 
 /**
@@ -12,9 +14,10 @@ import './Showcase.css';
  * render correctly together before real page work begins.
  */
 export function Showcase() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Container>
         <Section>
           <h1>Heading 1</h1>
@@ -50,7 +53,23 @@ export function Showcase() {
             </Button>
           </div>
         </Section>
+
+        <Section>
+          <Button variant="secondary" onClick={() => setIsModalOpen(true)}>
+            Open Modal
+          </Button>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Modal example"
+          >
+            <p className="text-body">
+              This modal uses the glass surface tokens and closes on backdrop
+              click or Escape.
+            </p>
+          </Modal>
+        </Section>
       </Container>
-    </>
+    </PageLayout>
   );
 }

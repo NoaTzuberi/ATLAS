@@ -51,6 +51,10 @@
   /* Layout */
   --container-max-width: 1200px;
 
+  /* Z-Index */
+  --z-modal-backdrop: 1000;
+  --z-modal: 1001;
+
   /* Opacity */
   --opacity-disabled: 0.5;
 
@@ -61,7 +65,8 @@
   --shadow-xl: 0 24px 64px rgba(3, 8, 15, 0.65);
 
   /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  --font-display: "Cabinet Grotesk", sans-serif;
+  --font-body: "Satoshi", sans-serif;
 
   --font-size-xs: 13px;
   --font-size-sm: 15px;
