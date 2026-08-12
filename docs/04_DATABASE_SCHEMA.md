@@ -127,42 +127,25 @@ profile: {
 age: Number,
 height: Number,
 weight: Number,
-experienceLevel:
-"beginner | intermediate | advanced",
-goals: [
-"muscle_gain",
-"weight_loss",
-"strength",
-"endurance",
-"health"
-],
-preferredActivities: [
-"gym",
-"running",
-"surf",
-"skate",
-"boxing"
-],
+gender:
+"male | female | other",
+goals: [String],
 trainingFrequency: {
 minDays: Number,
 maxDays: Number,
 flexibleSchedule: Boolean
 },
-equipment: [
-"full_gym",
-"home",
-"dumbbells",
-"bodyweight"
-],
-injuries: [
-{
-area: String,
+preferredActivities: [String],
+exercisePreferences: {
+favoriteExerciseNotes: String,
+improvementExerciseNotes: String,
+muscleFocus: [String]
+},
+equipment: [String],
+recovery: {
+flags: [String],
 notes: String
 }
-],
-favoriteExercises: [
-ObjectId
-]
 },
 preferences:{
 units:{
@@ -173,9 +156,20 @@ distance:
 },
 notifications:Boolean
 },
+onboardingCompleted:Boolean,
 createdAt:Date,
 updatedAt:Date
 }
+
+⸻
+
+Note on option IDs
+
+Stable IDs for goals, preferredActivities, equipment, exercisePreferences.muscleFocus, recovery.flags, and gender are defined in server/src/features/users/users.constants.ts (mirrored for UI labels in client/src/features/onboarding/data/). This document intentionally does not duplicate that list — check the constants file for the current authoritative set.
+
+Superseded fields
+
+experienceLevel, injuries, and favoriteExercises (ObjectId refs) described in earlier drafts of this document were not implemented during Phase 3. Recovery and exercise history are currently captured as free-text notes plus a fixed set of recovery flags instead — see docs/Onboarding.txt for the onboarding flow these fields come from. favoriteExercises as ObjectId references to a real Exercise collection remains a candidate for Phase 4, once the Exercise Library exists to reference.
 
 ⸻
 
