@@ -1,0 +1,136 @@
+ATLAS Onboarding — Complete Card Flow
+Use one card/screen at a time with a progress indicator, Back button, and Continue button. Multiple-choice cards allow multiple selections.
+0. Welcome
+Build a profile that moves with you.
+ATLAS uses your answers to adapt training, activities, and guidance around your real life.
+Button: Start
+1. Basic profile
+Let’s start with you.
+Name — required
+Age — required
+Height — required
+Weight — required
+Gender — optional
+Preferred units:kg / lb
+km / miles
+
+Button: Continue
+2. Goals
+What are you working toward?
+Choose all that apply.
+💪 Build muscle
+🏋️ Increase strength
+⚖️ Lose weight
+🏃 Improve endurance
+❤️ Improve health
+✨ Maintain an active lifestyle
+🤸 Move better
+3. Training frequency
+How often would you like to train?
+Minimum days per week: 1–7
+Maximum days per week: 1–7
+Toggle:
+My schedule changes week to week
+Supporting note:
+ATLAS can adapt recommendations when your available time changes.
+
+4. Activities
+What activities are part of your life?
+Choose all that apply.
+Strength & training
+🏋️ Gym / Strength Training
+🤸 Calisthenics
+🏃 Functional Training
+🏋️ CrossFit
+Cardio & endurance
+🏃 Running
+🚴 Cycling
+🏊 Swimming
+🚣 Rowing
+🥾 Hiking
+🪢 Jump Rope
+Mind, mobility & recovery
+🧘 Yoga
+🤸 Pilates
+🧎 Mobility
+💃 Dance
+Combat sports
+🥊 Boxing
+🥋 Martial Arts
+🤼 Brazilian Jiu-Jitsu
+🥊 Muay Thai
+Outdoor & board sports
+🏄 Surfing
+🛹 Skateboarding
+🧗 Climbing
+⛷️ Skiing
+🏂 Snowboarding
+Team & racquet sports
+⚽ Football / Soccer
+🏀 Basketball
+🎾 Tennis
+🏐 Volleyball
+🏓 Table Tennis
+🏸 Badminton
+🏉 Rugby
+Other
+✨ Other activity
+For the actual UI, present these as selectable cards/chips grouped by category—not all as one long unstructured list.
+5. Exercise preferences
+What would you like ATLAS to prioritize?
+All answers are optional.
+Exercises you enjoy
+Selectable exercise cards or searchable selection.
+Exercises you want to improve
+Selectable exercise cards or searchable selection.
+Muscle groups you want to focus on
+Chest
+Back
+Shoulders
+Arms
+Core
+Glutes
+Legs
+Full body
+Button: Continue
+Secondary option: Skip for now
+6. Recovery and limitations
+Anything ATLAS should consider?
+Optional.
+I’m returning after time away
+I prefer low-impact training
+I have an injury or limitation
+I have mobility restrictions
+Nothing to add
+If the user selects an injury/limitation, reveal:
+Tell us anything helpful for adapting your training.
+Optional text field.
+Supporting note:
+ATLAS can adapt training suggestions, but it does not diagnose medical conditions.
+
+7. Equipment
+What equipment can you use?
+Choose all that apply.
+🏋️ Full gym
+[Gym icon]
+🏠 Home equipment
+[Home gym icon]
+🏋️ Dumbbells
+[Dumbbell icon]
+🏋️ Barbell and plates
+[Barbell icon]
+🧵 Resistance bands
+[Resistance band icon]
+🪑 Bench
+[Bench icon]
+🏃 Cardio machines
+[Cardio machine icon]
+🤸 Bodyweight only
+[Bodyweight icon]
+🚫 No equipment
+[No equipment icon]
+The emoji can make early cards feel alive; later, replace them with one consistent ATLAS line-icon system.
+8. Profile ready
+Your ATLAS profile is ready.
+ATLAS will use your goals, schedule, activities, preferences, and equipment to build a more relevant training experience.
+Button: Create my profile

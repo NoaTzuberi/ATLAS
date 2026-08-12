@@ -8,6 +8,7 @@ import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute/Pr
 import { DashboardPage } from '../../features/dashboard/pages/DashboardPage/DashboardPage';
 import { ProfilePage } from '../../features/profile/pages/ProfilePage/ProfilePage';
 import { WorkoutsPage } from '../../features/workouts/pages/WorkoutsPage/WorkoutsPage';
+import { OnboardingPage } from '../../features/onboarding/pages/OnboardingPage/OnboardingPage';
 
 export function AppRouter() {
   return (
@@ -21,6 +22,7 @@ export function AppRouter() {
         <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         <Route path={ROUTES.WORKOUTS} element={<WorkoutsPage />} />
+        <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
       </Route>
     </Routes>
   );

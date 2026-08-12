@@ -7,4 +7,5 @@ export const ROUTES = {
   PROFILE: '/profile',
   SETTINGS: '/settings',
   WORKOUTS: '/workouts',
+  ONBOARDING: '/onboarding',
 } as const;

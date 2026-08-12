@@ -1,0 +1,80 @@
+import { User } from './user.model';
+
+interface OnboardingProfilePayload {
+  name?: string;
+  age: number;
+  height: number;
+  weight: number;
+  gender?: string;
+  units: {
+    weight: 'kg' | 'lb';
+    distance: 'km' | 'miles';
+  };
+  goals: string[];
+  trainingFrequency: {
+    minDays: number;
+    maxDays: number;
+    flexibleSchedule: boolean;
+  };
+  preferredActivities: string[];
+  exercisePreferences?: {
+    favoriteExerciseNotes?: string;
+    improvementExerciseNotes?: string;
+    muscleFocus?: string[];
+  };
+  equipment: string[];
+  recovery?: {
+    flags?: string[];
+    notes?: string;
+  };
+}
+
+export class UserNotFoundError extends Error {}
+
+export async function updateUserProfile(userId: string, payload: OnboardingProfilePayload) {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new UserNotFoundError('User not found.');
+  }
+
+  if (payload.name) {
+    user.name = payload.name;
+  }
+
+  user.profile = {
+    age: payload.age,
+    height: payload.height,
+    weight: payload.weight,
+    gender: payload.gender,
+    goals: payload.goals,
+    trainingFrequency: payload.trainingFrequency,
+    preferredActivities: payload.preferredActivities,
+    exercisePreferences: {
+      favoriteExerciseNotes: payload.exercisePreferences?.favoriteExerciseNotes,
+      improvementExerciseNotes: payload.exercisePreferences?.improvementExerciseNotes,
+      muscleFocus: payload.exercisePreferences?.muscleFocus ?? [],
+    },
+    equipment: payload.equipment,
+    recovery: {
+      flags: payload.recovery?.flags ?? [],
+      notes: payload.recovery?.notes,
+    },
+  };
+
+  user.preferences = {
+    units: payload.units,
+  };
+
+  user.onboardingCompleted = true;
+
+  await user.save();
+
+  return {
+    id: String(user._id),
+    name: user.name,
+    email: user.email,
+    onboardingCompleted: user.onboardingCompleted,
+    profile: user.profile,
+    preferences: user.preferences,
+  };
+}

@@ -1,0 +1,26 @@
+.step-video-background {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.88) 58%, rgba(255, 122, 26, 0.2) 100%),
+    var(--background-secondary);
+}
+
+.step-video-background-media {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.step-video-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(18, 22, 29, 0.82) 0%, rgba(22, 30, 39, 0.72) 55%, rgba(255, 122, 26, 0.16) 100%);
+}

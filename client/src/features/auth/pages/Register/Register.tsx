@@ -40,7 +40,7 @@ export function Register() {
     setIsSubmitting(true);
     try {
       await register({ name, email, password });
-      navigate(ROUTES.HOME);
+      navigate(ROUTES.ONBOARDING);
     } catch (error) {
       setFormError(
         error instanceof Error ? error.message : 'Registration failed. Please try again.',

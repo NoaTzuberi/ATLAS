@@ -17,3 +17,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Large onboarding stock footage — not committed yet; pending an LFS/CDN decision
+client/src/assets/onBoardingvid/
