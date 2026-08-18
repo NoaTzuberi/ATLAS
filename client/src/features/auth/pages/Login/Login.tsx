@@ -36,7 +36,7 @@ export function Login() {
     setIsSubmitting(true);
     try {
       await login({ email, password });
-      navigate(ROUTES.HOME);
+      navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setFormError(error instanceof Error ? error.message : 'Login failed. Please try again.');
     } finally {

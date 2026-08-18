@@ -64,7 +64,7 @@ function isStepValid(index: number, state: OnboardingFormState): boolean {
 
 export function OnboardingPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [stepIndex, setStepIndex] = useState(0);
   const [formState, setFormState] = useState<OnboardingFormState>(() => ({
     ...INITIAL_ONBOARDING_STATE,
@@ -90,7 +90,8 @@ export function OnboardingPage() {
       setSubmitError(undefined);
       setIsSubmitting(true);
       try {
-        await saveOnboardingProfile(formState);
+        const { user: savedUser } = await saveOnboardingProfile(formState);
+        updateUser({ name: savedUser.name, onboardingCompleted: savedUser.onboardingCompleted });
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
         setSubmitError(

@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../../services/auth/AuthContext';
 import { ROUTES } from '../../../../app/config/routes';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
@@ -6,7 +6,8 @@ import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
 import './ProtectedRoute.css';
 
 export function ProtectedRoute() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -14,6 +15,18 @@ export function ProtectedRoute() {
         <Spinner size="lg" />
       </div>
     );
+  }
+
+  if (isAuthenticated && user) {
+    const isOnboardingRoute = location.pathname === ROUTES.ONBOARDING;
+
+    if (!user.onboardingCompleted && !isOnboardingRoute) {
+      return <Navigate to={ROUTES.ONBOARDING} replace />;
+    }
+
+    if (user.onboardingCompleted && isOnboardingRoute) {
+      return <Navigate to={ROUTES.DASHBOARD} replace />;
+    }
   }
 
   return (

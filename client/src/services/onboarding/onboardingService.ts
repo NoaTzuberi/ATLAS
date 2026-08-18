@@ -30,7 +30,20 @@ interface OnboardingProfilePayload {
   };
 }
 
-export async function saveOnboardingProfile(formState: OnboardingFormState) {
+interface OnboardingProfileResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    onboardingCompleted: boolean;
+    profile: unknown;
+    preferences: unknown;
+  };
+}
+
+export async function saveOnboardingProfile(
+  formState: OnboardingFormState,
+): Promise<OnboardingProfileResponse> {
   const payload: OnboardingProfilePayload = {
     name: formState.name.trim() || undefined,
     age: Number(formState.age),
@@ -54,6 +67,6 @@ export async function saveOnboardingProfile(formState: OnboardingFormState) {
     },
   };
 
-  const { data } = await apiClient.put('/users/profile', payload);
+  const { data } = await apiClient.put<OnboardingProfileResponse>('/users/profile', payload);
   return data;
 }

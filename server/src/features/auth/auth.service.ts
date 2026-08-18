@@ -19,6 +19,7 @@ function toPublicUser(user: UserDocument & { _id: unknown }) {
     id: String(user._id),
     name: user.name,
     email: user.email,
+    onboardingCompleted: user.onboardingCompleted,
     createdAt: user.createdAt,
   };
 }
