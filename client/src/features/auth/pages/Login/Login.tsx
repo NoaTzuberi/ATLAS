@@ -46,13 +46,14 @@ export function Login() {
 
   return (
     <PageLayout>
-      <Section>
+      <Section className="auth-page">
         <Container>
           <AuthCard title="Log In">
             <form className="auth-form" onSubmit={handleSubmit} noValidate>
               <Input
                 type="email"
                 label="Email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 error={emailError}
@@ -61,6 +62,7 @@ export function Login() {
               <Input
                 type="password"
                 label="Password"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 error={passwordError}

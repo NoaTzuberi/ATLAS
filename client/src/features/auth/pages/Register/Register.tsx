@@ -52,13 +52,14 @@ export function Register() {
 
   return (
     <PageLayout>
-      <Section>
+      <Section className="auth-page">
         <Container>
           <AuthCard title="Create Account">
             <form className="auth-form" onSubmit={handleSubmit} noValidate>
               <Input
                 type="text"
                 label="Name"
+                placeholder="Your full name"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 error={nameError}
@@ -67,6 +68,7 @@ export function Register() {
               <Input
                 type="email"
                 label="Email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 error={emailError}
@@ -75,6 +77,7 @@ export function Register() {
               <Input
                 type="password"
                 label="Password"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 error={passwordError}

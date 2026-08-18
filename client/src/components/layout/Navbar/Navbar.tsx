@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../app/config/routes';
 import { useAuth } from '../../../services/auth/AuthContext';
+import atlasLogo from '../../../assets/Logo/ATLASlogo3.jpg';
 import './Navbar.css';
 
 export function Navbar() {
@@ -15,8 +16,9 @@ export function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-inner">
-        <Link to={ROUTES.HOME} className="navbar-logo">
-          ATLAS
+        <Link to={ROUTES.HOME} className="navbar-brand">
+          <img className="navbar-logo" src={atlasLogo} alt="ATLAS Logo" />
+          <span className="navbar-logoName">ATLAS</span>
         </Link>
         <nav className="navbar-links">
           <Link to={ROUTES.HOME} className="navbar-link">
