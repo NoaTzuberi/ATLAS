@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import atlasLogo from '../../../../assets/Logo/ATLASlogo3.jpg';
+import atlasLogo from '../../../../assets/Logo/ATLASlogo3.png';
 import './AuthCard.css';
 
 interface AuthCardProps {

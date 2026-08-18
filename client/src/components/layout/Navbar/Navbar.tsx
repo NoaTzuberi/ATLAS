@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../app/config/routes';
 import { useAuth } from '../../../services/auth/AuthContext';
-import atlasLogo from '../../../assets/Logo/ATLASlogo3.jpg';
+import atlasLogo from '../../../assets/Logo/ATLASlogo3.png';
 import './Navbar.css';
 
 export function Navbar() {
@@ -45,7 +45,7 @@ export function Navbar() {
           ) : (
             <>
               <Link to={ROUTES.LOGIN} className="btn btn-ghost">
-                <span className="btn-label">Sign In</span>
+                <span className="btn-label">Log In</span>
               </Link>
               <Link to={ROUTES.REGISTER} className="btn btn-primary">
                 <span className="btn-label">Sign Up</span>
