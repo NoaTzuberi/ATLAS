@@ -6,7 +6,9 @@
     "dev": "nodemon --watch src --ext ts --exec tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "import:exercises": "tsx src/features/exercises/scripts/importExercises.ts",
+    "import:repdb": "tsx src/features/exercises/scripts/importRepDbPreview.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
+    "csv-parse": "^7.0.2",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
@@ -26,8 +29,10 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.2",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
     "tsx": "^4.23.12",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
   }
 }

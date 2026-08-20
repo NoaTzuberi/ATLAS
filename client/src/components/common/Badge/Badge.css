@@ -5,10 +5,9 @@
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
+  text-transform: capitalize;
 }
 
 .badge-default {
@@ -18,11 +17,13 @@
 }
 
 .badge-accent {
-  background-color: var(--color-orange-500);
-  color: var(--color-navy-950);
+  background-color: var(--color-orange-soft);
+  border: 1px solid transparent;
+  color: var(--color-orange-hover);
 }
 
 .badge-achievement {
   background-color: var(--color-amber-soft);
+  border: 1px solid transparent;
   color: var(--color-amber-500);
 }

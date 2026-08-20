@@ -193,23 +193,18 @@ Schema:
 
 {
 _id:ObjectId,
+slug:String,
 name:String,
+aliases:[String],
 category:[
-"push",
-"pull",
-"legs",
-"core"
+"upper_body",
+"back",
+"core",
+"lower_body"
 ],
-muscleGroups:[
-"chest",
-"shoulders",
-"triceps"
-],
-equipment:[
-"barbell",
-"dumbbell",
-"machine"
-],
+primaryMuscles:[String],
+secondaryMuscles:[String],
+equipment:[String],
 difficulty:
 "beginner | intermediate | advanced",
 movementType:
@@ -221,22 +216,56 @@ breathing:String
 },
 commonMistakes:[String],
 tips:[String],
-progressions:[
-ObjectId
-],
-regressions:[
-ObjectId
-],
-variations:[
-ObjectId
-],
+progressions:[ObjectId],
+regressions:[ObjectId],
+variations:[ObjectId],
+alternatives:[ObjectId],
 media:{
 image:String,
 gif:String,
-video:String
+video:String,
+gallery:[
+{ style: "flat | classic | classic_white", variant: "start | peak | main", url: String }
+],
+animationUrl:String
 },
-createdAt:Date
+source:{
+provider:String,
+dataset:String,
+originalTitle:String,
+importedAt:Date,
+license:String,
+sourceUrl:String,
+raw:Mixed
+},
+reviewStatus:
+"imported | reviewed | published | rejected",
+isActive:Boolean,
+contentTier:
+"standard | enhanced",
+goals:[String],
+mechanic:
+"compound | isolation",
+forceType:
+"push | pull | static | dynamic",
+isUnilateral:Boolean,
+createdAt:Date,
+updatedAt:Date
 }
+
+⸻
+
+Note on option IDs
+
+Stable IDs for category, primaryMuscles/secondaryMuscles, equipment, goals, mechanic, forceType, difficulty, movementType, reviewStatus, and contentTier are defined in server/src/features/exercises/exercise.constants.ts. This document intentionally does not duplicate that list — check the constants file for the current authoritative set.
+
+Two data sources, one collection
+
+~2,889 exercises come from the Kaggle "Gym Exercise Data" import (contentTier: "standard"); 16 come from the RepDB preview pack (contentTier: "enhanced" — richer structured data, goals/mechanic/forceType/isUnilateral populated, real images/animations). See docs/THIRD_PARTY_CONTENT.md for attribution and licensing on both sources — the RepDB pack is CC BY-NC 4.0, non-commercial use only. goals, mechanic, forceType, and isUnilateral are only populated for the enhanced subset today; they're optional fields, not required, for exactly that reason.
+
+Superseded fields
+
+muscleGroups (flat, undifferentiated) was replaced by primaryMuscles/secondaryMuscles for filtering precision — same reasoning as the original push/pull/legs/core → upper_body/back/core/lower_body category change. media.image/gif/video are unchanged and still populated for both tiers; gallery and animationUrl are additive, enhanced-tier-only fields, not replacements.
 
 ⸻
 

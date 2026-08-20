@@ -7,6 +7,7 @@
   --color-orange-500: #ff7a1a;
   --color-orange-hover: #ff9645;
   --color-orange-active: #e56a0f;
+  --color-orange-soft: rgba(255, 122, 26, 0.14);
 
   /* Supporting accent only — achievements, highlights, premium moments.
      Do not use for primary buttons or main CTAs. */

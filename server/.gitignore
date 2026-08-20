@@ -20,3 +20,10 @@ npm-debug.log*
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# Raw/processed import data — not committed (see docs on the exercises import pipeline)
+data/raw/
+data/processed/
+
+# Third-party evaluation pack, CC BY-NC 4.0 (non-commercial) — do not ship in the product
+data/repdb-preview/

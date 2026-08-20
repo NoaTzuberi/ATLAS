@@ -1,0 +1,8 @@
+,Title,Desc,Type,BodyPart,Equipment,Level,Rating,RatingDesc
+0,Barbell Back Squat,A compound lower body exercise.,Strength,Quadriceps,Barbell,Intermediate,8.5,
+1,Push-Up,,Strength,Chest,Body Only,Beginner,,
+2,Seated Cable Row,A back exercise using a cable machine.,Strength,Middle Back,Cable,Intermediate,,
+3,Seated Cable Row,A back exercise using a cable machine.,Strength,Middle Back,Cable,Intermediate,,
+4,,Missing title row,Strength,Chest,Barbell,Intermediate,,
+5,Mystery Move,An exercise with an unrecognized level.,Strength,Chest,Barbell,Unknown,,
+6,Alien Equipment Curl,Uses equipment we cannot map.,Strength,Biceps,Tractor Beam,Beginner,,

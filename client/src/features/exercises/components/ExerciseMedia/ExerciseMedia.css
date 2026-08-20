@@ -1,0 +1,36 @@
+.exercise-media {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--surface-glass-bg);
+}
+
+.exercise-media-card {
+  aspect-ratio: 4 / 3;
+}
+
+.exercise-media-detail {
+  aspect-ratio: 16 / 9;
+}
+
+.exercise-media-image,
+.exercise-media-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.exercise-media-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 122, 26, 0.08), rgba(255, 255, 255, 0.03));
+}
+
+.exercise-media-placeholder-icon {
+  font-size: 2rem;
+  opacity: 0.5;
+}

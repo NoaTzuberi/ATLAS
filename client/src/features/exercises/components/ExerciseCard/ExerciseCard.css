@@ -1,0 +1,56 @@
+.exercise-card-link {
+  display: block;
+}
+
+.exercise-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.08) 100%),
+    var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.14);
+  box-shadow: inset 0 1px 0 rgba(245, 246, 248, 0.05);
+  transition:
+    transform var(--transition-base) var(--ease-standard),
+    box-shadow var(--transition-base) var(--ease-standard),
+    border-color var(--transition-base) var(--ease-standard);
+}
+
+.exercise-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 122, 26, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 246, 248, 0.05),
+    var(--shadow-lg);
+}
+
+.exercise-card-media-wrap {
+  position: relative;
+}
+
+.exercise-card-enhanced-badge {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: rgba(3, 8, 15, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-orange-hover);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.exercise-card-name {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+}
+
+.exercise-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

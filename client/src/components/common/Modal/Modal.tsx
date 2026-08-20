@@ -7,10 +7,11 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
+  className?: string;
   children: ReactNode;
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, className, children }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -24,15 +25,27 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
 
   if (!isOpen) return null;
 
+  const panelClassNames = ['modal-panel', className].filter(Boolean).join(' ');
+
   return createPortal(
     <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="modal-panel"
+        className={panelClassNames}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
         onClick={(event) => event.stopPropagation()}
       >
+        <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path
+              d="M5 5L15 15M15 5L5 15"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
         {title && (
           <h3 id="modal-title" className="modal-title">
             {title}

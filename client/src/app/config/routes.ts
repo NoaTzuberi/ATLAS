@@ -8,4 +8,11 @@ export const ROUTES = {
   SETTINGS: '/settings',
   WORKOUTS: '/workouts',
   ONBOARDING: '/onboarding',
+  EXERCISES: '/exercises',
 } as const;
+
+export const EXERCISE_DETAIL_PATH = '/exercises/:slug';
+
+export function exercisePath(slug: string): string {
+  return `/exercises/${slug}`;
+}

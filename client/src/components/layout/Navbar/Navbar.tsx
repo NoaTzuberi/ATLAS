@@ -27,11 +27,14 @@ export function Navbar() {
           <Link to={ROUTES.DASHBOARD} className="navbar-link">
             Dashboard
           </Link>
-          <Link to={ROUTES.PROFILE} className="navbar-link">
-            Profile
+          <Link to={ROUTES.EXERCISES} className="navbar-link">
+            Exercises
           </Link>
           <Link to={ROUTES.WORKOUTS} className="navbar-link">
             Workouts
+          </Link>
+          <Link to={ROUTES.PROFILE} className="navbar-link">
+            Profile
           </Link>
         </nav>
         <div className="navbar-actions">
