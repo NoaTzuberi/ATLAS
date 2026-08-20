@@ -9,7 +9,7 @@ import {
   DIFFICULTY_OPTIONS,
   MOVEMENT_TYPE_OPTIONS,
 } from '../../data/filterOptions';
-import { useDebouncedValue } from '../../hooks/useDebouncedValue';
+import { useDebouncedValue } from '../../../../hooks/useDebouncedValue';
 import type { ExerciseFilterState } from '../../types';
 import './ExerciseFilters.css';
 

@@ -1,0 +1,56 @@
+import type { Difficulty, ExerciseMediaFields } from '../exercises/types';
+
+export type WorkoutCategory = 'push' | 'pull' | 'legs' | 'full_body' | 'core';
+export type WorkoutGoal = 'strength' | 'hypertrophy' | 'endurance';
+
+export interface WorkoutTemplateExerciseSummary {
+  id: string;
+  slug: string;
+  name: string;
+  primaryMuscles: string[];
+  equipment: string[];
+  media: ExerciseMediaFields;
+}
+
+export interface WorkoutTemplateExercise {
+  order: number;
+  defaultSets: number;
+  defaultReps: string;
+  defaultWeight?: number;
+  restTime?: number;
+  exercise: WorkoutTemplateExerciseSummary;
+}
+
+export interface WorkoutTemplate {
+  id: string;
+  name: string;
+  description: string;
+  goal: WorkoutGoal[];
+  difficulty?: Difficulty;
+  duration?: number;
+  category?: WorkoutCategory;
+  exercises: WorkoutTemplateExercise[];
+  isSystemTemplate: boolean;
+  isOwner: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkoutTemplateExerciseInput {
+  exerciseId: string;
+  order: number;
+  defaultSets: number;
+  defaultReps: string;
+  defaultWeight?: number;
+  restTime?: number;
+}
+
+export interface WorkoutTemplateInput {
+  name: string;
+  description?: string;
+  goal?: WorkoutGoal[];
+  difficulty?: Difficulty;
+  duration?: number;
+  category?: WorkoutCategory;
+  exercises: WorkoutTemplateExerciseInput[];
+}

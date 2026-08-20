@@ -5,6 +5,7 @@ import { healthRouter } from './features/health/health.routes';
 import { authRouter } from './features/auth/auth.routes';
 import { usersRouter } from './features/users/users.routes';
 import { exercisesRouter } from './features/exercises/exercise.routes';
+import { workoutTemplatesRouter } from './features/workoutTemplates/workoutTemplate.routes';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use('/api', healthRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/exercises', exercisesRouter);
+app.use('/api/workout-templates', workoutTemplatesRouter);
 
 /**
  * Serves the RepDB preview pack's images/animations directly from its raw

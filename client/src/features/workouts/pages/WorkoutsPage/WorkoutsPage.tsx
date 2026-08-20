@@ -1,24 +1,111 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
+import { Spinner } from '../../../../components/common/Spinner/Spinner';
+import { Button } from '../../../../components/common/Button/Button';
+import { WorkoutChip } from '../../components/WorkoutChip/WorkoutChip';
+import { TemplateCard } from '../../components/TemplateCard/TemplateCard';
+import { WORKOUT_CATEGORY_OPTIONS } from '../../data/workoutOptions';
+import { listWorkoutTemplates } from '../../../../services/workouts/workoutTemplatesService';
+import { ROUTES } from '../../../../app/config/routes';
+import type { WorkoutCategory, WorkoutTemplate } from '../../types';
 import './WorkoutsPage.css';
 
-/**
- * Placeholder — awaiting real Workouts feature design.
- * Exists to verify the protected-route guard end-to-end.
- */
 export function WorkoutsPage() {
+  const [category, setCategory] = useState<WorkoutCategory | undefined>(undefined);
+  const [mineOnly, setMineOnly] = useState(false);
+  const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string>();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setIsLoading(true);
+      setLoadError(undefined);
+      try {
+        const data = await listWorkoutTemplates({ category, mine: mineOnly });
+        if (!cancelled) setTemplates(data);
+      } catch (error) {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : "Couldn't load workouts. Please try again.");
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [category, mineOnly]);
+
   return (
     <PageLayout>
-      <Container>
-        <Section>
-          <GlassCard>
-            <h1>Workouts</h1>
-            <p className="text-body">This is a placeholder page. Real content coming in a later phase.</p>
+      <Section className="workouts-page">
+        <Container>
+          <div className="workouts-page-header">
+            <div>
+              <h1 className="workouts-page-title">Workouts</h1>
+              <p className="text-body workouts-page-subtitle">
+                Browse ready-made workouts or build your own.
+              </p>
+            </div>
+            <Link to={ROUTES.WORKOUT_BUILDER}>
+              <Button>Create Workout</Button>
+            </Link>
+          </div>
+
+          <GlassCard className="workouts-page-toolbar">
+            <div className="workouts-page-chips">
+              <WorkoutChip
+                label="All"
+                selected={category === undefined}
+                onClick={() => setCategory(undefined)}
+              />
+              {WORKOUT_CATEGORY_OPTIONS.map((option) => (
+                <WorkoutChip
+                  key={option.value}
+                  label={option.label}
+                  selected={category === option.value}
+                  onClick={() => setCategory(category === option.value ? undefined : option.value)}
+                />
+              ))}
+            </div>
+            <WorkoutChip label="My Workouts" selected={mineOnly} onClick={() => setMineOnly((v) => !v)} />
           </GlassCard>
-        </Section>
-      </Container>
+
+          {isLoading && (
+            <div className="workouts-page-loading">
+              <Spinner size="lg" />
+            </div>
+          )}
+
+          {!isLoading && loadError && <p className="workouts-page-error">{loadError}</p>}
+
+          {!isLoading && !loadError && templates.length === 0 && (
+            <GlassCard className="workouts-page-empty">
+              <h2>{mineOnly ? "You haven't created any workouts yet." : 'No workouts match this filter.'}</h2>
+              <Link to={ROUTES.WORKOUT_BUILDER}>
+                <Button>Create Workout</Button>
+              </Link>
+            </GlassCard>
+          )}
+
+          {!isLoading && !loadError && templates.length > 0 && (
+            <div className="workouts-page-grid">
+              {templates.map((template) => (
+                <TemplateCard key={template.id} template={template} />
+              ))}
+            </div>
+          )}
+        </Container>
+      </Section>
     </PageLayout>
   );
 }

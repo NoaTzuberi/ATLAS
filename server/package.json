@@ -8,7 +8,8 @@
     "start": "node dist/server.js",
     "test": "vitest run",
     "import:exercises": "tsx src/features/exercises/scripts/importExercises.ts",
-    "import:repdb": "tsx src/features/exercises/scripts/importRepDbPreview.ts"
+    "import:repdb": "tsx src/features/exercises/scripts/importRepDbPreview.ts",
+    "seed:workout-templates": "tsx src/features/workoutTemplates/scripts/seedWorkoutTemplates.ts"
   },
   "keywords": [],
   "author": "",
