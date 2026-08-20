@@ -1,0 +1,94 @@
+.workout-summary-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.workout-summary-page::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: radial-gradient(circle at 85% 0%, rgba(255, 122, 26, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.workout-summary-page .container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.workout-summary-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8) 0;
+}
+
+.workout-summary-error {
+  color: var(--color-error-500);
+}
+
+.workout-summary-title {
+  font-family: var(--font-display);
+  margin-bottom: var(--space-5);
+}
+
+.workout-summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.workout-summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.08) 100%),
+    var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.14);
+}
+
+.workout-summary-stat-value {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+}
+
+.workout-summary-stat-label {
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.workout-summary-prs,
+.workout-summary-notes {
+  margin-bottom: var(--space-5);
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.08) 100%),
+    var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.14);
+}
+
+.workout-summary-pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.workout-summary-pr {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.workout-summary-pr-badge {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-amber-soft);
+  color: var(--color-amber-500);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}

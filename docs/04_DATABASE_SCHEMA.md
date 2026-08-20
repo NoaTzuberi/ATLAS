@@ -309,11 +309,20 @@ exerciseId:ObjectId,
 order:Number,
 defaultSets:Number,
 defaultReps:String,
+defaultWeight:Number,
 restTime:Number
 }
 ],
-createdAt:Date
+createdBy:ObjectId|null,
+createdAt:Date,
+updatedAt:Date
 }
+
+⸻
+
+One collection, two authors
+
+createdBy is additive to the originally documented schema. null/absent means an ATLAS ready-made template (Phase 5 seeds 5 of these — one per category); a real user id means a template the user built themselves in the Workout Builder. Both are the same shape and the same collection — Principle 2 ("Separate Templates From Reality") is about templates vs. completed sessions, not about who authored a template, so a user's own saved workout is still a template until it's actually performed. defaultWeight is additive too: the roadmap's Workout Builder explicitly lets a user set a target weight per exercise, which the original schema draft didn't anticipate; it's optional since ATLAS's own ready-made templates don't set one (weight is inherently personal).
 
 ⸻
 
@@ -343,7 +352,7 @@ name:String,
 date:Date,
 duration:Number,
 status:
-"completed | abandoned",
+"in_progress | completed | abandoned",
 exercises:[
 {
 exerciseId:ObjectId,
@@ -361,8 +370,15 @@ totalVolume:Number,
 rating:Number,
 notes:String,
 photo:String,
-createdAt:Date
+createdAt:Date,
+updatedAt:Date
 }
+
+⸻
+
+in_progress is additive to the originally documented "completed | abandoned" pair. Phase 6's active workout screen persists the session the moment it starts (rather than only on finish) so a lost connection or closed tab at the gym doesn't lose logged sets — that needs a third state for "started, not yet resolved." Only one in_progress workout exists per user at a time; starting a new one while one is active resumes it instead of creating a second.
+
+photo has no upload UI yet — the field is reserved but unused; building real photo storage is out of scope for Phase 6 and left for later.
 
 ⸻
 
@@ -456,9 +472,13 @@ exerciseId:ObjectId,
 previousValue:Number,
 newValue:Number,
 type:
-"weight | reps | volume",
+"weight | reps",
 date:Date
 }
+
+⸻
+
+Phase 6 implements weight (heaviest completed set ever, per exercise) and reps (most reps completed in a single set, per exercise) detection on finishing a workout — the simplest, most literal reading of "PR." volume, described in earlier drafts, is deferred; the field isn't populated today. previousValue defaults to 0 when no prior record exists, so a exercise's first-ever completed set is itself a PR — consistent, if generous, and avoids a special case for "no history yet."
 
 ⸻
 

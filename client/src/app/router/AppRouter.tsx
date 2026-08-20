@@ -1,6 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import type { Location } from 'react-router-dom';
-import { ROUTES, EXERCISE_DETAIL_PATH, WORKOUT_DETAIL_PATH, WORKOUT_EDIT_PATH } from '../config/routes';
+import {
+  ROUTES,
+  EXERCISE_DETAIL_PATH,
+  WORKOUT_DETAIL_PATH,
+  WORKOUT_EDIT_PATH,
+  WORKOUT_SESSION_PATH,
+  WORKOUT_SESSION_SUMMARY_PATH,
+} from '../config/routes';
 import { Landing } from '../../pages/Landing/Landing';
 import { Showcase } from '../../pages/Showcase/Showcase';
 import { Login } from '../../features/auth/pages/Login/Login';
@@ -14,6 +21,8 @@ import { ExerciseLibraryPage } from '../../features/exercises/pages/ExerciseLibr
 import { ExerciseDetailPage } from '../../features/exercises/pages/ExerciseDetailPage/ExerciseDetailPage';
 import { WorkoutBuilderPage } from '../../features/workouts/pages/WorkoutBuilderPage/WorkoutBuilderPage';
 import { WorkoutTemplateDetailPage } from '../../features/workouts/pages/WorkoutTemplateDetailPage/WorkoutTemplateDetailPage';
+import { ActiveWorkoutPage } from '../../features/workouts/pages/ActiveWorkoutPage/ActiveWorkoutPage';
+import { WorkoutSummaryPage } from '../../features/workouts/pages/WorkoutSummaryPage/WorkoutSummaryPage';
 
 export function AppRouter() {
   const location = useLocation();
@@ -34,6 +43,8 @@ export function AppRouter() {
           <Route path={ROUTES.WORKOUTS} element={<WorkoutsPage />} />
           <Route path={ROUTES.WORKOUT_BUILDER} element={<WorkoutBuilderPage />} />
           <Route path={WORKOUT_EDIT_PATH} element={<WorkoutBuilderPage />} />
+          <Route path={WORKOUT_SESSION_PATH} element={<ActiveWorkoutPage />} />
+          <Route path={WORKOUT_SESSION_SUMMARY_PATH} element={<WorkoutSummaryPage />} />
           <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
           <Route path={ROUTES.EXERCISES} element={<ExerciseLibraryPage />} />
           {!backgroundLocation && (

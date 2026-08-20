@@ -33,6 +33,17 @@
   margin-top: var(--space-2);
 }
 
+.workouts-page-resume-banner {
+  margin-top: var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  border-color: rgba(255, 122, 26, 0.4);
+  background: linear-gradient(135deg, rgba(255, 122, 26, 0.12), rgba(18, 22, 29, 0.9));
+}
+
 .workouts-page-toolbar {
   margin-top: var(--space-5);
   margin-bottom: var(--space-6);

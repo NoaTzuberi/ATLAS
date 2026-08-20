@@ -11,7 +11,8 @@ import { ExerciseMedia } from '../../../exercises/components/ExerciseMedia/Exerc
 import { muscleLabel, equipmentLabel } from '../../../exercises/data/filterOptions';
 import { workoutCategoryLabel, workoutGoalLabel } from '../../data/workoutOptions';
 import { getWorkoutTemplateById, deleteWorkoutTemplate } from '../../../../services/workouts/workoutTemplatesService';
-import { ROUTES, workoutEditPath } from '../../../../app/config/routes';
+import { startWorkout } from '../../../../services/workouts/workoutSessionService';
+import { ROUTES, workoutEditPath, workoutSessionPath } from '../../../../app/config/routes';
 import type { WorkoutTemplate } from '../../types';
 import './WorkoutTemplateDetailPage.css';
 
@@ -27,6 +28,7 @@ export function WorkoutTemplateDetailPage() {
   const [notFound, setNotFound] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -56,6 +58,17 @@ export function WorkoutTemplateDetailPage() {
       navigate(-1);
     } else {
       navigate(ROUTES.WORKOUTS);
+    }
+  }
+
+  async function handleStart() {
+    if (!id) return;
+    setIsStarting(true);
+    try {
+      const session = await startWorkout(id);
+      navigate(workoutSessionPath(session.id));
+    } finally {
+      setIsStarting(false);
     }
   }
 
@@ -110,6 +123,10 @@ export function WorkoutTemplateDetailPage() {
         </div>
 
         {template.description && <p className="text-body workout-detail-description">{template.description}</p>}
+
+        <Button onClick={handleStart} loading={isStarting} className="workout-detail-start-button">
+          Start Workout
+        </Button>
 
         <div className="workout-detail-exercises">
           {template.exercises.map((entry) => (

@@ -54,3 +54,53 @@ export interface WorkoutTemplateInput {
   category?: WorkoutCategory;
   exercises: WorkoutTemplateExerciseInput[];
 }
+
+export type WorkoutSessionStatus = 'in_progress' | 'completed' | 'abandoned';
+
+export interface WorkoutSet {
+  setNumber: number;
+  weight: number;
+  reps: number;
+  completed: boolean;
+}
+
+export interface WorkoutSessionExercise {
+  exercise: WorkoutTemplateExerciseSummary;
+  sets: WorkoutSet[];
+}
+
+export interface WorkoutSession {
+  id: string;
+  templateId: string | null;
+  name: string;
+  date: string;
+  duration?: number;
+  status: WorkoutSessionStatus;
+  totalVolume?: number;
+  rating?: number;
+  notes?: string;
+  photo?: string;
+  exercises: WorkoutSessionExercise[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkoutSessionExerciseInput {
+  exerciseId: string;
+  sets: WorkoutSet[];
+}
+
+export type PersonalRecordType = 'weight' | 'reps';
+
+export interface NewPersonalRecord {
+  exerciseId: string;
+  exerciseName: string;
+  type: PersonalRecordType;
+  previousValue: number;
+  newValue: number;
+}
+
+export interface FinishWorkoutResult {
+  workout: WorkoutSession;
+  newPersonalRecords: NewPersonalRecord[];
+}

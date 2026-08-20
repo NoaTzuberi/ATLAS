@@ -10,8 +10,9 @@ import { WorkoutChip } from '../../components/WorkoutChip/WorkoutChip';
 import { TemplateCard } from '../../components/TemplateCard/TemplateCard';
 import { WORKOUT_CATEGORY_OPTIONS } from '../../data/workoutOptions';
 import { listWorkoutTemplates } from '../../../../services/workouts/workoutTemplatesService';
-import { ROUTES } from '../../../../app/config/routes';
-import type { WorkoutCategory, WorkoutTemplate } from '../../types';
+import { getActiveWorkout } from '../../../../services/workouts/workoutSessionService';
+import { ROUTES, workoutSessionPath } from '../../../../app/config/routes';
+import type { WorkoutCategory, WorkoutTemplate, WorkoutSession } from '../../types';
 import './WorkoutsPage.css';
 
 export function WorkoutsPage() {
@@ -20,6 +21,11 @@ export function WorkoutsPage() {
   const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string>();
+  const [activeWorkout, setActiveWorkout] = useState<WorkoutSession | null>(null);
+
+  useEffect(() => {
+    getActiveWorkout().then(setActiveWorkout);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,6 +66,15 @@ export function WorkoutsPage() {
               <Button>Create Workout</Button>
             </Link>
           </div>
+
+          {activeWorkout && (
+            <GlassCard className="workouts-page-resume-banner">
+              <span>Workout in progress: {activeWorkout.name}</span>
+              <Link to={workoutSessionPath(activeWorkout.id)}>
+                <Button variant="secondary">Resume</Button>
+              </Link>
+            </GlassCard>
+          )}
 
           <GlassCard className="workouts-page-toolbar">
             <div className="workouts-page-chips">

@@ -38,6 +38,11 @@
   color: var(--color-neutral-300);
 }
 
+.workout-detail-start-button {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
 .workout-detail-exercises {
   display: flex;
   flex-direction: column;
