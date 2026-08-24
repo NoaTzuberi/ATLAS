@@ -33,6 +33,9 @@ export function Navbar() {
           <Link to={ROUTES.WORKOUTS} className="navbar-link">
             Workouts
           </Link>
+          <Link to={ROUTES.CALENDAR} className="navbar-link">
+            Calendar
+          </Link>
           <Link to={ROUTES.PROFILE} className="navbar-link">
             Profile
           </Link>

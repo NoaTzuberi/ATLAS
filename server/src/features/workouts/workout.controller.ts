@@ -5,6 +5,7 @@ import {
   validateStartWorkoutPayload,
   validateProgressPayload,
   validateFinishWorkoutPayload,
+  validateListQuery,
 } from './workout.validation';
 import {
   startWorkout,
@@ -13,9 +14,27 @@ import {
   updateWorkoutProgress,
   abandonWorkout,
   finishWorkout,
+  listWorkoutSummaries,
   WorkoutNotFoundError,
   WorkoutNotActiveError,
 } from './workout.service';
+import type { WorkoutStatus } from './workout.constants';
+
+export async function getList(req: AuthenticatedRequest, res: Response) {
+  const validationError = validateListQuery(req.query);
+  if (validationError) {
+    res.status(400).json({ message: validationError });
+    return;
+  }
+
+  const query = req.query as Record<string, string | undefined>;
+  const workouts = await listWorkoutSummaries(req.userId!, {
+    from: query.from,
+    to: query.to,
+    status: query.status as WorkoutStatus | undefined,
+  });
+  res.status(200).json({ items: workouts });
+}
 
 export async function postStartWorkout(req: AuthenticatedRequest, res: Response) {
   const validationError = validateStartWorkoutPayload(req.body);

@@ -1,9 +1,32 @@
 import mongoose from 'mongoose';
+import { WORKOUT_STATUS_IDS } from './workout.constants';
 
 export function validateIdParam(id: unknown): string | null {
   if (typeof id !== 'string' || !mongoose.isValidObjectId(id)) {
     return 'A valid workout id is required.';
   }
+  return null;
+}
+
+export function validateListQuery(query: unknown): string | null {
+  if (typeof query !== 'object' || query === null) {
+    return 'Invalid query parameters.';
+  }
+
+  const params = query as Record<string, unknown>;
+
+  if (params.status !== undefined && !(WORKOUT_STATUS_IDS as readonly string[]).includes(String(params.status))) {
+    return 'status must be one of the supported workout status values.';
+  }
+
+  if (params.from !== undefined && Number.isNaN(Date.parse(String(params.from)))) {
+    return 'from must be a valid ISO date string.';
+  }
+
+  if (params.to !== undefined && Number.isNaN(Date.parse(String(params.to)))) {
+    return 'to must be a valid ISO date string.';
+  }
+
   return null;
 }
 

@@ -4,7 +4,19 @@ import type {
   WorkoutSession,
   WorkoutSessionExerciseInput,
   FinishWorkoutResult,
+  WorkoutSummary,
 } from '../../features/workouts/types';
+
+export interface ListWorkoutsParams {
+  from?: string;
+  to?: string;
+  status?: string;
+}
+
+export async function listWorkouts(params: ListWorkoutsParams = {}): Promise<WorkoutSummary[]> {
+  const { data } = await apiClient.get<{ items: WorkoutSummary[] }>('/workouts', { params });
+  return data.items;
+}
 
 export async function startWorkout(templateId: string): Promise<WorkoutSession> {
   const { data } = await apiClient.post<{ workout: WorkoutSession }>('/workouts/start', { templateId });

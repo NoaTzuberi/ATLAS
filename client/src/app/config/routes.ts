@@ -10,6 +10,7 @@ export const ROUTES = {
   WORKOUT_BUILDER: '/workouts/new',
   ONBOARDING: '/onboarding',
   EXERCISES: '/exercises',
+  CALENDAR: '/calendar',
 } as const;
 
 export const EXERCISE_DETAIL_PATH = '/exercises/:slug';

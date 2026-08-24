@@ -444,8 +444,14 @@ waist:Number,
 legs:Number
 },
 photos:[String],
-notes:String
+notes:String,
+createdAt:Date,
+updatedAt:Date
 }
+
+⸻
+
+createdAt/updatedAt are additive (standard timestamps, consistent with every other collection in this document). photos has no upload UI yet — same reserved-but-unused treatment as workouts.photo (Section 7); real photo storage is a separate feature not yet built. weight, bodyMeasurements, and notes are each optional, but at least one is required per entry — an entry with none of them logs nothing.
 
 ⸻
 

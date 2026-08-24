@@ -3,6 +3,7 @@ import { requireAuth } from '../../middleware/auth.middleware';
 import {
   postStartWorkout,
   getActive,
+  getList,
   getById,
   patchProgress,
   postAbandon,
@@ -15,6 +16,7 @@ workoutsRouter.use(requireAuth);
 
 workoutsRouter.post('/start', postStartWorkout);
 workoutsRouter.get('/active', getActive);
+workoutsRouter.get('/', getList);
 workoutsRouter.get('/:id', getById);
 workoutsRouter.patch('/:id/progress', patchProgress);
 workoutsRouter.post('/:id/abandon', postAbandon);

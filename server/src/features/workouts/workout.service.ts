@@ -219,6 +219,53 @@ export async function getWorkoutById(id: string, userId: string): Promise<Public
   return toPublicWorkout(doc);
 }
 
+export interface WorkoutSummary {
+  id: string;
+  name: string;
+  date: Date;
+  status: WorkoutStatus;
+  duration?: number;
+  totalVolume?: number;
+}
+
+export interface ListWorkoutsParams {
+  from?: string;
+  to?: string;
+  status?: WorkoutStatus;
+}
+
+/**
+ * Lightweight listing (no populated exercises) for calendar/history views —
+ * the full per-exercise breakdown from getWorkoutById is unnecessary just to
+ * mark which days had a workout or show a name/duration in a list.
+ */
+export async function listWorkoutSummaries(userId: string, params: ListWorkoutsParams = {}): Promise<WorkoutSummary[]> {
+  const filter: Record<string, unknown> = { userId };
+
+  if (params.status) filter.status = params.status;
+
+  if (params.from || params.to) {
+    const dateFilter: Record<string, Date> = {};
+    if (params.from) dateFilter.$gte = new Date(params.from);
+    if (params.to) dateFilter.$lte = new Date(params.to);
+    filter.date = dateFilter;
+  }
+
+  const docs = await Workout.find(filter)
+    .select('name date status duration totalVolume')
+    .sort({ date: -1 })
+    .lean();
+
+  return docs.map((doc) => ({
+    id: String(doc._id),
+    name: doc.name,
+    date: doc.date,
+    status: doc.status,
+    duration: doc.duration,
+    totalVolume: doc.totalVolume,
+  }));
+}
+
 async function findActiveOwnedWorkout(id: string, userId: string) {
   const workout = await Workout.findById(id);
   if (!workout || String(workout.userId) !== userId) {

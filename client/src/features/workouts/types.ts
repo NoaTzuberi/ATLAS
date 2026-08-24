@@ -104,3 +104,12 @@ export interface FinishWorkoutResult {
   workout: WorkoutSession;
   newPersonalRecords: NewPersonalRecord[];
 }
+
+export interface WorkoutSummary {
+  id: string;
+  name: string;
+  date: string;
+  status: WorkoutSessionStatus;
+  duration?: number;
+  totalVolume?: number;
+}

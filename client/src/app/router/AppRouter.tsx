@@ -23,6 +23,7 @@ import { WorkoutBuilderPage } from '../../features/workouts/pages/WorkoutBuilder
 import { WorkoutTemplateDetailPage } from '../../features/workouts/pages/WorkoutTemplateDetailPage/WorkoutTemplateDetailPage';
 import { ActiveWorkoutPage } from '../../features/workouts/pages/ActiveWorkoutPage/ActiveWorkoutPage';
 import { WorkoutSummaryPage } from '../../features/workouts/pages/WorkoutSummaryPage/WorkoutSummaryPage';
+import { CalendarPage } from '../../features/progress/pages/CalendarPage/CalendarPage';
 
 export function AppRouter() {
   const location = useLocation();
@@ -47,6 +48,7 @@ export function AppRouter() {
           <Route path={WORKOUT_SESSION_SUMMARY_PATH} element={<WorkoutSummaryPage />} />
           <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
           <Route path={ROUTES.EXERCISES} element={<ExerciseLibraryPage />} />
+          <Route path={ROUTES.CALENDAR} element={<CalendarPage />} />
           {!backgroundLocation && (
             <>
               <Route path={EXERCISE_DETAIL_PATH} element={<ExerciseDetailPage />} />
