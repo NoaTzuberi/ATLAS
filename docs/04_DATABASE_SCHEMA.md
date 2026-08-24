@@ -627,12 +627,16 @@ content:String,
 embedding:[Number],
 metadata:{
 type:
-"exercise | training | recovery",
+"training | programming | recovery | coaching",
 source:String,
 exerciseId:ObjectId|null
 },
 createdAt:Date
 }
+
+⸻
+
+type's enum changed from the original "exercise | training | recovery" to "training | programming | recovery | coaching" — matching docs/06_RAG_KNOWLEDGE_PLAN.md categories 2-6. exercise was dropped: exercise knowledge (category 1) is served directly from the Exercise collection via agent tools (getExerciseDetails, searchExerciseLibrary) rather than duplicated into embeddings — it's already-structured data with 2,900+ real entries, and re-embedding it would just be a stale copy. programming and coaching were added since categories 3 and 6 didn't fit cleanly into the original three buckets. Embeddings come from Voyage AI (voyage-3.5); retrieval is in-process cosine similarity over the full set (docs/knowledge/scripts/seedKnowledge.ts seeds ~25 hand-written documents) rather than a dedicated vector database — sufficient at this scale and avoids depending on an Atlas tier with vector search.
 
 ⸻
 

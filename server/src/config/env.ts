@@ -9,4 +9,6 @@ export const config = {
   port: Number(process.env.PORT) || DEFAULT_PORT,
   databaseUrl: process.env.DATABASE_URL || '',
   jwtSecret: process.env.JWT_SECRET || DEFAULT_JWT_SECRET,
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  voyageApiKey: process.env.VOYAGE_API_KEY || '',
 };

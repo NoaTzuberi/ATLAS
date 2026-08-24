@@ -1,0 +1,199 @@
+.coach-page {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.coach-page::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: radial-gradient(circle at 85% 0%, rgba(255, 122, 26, 0.1), transparent 55%);
+  pointer-events: none;
+}
+
+.coach-page .container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  min-height: 480px;
+}
+
+.coach-header {
+  margin-bottom: var(--space-4);
+}
+
+.coach-title {
+  font-family: var(--font-display);
+}
+
+.coach-subtitle {
+  margin-top: var(--space-2);
+}
+
+.coach-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.06) 100%),
+    var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.14);
+}
+
+.coach-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.coach-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-6) 0;
+}
+
+.coach-empty {
+  margin: auto;
+  max-width: 420px;
+  text-align: center;
+  color: var(--color-neutral-500);
+}
+
+.coach-message {
+  max-width: 72%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.coach-message-content {
+  white-space: pre-line;
+}
+
+.coach-message-user {
+  align-self: flex-end;
+  background-color: rgba(255, 122, 26, 0.16);
+  border: 1px solid rgba(255, 122, 26, 0.28);
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.coach-message-atlas {
+  align-self: flex-start;
+  background-color: var(--surface-glass-bg);
+  border: 1px solid var(--color-border);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.coach-message-label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-orange-hover);
+}
+
+.coach-typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: var(--space-1) 0;
+}
+
+.coach-typing-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-500);
+  animation: coach-typing-pulse 1.2s ease-in-out infinite;
+}
+
+.coach-typing-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.coach-typing-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes coach-typing-pulse {
+  0%, 60%, 100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coach-typing-dots span {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.coach-error {
+  align-self: center;
+  color: var(--color-error-500);
+  text-align: center;
+}
+
+.coach-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.coach-input {
+  flex: 1;
+  resize: none;
+  max-height: 140px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-100);
+  background-color: var(--surface-glass-bg);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.coach-input:focus {
+  outline: none;
+  border-color: var(--color-orange-500);
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.14);
+}
+
+.coach-send-button {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-orange-500);
+  color: var(--color-navy-950);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-standard);
+}
+
+.coach-send-button:hover:not(:disabled) {
+  background-color: var(--color-orange-hover);
+}
+
+.coach-send-button:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}

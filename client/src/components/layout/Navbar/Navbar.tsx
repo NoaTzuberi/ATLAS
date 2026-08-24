@@ -36,6 +36,9 @@ export function Navbar() {
           <Link to={ROUTES.CALENDAR} className="navbar-link">
             Calendar
           </Link>
+          <Link to={ROUTES.COACH} className="navbar-link">
+            Coach
+          </Link>
           <Link to={ROUTES.PROFILE} className="navbar-link">
             Profile
           </Link>

@@ -11,6 +11,7 @@ export const ROUTES = {
   ONBOARDING: '/onboarding',
   EXERCISES: '/exercises',
   CALENDAR: '/calendar',
+  COACH: '/coach',
 } as const;
 
 export const EXERCISE_DETAIL_PATH = '/exercises/:slug';

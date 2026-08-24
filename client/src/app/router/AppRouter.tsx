@@ -24,6 +24,7 @@ import { WorkoutTemplateDetailPage } from '../../features/workouts/pages/Workout
 import { ActiveWorkoutPage } from '../../features/workouts/pages/ActiveWorkoutPage/ActiveWorkoutPage';
 import { WorkoutSummaryPage } from '../../features/workouts/pages/WorkoutSummaryPage/WorkoutSummaryPage';
 import { CalendarPage } from '../../features/progress/pages/CalendarPage/CalendarPage';
+import { CoachPage } from '../../features/coach/pages/CoachPage/CoachPage';
 
 export function AppRouter() {
   const location = useLocation();
@@ -49,6 +50,7 @@ export function AppRouter() {
           <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
           <Route path={ROUTES.EXERCISES} element={<ExerciseLibraryPage />} />
           <Route path={ROUTES.CALENDAR} element={<CalendarPage />} />
+          <Route path={ROUTES.COACH} element={<CoachPage />} />
           {!backgroundLocation && (
             <>
               <Route path={EXERCISE_DETAIL_PATH} element={<ExerciseDetailPage />} />

@@ -232,6 +232,7 @@ export interface ListWorkoutsParams {
   from?: string;
   to?: string;
   status?: WorkoutStatus;
+  limit?: number;
 }
 
 /**
@@ -251,10 +252,11 @@ export async function listWorkoutSummaries(userId: string, params: ListWorkoutsP
     filter.date = dateFilter;
   }
 
-  const docs = await Workout.find(filter)
-    .select('name date status duration totalVolume')
-    .sort({ date: -1 })
-    .lean();
+  let queryBuilder = Workout.find(filter).select('name date status duration totalVolume').sort({ date: -1 });
+  if (params.limit) {
+    queryBuilder = queryBuilder.limit(params.limit);
+  }
+  const docs = await queryBuilder.lean();
 
   return docs.map((doc) => ({
     id: String(doc._id),

@@ -11,6 +11,7 @@ import { personalRecordsRouter } from './features/personalRecords/personalRecord
 import { progressRouter } from './features/progress/progress.routes';
 import { activitiesRouter } from './features/activities/activity.routes';
 import { dashboardRouter } from './features/dashboard/dashboard.routes';
+import { aiCoachRouter } from './features/aiCoach/aiCoach.routes';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/personal-records', personalRecordsRouter);
 app.use('/api/progress', progressRouter);
 app.use('/api/activities', activitiesRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/coach', aiCoachRouter);
 
 /**
  * Serves the RepDB preview pack's images/animations directly from its raw

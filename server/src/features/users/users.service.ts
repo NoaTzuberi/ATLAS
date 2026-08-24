@@ -78,3 +78,17 @@ export async function updateUserProfile(userId: string, payload: OnboardingProfi
     preferences: user.preferences,
   };
 }
+
+export async function getUserProfileById(userId: string) {
+  const user = await User.findById(userId).select('name profile preferences onboardingCompleted').lean();
+  if (!user) {
+    throw new UserNotFoundError('User not found.');
+  }
+
+  return {
+    name: user.name,
+    onboardingCompleted: user.onboardingCompleted,
+    profile: user.profile,
+    preferences: user.preferences,
+  };
+}
