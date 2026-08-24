@@ -12,6 +12,7 @@ import { WORKOUT_CATEGORY_OPTIONS } from '../../data/workoutOptions';
 import { listWorkoutTemplates } from '../../../../services/workouts/workoutTemplatesService';
 import { getActiveWorkout } from '../../../../services/workouts/workoutSessionService';
 import { ROUTES, workoutSessionPath } from '../../../../app/config/routes';
+import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import type { WorkoutCategory, WorkoutTemplate, WorkoutSession } from '../../types';
 import './WorkoutsPage.css';
 
@@ -22,6 +23,7 @@ export function WorkoutsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string>();
   const [activeWorkout, setActiveWorkout] = useState<WorkoutSession | null>(null);
+  const gridRef = useStaggerReveal<HTMLDivElement>([templates]);
 
   useEffect(() => {
     getActiveWorkout().then(setActiveWorkout);
@@ -113,7 +115,7 @@ export function WorkoutsPage() {
           )}
 
           {!isLoading && !loadError && templates.length > 0 && (
-            <div className="workouts-page-grid">
+            <div className="workouts-page-grid" ref={gridRef}>
               {templates.map((template) => (
                 <TemplateCard key={template.id} template={template} />
               ))}

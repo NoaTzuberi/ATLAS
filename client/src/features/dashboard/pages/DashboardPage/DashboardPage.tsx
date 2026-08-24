@@ -9,6 +9,7 @@ import { Modal } from '../../../../components/common/Modal/Modal';
 import { Input } from '../../../../components/common/Input/Input';
 import { getDashboardSummary } from '../../../../services/dashboard/dashboardService';
 import { createProgressEntry } from '../../../../services/progress/progressService';
+import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import type { DashboardSummary, WeightTrendPoint } from '../../types';
 import './DashboardPage.css';
 
@@ -51,6 +52,8 @@ export function DashboardPage() {
   const [weightInput, setWeightInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
+  const statsRef = useStaggerReveal<HTMLDivElement>([summary]);
+  const prListRef = useStaggerReveal<HTMLDivElement>([summary?.recentPersonalRecords]);
 
   async function loadSummary() {
     setIsLoading(true);
@@ -112,7 +115,7 @@ export function DashboardPage() {
 
           {!isLoading && !loadError && summary && (
             <>
-              <div className="dashboard-stats">
+              <div className="dashboard-stats" ref={statsRef}>
                 <GlassCard className="dashboard-stat dashboard-stat-hero">
                   <div className="dashboard-stat-hero-glow" aria-hidden="true" />
                   <span className="dashboard-stat-badge dashboard-stat-badge-hero" aria-hidden="true">
@@ -182,7 +185,7 @@ export function DashboardPage() {
                     Complete a workout and log your sets to start earning personal records.
                   </p>
                 ) : (
-                  <div className="dashboard-pr-list">
+                  <div className="dashboard-pr-list" ref={prListRef}>
                     {summary.recentPersonalRecords.map((pr) => (
                       <div key={pr.id} className="dashboard-pr-row">
                         <span
