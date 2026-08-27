@@ -34,7 +34,10 @@ Steps:
      (generated once for this guide — treat it as sensitive, don't commit it anywhere)
    - `GEMINI_API_KEY` — same value as `server/.env`
    - `VOYAGE_API_KEY` — same value as `server/.env`
-   - `CLIENT_ORIGIN` — leave blank for now; come back and set it once the Vercel URL exists (step 3.4)
+   - `RESEND_API_KEY` — same value as `server/.env` (powers password-reset emails)
+   - `EMAIL_FROM` — optional; only set it if you're using a custom "from" address instead of Resend's default sandbox sender
+   - `CLIENT_ORIGIN` — leave blank for now; come back and set it once the Vercel URL exists (step 3.5) — this is the CORS allow-list
+   - `CLIENT_URL` — leave blank for now too; come back and set it alongside `CLIENT_ORIGIN` (step 3.5) — this is the URL baked into password-reset email links, **not** the same variable as `CLIENT_ORIGIN` even though they'll end up holding the same value
 4. Deploy. Once live, note the service URL (e.g. `https://atlas-api.onrender.com`).
 
 Note: the app now refuses to start in production if `JWT_SECRET` isn't set to something other than the dev default — this is intentional (see `server/src/config/env.ts`).
@@ -50,7 +53,7 @@ Render's free tier spins the service down after ~15 minutes idle; the first requ
 3. Add environment variable:
    - `VITE_API_URL` = `https://<your-render-service>.onrender.com/api`
 4. Deploy. Note the resulting URL (e.g. `https://atlas.vercel.app`).
-5. Go back to Render → the `atlas-api` service → environment → set `CLIENT_ORIGIN` to this exact Vercel URL, then redeploy the backend so CORS accepts requests from it.
+5. Go back to Render → the `atlas-api` service → environment → set **both** `CLIENT_ORIGIN` and `CLIENT_URL` to this exact Vercel URL, then redeploy the backend. `CLIENT_ORIGIN` unlocks CORS for the frontend; `CLIENT_URL` is what gets embedded in password-reset email links — skipping either one leaves that piece broken even though the rest of the app works.
 
 `client/vercel.json` already handles SPA routing (rewrites every path to `index.html` so direct links like `/exercises/bench-press` or a page refresh on `/dashboard` don't 404).
 
@@ -70,3 +73,4 @@ Render's free tier spins the service down after ~15 minutes idle; the first requ
 * Exercise Library loads and filters
 * Start + complete a workout, confirm it saves
 * Coach widget sends a message and gets a real reply (confirms `GEMINI_API_KEY`/`VOYAGE_API_KEY` made it to Render correctly)
+* "Forgot password" sends a real email with a link pointing at the **Vercel** URL, not localhost (confirms `RESEND_API_KEY` and `CLIENT_URL` are both set correctly)
