@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { Location } from 'react-router-dom';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Modal } from '../../../../components/common/Modal/Modal';
 import { Badge } from '../../../../components/common/Badge/Badge';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
@@ -170,5 +170,5 @@ export function WorkoutTemplateDetailPage() {
     );
   }
 
-  return backgroundLocation ? modalContent : <PageLayout>{modalContent}</PageLayout>;
+  return backgroundLocation ? modalContent : <AppShell>{modalContent}</AppShell>;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
@@ -78,7 +78,7 @@ export function ExerciseLibraryPage() {
   const filtersActive = hasActiveFilters(filters);
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="exercise-library-page">
         <Container>
           <h1 className="exercise-library-title">Exercise Library</h1>
@@ -122,6 +122,6 @@ export function ExerciseLibraryPage() {
           )}
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

@@ -1,0 +1,119 @@
+.achievements-grid {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  scrollbar-width: thin;
+}
+
+.badge-tile {
+  position: relative;
+  display: flex;
+  flex: 0 0 140px;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-glass-border);
+  background: var(--surface-glass-bg);
+  text-align: center;
+  transition:
+    transform var(--transition-base) var(--ease-standard),
+    border-color var(--transition-base) var(--ease-standard);
+}
+
+.badge-tile-locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.badge-tile-earned {
+  opacity: 1;
+  filter: none;
+  border-color: rgba(255, 122, 26, 0.4);
+  background: linear-gradient(150deg, rgba(255, 122, 26, 0.16) 0%, rgba(22, 30, 39, 0.94) 60%);
+  box-shadow: 0 0 24px rgba(255, 122, 26, 0.25);
+}
+
+.badge-tile:hover,
+.badge-tile:focus-visible {
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.badge-tile-icon {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  color: var(--color-orange-500);
+}
+
+.badge-tile-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.badge-tile-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.badge-tile-lock {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 18px;
+  height: 18px;
+  color: var(--color-neutral-500);
+}
+
+.badge-tile-lock svg {
+  width: 100%;
+  height: 100%;
+}
+
+.badge-tile-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--color-charcoal-900);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--color-neutral-100);
+  font-size: var(--font-size-xs);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-fast) var(--ease-standard),
+    transform var(--transition-fast) var(--ease-standard);
+  z-index: 2;
+}
+
+.badge-tile:hover .badge-tile-tooltip,
+.badge-tile:focus-visible .badge-tile-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes badge-unlock {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.badge-tile-just-earned {
+  animation: badge-unlock 0.6s var(--ease-standard);
+}

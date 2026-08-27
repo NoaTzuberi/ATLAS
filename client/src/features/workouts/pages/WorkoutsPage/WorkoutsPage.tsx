@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -54,7 +54,7 @@ export function WorkoutsPage() {
   }, [category, mineOnly]);
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="workouts-page">
         <Container>
           <div className="workouts-page-header">
@@ -123,6 +123,6 @@ export function WorkoutsPage() {
           )}
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

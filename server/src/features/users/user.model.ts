@@ -18,7 +18,7 @@ interface Recovery {
 }
 
 interface UserProfile {
-  age?: number;
+  birthDate?: Date;
   height?: number;
   weight?: number;
   gender?: string;
@@ -41,6 +41,8 @@ export interface UserDocument {
   name: string;
   email: string;
   passwordHash: string;
+  passwordResetTokenHash?: string;
+  passwordResetExpires?: Date;
   profile?: UserProfile;
   preferences?: UserPreferences;
   onboardingCompleted: boolean;
@@ -76,7 +78,7 @@ const recoverySchema = new Schema<Recovery>(
 
 const profileSchema = new Schema<UserProfile>(
   {
-    age: { type: Number },
+    birthDate: { type: Date },
     height: { type: Number },
     weight: { type: Number },
     gender: { type: String, trim: true },
@@ -105,6 +107,8 @@ const userSchema = new Schema<UserDocument>(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
+    passwordResetTokenHash: { type: String, select: false },
+    passwordResetExpires: { type: Date, select: false },
     profile: { type: profileSchema },
     preferences: { type: preferencesSchema },
     onboardingCompleted: { type: Boolean, default: false },

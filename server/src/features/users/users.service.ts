@@ -2,7 +2,7 @@ import { User } from './user.model';
 
 interface OnboardingProfilePayload {
   name?: string;
-  age: number;
+  birthDate: string;
   height: number;
   weight: number;
   gender?: string;
@@ -42,7 +42,7 @@ export async function updateUserProfile(userId: string, payload: OnboardingProfi
   }
 
   user.profile = {
-    age: payload.age,
+    birthDate: new Date(payload.birthDate),
     height: payload.height,
     weight: payload.weight,
     gender: payload.gender,

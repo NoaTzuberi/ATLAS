@@ -1,0 +1,105 @@
+.profile-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-page::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: radial-gradient(circle at 85% 0%, rgba(255, 122, 26, 0.1), transparent 55%);
+  pointer-events: none;
+}
+
+.profile-page .container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.profile-header {
+  margin-bottom: var(--space-5);
+}
+
+.profile-title {
+  font-family: var(--font-display);
+}
+
+.profile-subtitle {
+  margin-top: var(--space-2);
+}
+
+.profile-section-card {
+  margin-bottom: var(--space-4);
+  background:
+    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.06) 100%),
+    var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.14);
+}
+
+.profile-section-card h2 {
+  font-family: var(--font-display);
+  margin-bottom: var(--space-3);
+}
+
+.profile-account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-change-password-link {
+  color: var(--color-orange-500);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.profile-loading-inline {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-4) 0;
+}
+
+.profile-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.profile-summary-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-summary-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-summary-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.profile-summary-empty {
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.profile-onboarding-cta {
+  width: 100%;
+}
+
+.profile-error {
+  color: var(--color-error-500);
+  font-size: var(--font-size-sm);
+}

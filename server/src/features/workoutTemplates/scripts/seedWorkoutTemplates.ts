@@ -1,10 +1,10 @@
 /**
  * Seeds ATLAS's ready-made workout templates (createdBy: null) — 10 per
- * category (push/pull/legs/full_body/core), each with 6-8 exercises drawn
- * from a curated real-exercise pool per category. Manual/dev script only —
- * not run automatically at startup, same pattern as importExercises.ts.
- * Re-running replaces the whole system template set; it never touches
- * user-created templates (createdBy !== null).
+ * category (upper_body/push/pull/legs/full_body/core), each with 6-8
+ * exercises drawn from a curated real-exercise pool per category. Manual/dev
+ * script only — not run automatically at startup, same pattern as
+ * importExercises.ts. Re-running replaces the whole system template set; it
+ * never touches user-created templates (createdBy !== null).
  *
  * Publishes whatever exercises it references (reviewStatus: 'published') so
  * they're consistently visible in both the Exercise Library and Workouts —
@@ -67,6 +67,29 @@ const PULL_POOL: PoolExercise[] = [
   { slug: 'concentration-curl', defaultSets: 3, defaultReps: '10-12', restTime: 45 },
   { slug: 'preacher-curl', defaultSets: 3, defaultReps: '8-10', restTime: 60 },
   { slug: 'dumbbell-preacher-curl', defaultSets: 3, defaultReps: '10-12', restTime: 60 },
+];
+
+const UPPER_BODY_POOL: PoolExercise[] = [
+  { slug: 'bench-press', defaultSets: 4, defaultReps: '6-8', restTime: 120 },
+  { slug: 'incline-bench-press', defaultSets: 3, defaultReps: '8-10', restTime: 90 },
+  { slug: 'dumbbell-bench-press', defaultSets: 3, defaultReps: '8-10', restTime: 90 },
+  { slug: 'pushups', defaultSets: 3, defaultReps: '12-20', restTime: 60 },
+  { slug: 'military-press', defaultSets: 3, defaultReps: '6-8', restTime: 120 },
+  { slug: 'barbell-shoulder-press', defaultSets: 3, defaultReps: '8-10', restTime: 90 },
+  { slug: 'side-lying-lateral-raise', defaultSets: 3, defaultReps: '12-15', restTime: 45 },
+  { slug: 'dumbbell-reverse-fly', defaultSets: 3, defaultReps: '12-15', restTime: 45 },
+  { slug: 'pull-up', defaultSets: 4, defaultReps: '6-10', restTime: 90 },
+  { slug: 'chin-up', defaultSets: 3, defaultReps: '8-10', restTime: 90 },
+  { slug: 'lat-pull-down', defaultSets: 3, defaultReps: '8-12', restTime: 75 },
+  { slug: 'seated-cable-rows', defaultSets: 3, defaultReps: '8-12', restTime: 75 },
+  { slug: 'bent-over-barbell-row', defaultSets: 4, defaultReps: '6-8', restTime: 120 },
+  { slug: 'pendlay-row', defaultSets: 3, defaultReps: '6-8', restTime: 120 },
+  { slug: 'barbell-curl', defaultSets: 3, defaultReps: '8-10', restTime: 60 },
+  { slug: 'hammer-curls', defaultSets: 3, defaultReps: '10-12', restTime: 60 },
+  { slug: 'preacher-curl', defaultSets: 3, defaultReps: '8-10', restTime: 60 },
+  { slug: 'dumbbell-skullcrusher', defaultSets: 3, defaultReps: '10-12', restTime: 60 },
+  { slug: 'standing-dumbbell-triceps-extension', defaultSets: 3, defaultReps: '10-12', restTime: 60 },
+  { slug: 'tricep-dumbbell-kickback', defaultSets: 3, defaultReps: '12-15', restTime: 45 },
 ];
 
 const LEGS_POOL: PoolExercise[] = [
@@ -134,6 +157,22 @@ interface CategoryConfig {
 }
 
 const CATEGORY_CONFIGS: CategoryConfig[] = [
+  {
+    category: 'upper_body',
+    pool: UPPER_BODY_POOL,
+    templates: [
+      { name: 'Upper Body A', description: 'A bench-press-first session covering chest, back, and arms in one workout.' },
+      { name: 'Upper Body B', description: 'An overhead-press-and-pull-up session for shoulders, back, and arms.' },
+      { name: 'Upper Body Strength', description: 'Heavy, low-rep pressing and pulling work across the whole upper body.' },
+      { name: 'Upper Body Hypertrophy', description: 'Higher-volume pressing, pulling, and arm work for upper-body size.' },
+      { name: 'Push & Pull Circuit', description: 'A circuit alternating pressing and pulling movements for full upper-body coverage.' },
+      { name: 'Chest, Back & Arms', description: 'A complete session touching chest, back, shoulders, biceps, and triceps.' },
+      { name: 'Beginner Upper Body', description: 'A straightforward upper-body session covering the pressing and pulling basics.' },
+      { name: 'Advanced Upper Body Strength', description: 'A demanding session combining heavy barbell pressing with weighted pulling.' },
+      { name: 'Upper Body Pump', description: 'A higher-rep session built to maximize pump across chest, back, and arms.' },
+      { name: 'Complete Upper Body', description: 'A well-rounded upper-body session covering every major pushing and pulling pattern.' },
+    ],
+  },
   {
     category: 'push',
     pool: PUSH_POOL,

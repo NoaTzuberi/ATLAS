@@ -54,3 +54,21 @@ export async function fetchCurrentUser(): Promise<AuthUser> {
   const { data } = await apiClient.get<{ user: AuthUser }>('/auth/me');
   return data.user;
 }
+
+export async function requestPasswordReset(email: string): Promise<string> {
+  try {
+    const { data } = await apiClient.post<{ message: string }>('/auth/forgot-password', { email });
+    return data.message;
+  } catch (error) {
+    throw new Error(extractErrorMessage(error, "Couldn't send the reset email. Please try again."));
+  }
+}
+
+export async function resetPassword(token: string, password: string): Promise<string> {
+  try {
+    const { data } = await apiClient.post<{ message: string }>('/auth/reset-password', { token, password });
+    return data.message;
+  } catch (error) {
+    throw new Error(extractErrorMessage(error, "Couldn't reset your password. Please try again."));
+  }
+}

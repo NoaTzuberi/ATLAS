@@ -3,7 +3,7 @@ import type { OnboardingFormState } from '../../features/onboarding/types';
 
 interface OnboardingProfilePayload {
   name?: string;
-  age: number;
+  birthDate: string;
   height: number;
   weight: number;
   gender?: string;
@@ -46,7 +46,7 @@ export async function saveOnboardingProfile(
 ): Promise<OnboardingProfileResponse> {
   const payload: OnboardingProfilePayload = {
     name: formState.name.trim() || undefined,
-    age: Number(formState.age),
+    birthDate: formState.birthDate,
     height: Number(formState.height),
     weight: Number(formState.weight),
     gender: formState.gender.trim() || undefined,

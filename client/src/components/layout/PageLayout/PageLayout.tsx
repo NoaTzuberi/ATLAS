@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Navbar } from '../Navbar/Navbar';
+import { Footer } from '../Footer/Footer';
 import { usePageEnter } from '../../../hooks/usePageEnter';
 import './PageLayout.css';
 
@@ -16,6 +17,7 @@ export function PageLayout({ children }: PageLayoutProps) {
       <main className="page-layout-main" ref={mainRef}>
         {children}
       </main>
+      <Footer />
     </div>
   );
 }

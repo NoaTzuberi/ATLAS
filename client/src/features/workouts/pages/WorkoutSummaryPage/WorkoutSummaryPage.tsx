@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import gsap from 'gsap';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -93,7 +93,7 @@ export function WorkoutSummaryPage() {
 
   if (isLoading) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <div className="workout-summary-loading">
@@ -101,19 +101,19 @@ export function WorkoutSummaryPage() {
             </div>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
   if (loadError || !workout) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <p className="workout-summary-error">{loadError ?? "This workout couldn't be found."}</p>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
@@ -123,7 +123,7 @@ export function WorkoutSummaryPage() {
   );
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="workout-summary-page">
         <Container>
           <h1 className="workout-summary-title">{workout.name} — Complete</h1>
@@ -171,6 +171,6 @@ export function WorkoutSummaryPage() {
           <Button onClick={() => navigate(ROUTES.WORKOUTS)}>Done</Button>
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
-import { validateRegisterInput, validateLoginInput } from './auth.validation';
+import {
+  validateRegisterInput,
+  validateLoginInput,
+  validateForgotPasswordInput,
+  validateResetPasswordInput,
+} from './auth.validation';
 import {
   registerUser,
   loginUser,
   getCurrentUser,
+  requestPasswordReset,
+  resetPassword as resetPasswordService,
   EmailAlreadyInUseError,
   InvalidCredentialsError,
   UserNotFoundError,
+  InvalidResetTokenError,
 } from './auth.service';
 import { AuthenticatedRequest } from '../../middleware/auth.middleware';
 
@@ -46,6 +54,38 @@ export async function login(req: Request, res: Response) {
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       res.status(401).json({ message: error.message });
+      return;
+    }
+    throw error;
+  }
+}
+
+export async function forgotPassword(req: Request, res: Response) {
+  const validationError = validateForgotPasswordInput(req.body);
+  if (validationError) {
+    res.status(400).json({ message: validationError });
+    return;
+  }
+
+  await requestPasswordReset(req.body.email);
+  res.status(200).json({ message: 'If an account exists for that email, a reset link has been sent.' });
+}
+
+export async function resetPassword(req: Request, res: Response) {
+  const validationError = validateResetPasswordInput(req.body);
+  if (validationError) {
+    res.status(400).json({ message: validationError });
+    return;
+  }
+
+  const { token, password } = req.body;
+
+  try {
+    await resetPasswordService(token, password);
+    res.status(200).json({ message: 'Password reset successfully.' });
+  } catch (error) {
+    if (error instanceof InvalidResetTokenError) {
+      res.status(400).json({ message: error.message });
       return;
     }
     throw error;

@@ -12,6 +12,8 @@ import { Landing } from '../../pages/Landing/Landing';
 import { Showcase } from '../../pages/Showcase/Showcase';
 import { Login } from '../../features/auth/pages/Login/Login';
 import { Register } from '../../features/auth/pages/Register/Register';
+import { ForgotPassword } from '../../features/auth/pages/ForgotPassword/ForgotPassword';
+import { ResetPassword } from '../../features/auth/pages/ResetPassword/ResetPassword';
 import { ProtectedRoute } from '../../features/auth/components/ProtectedRoute/ProtectedRoute';
 import { DashboardPage } from '../../features/dashboard/pages/DashboardPage/DashboardPage';
 import { ProfilePage } from '../../features/profile/pages/ProfilePage/ProfilePage';
@@ -24,7 +26,7 @@ import { WorkoutTemplateDetailPage } from '../../features/workouts/pages/Workout
 import { ActiveWorkoutPage } from '../../features/workouts/pages/ActiveWorkoutPage/ActiveWorkoutPage';
 import { WorkoutSummaryPage } from '../../features/workouts/pages/WorkoutSummaryPage/WorkoutSummaryPage';
 import { CalendarPage } from '../../features/progress/pages/CalendarPage/CalendarPage';
-import { CoachPage } from '../../features/coach/pages/CoachPage/CoachPage';
+import { CoachWidget } from '../../features/coach/components/CoachWidget/CoachWidget';
 
 export function AppRouter() {
   const location = useLocation();
@@ -38,6 +40,8 @@ export function AppRouter() {
         <Route path={ROUTES.SHOWCASE} element={<Showcase />} />
         <Route path={ROUTES.LOGIN} element={<Login />} />
         <Route path={ROUTES.REGISTER} element={<Register />} />
+        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+        <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
@@ -50,7 +54,6 @@ export function AppRouter() {
           <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
           <Route path={ROUTES.EXERCISES} element={<ExerciseLibraryPage />} />
           <Route path={ROUTES.CALENDAR} element={<CalendarPage />} />
-          <Route path={ROUTES.COACH} element={<CoachPage />} />
           {!backgroundLocation && (
             <>
               <Route path={EXERCISE_DETAIL_PATH} element={<ExerciseDetailPage />} />
@@ -68,6 +71,8 @@ export function AppRouter() {
           </Route>
         </Routes>
       )}
+
+      <CoachWidget />
     </>
   );
 }

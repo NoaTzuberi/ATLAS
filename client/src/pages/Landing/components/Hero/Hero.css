@@ -1,7 +1,16 @@
+.hero {
+  display: flex;
+  align-items: flex-end;
+  min-height: 80vh;
+}
+
 .hero .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
   gap: var(--space-4);
+  max-width: 580px;
+  margin-inline: 0;
+  margin-left: var(--space-6);
 }

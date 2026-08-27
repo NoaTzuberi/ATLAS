@@ -68,6 +68,9 @@ export function Login() {
                 error={passwordError}
                 autoComplete="current-password"
               />
+              <Link to={ROUTES.FORGOT_PASSWORD} className="login-forgot-password">
+                Forgot password?
+              </Link>
               {formError && <p className="auth-form-error">{formError}</p>}
               <Button type="submit" variant="primary" loading={isSubmitting}>
                 Log In

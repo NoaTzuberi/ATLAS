@@ -2,6 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "main": "dist/server.js",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec tsx src/server.ts",
     "build": "tsc",
@@ -24,7 +27,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.9.1"
+    "mongoose": "^9.9.1",
+    "resend": "^6.24.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

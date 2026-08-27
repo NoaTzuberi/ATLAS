@@ -28,3 +28,10 @@ export function validateLoginPassword(password: string): string | undefined {
   }
   return undefined;
 }
+
+export function validateConfirmPassword(password: string, confirmPassword: string): string | undefined {
+  if (confirmPassword !== password) {
+    return 'Passwords do not match.';
+  }
+  return undefined;
+}

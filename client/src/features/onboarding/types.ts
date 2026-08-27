@@ -1,6 +1,6 @@
 export interface OnboardingFormState {
   name: string;
-  age: string;
+  birthDate: string;
   height: string;
   weight: string;
   gender: string;
@@ -29,7 +29,7 @@ export interface OnboardingFormState {
 
 export const INITIAL_ONBOARDING_STATE: OnboardingFormState = {
   name: '',
-  age: '',
+  birthDate: '',
   height: '',
   weight: '',
   gender: '',

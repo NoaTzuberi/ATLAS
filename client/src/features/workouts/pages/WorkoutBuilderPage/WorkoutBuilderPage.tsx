@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -149,7 +149,7 @@ export function WorkoutBuilderPage() {
 
   if (isLoading) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <div className="workout-builder-loading">
@@ -157,26 +157,26 @@ export function WorkoutBuilderPage() {
             </div>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
   if (loadError) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <p className="workout-builder-error">{loadError}</p>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
   const addedExerciseIds = new Set(rows.map((row) => row.exercise.id));
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="workout-builder-page">
         <Container>
           <h1 className="workout-builder-title">{isEditMode ? 'Edit Workout' : 'Create Workout'}</h1>
@@ -272,6 +272,6 @@ export function WorkoutBuilderPage() {
           </div>
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

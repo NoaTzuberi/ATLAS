@@ -1,12 +1,21 @@
 interface RegisterInput {
-  name?: unknown;
-  email?: unknown;
-  password?: unknown;
+  name?: string;
+  email?: string;
+  password?: string;
 }
 
 interface LoginInput {
-  email?: unknown;
-  password?: unknown;
+  email?: string;
+  password?: string;
+}
+
+interface ForgotPasswordInput {
+  email?: string;
+}
+
+interface ResetPasswordInput {
+  token?: string;
+  password?: string;
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,6 +45,25 @@ export function validateLoginInput(input: LoginInput): string | null {
   }
   if (typeof password !== 'string' || password.length === 0) {
     return 'Password is required.';
+  }
+
+  return null;
+}
+
+export function validateForgotPasswordInput(input: ForgotPasswordInput): string | null {
+  if (typeof input.email !== 'string' || !EMAIL_REGEX.test(input.email)) {
+    return 'A valid email is required.';
+  }
+
+  return null;
+}
+
+export function validateResetPasswordInput(input: ResetPasswordInput): string | null {
+  if (typeof input.token !== 'string' || input.token.trim().length === 0) {
+    return 'Reset token is required.';
+  }
+  if (typeof input.password !== 'string' || input.password.length < MIN_PASSWORD_LENGTH) {
+    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
   }
 
   return null;

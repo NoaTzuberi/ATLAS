@@ -25,6 +25,17 @@ function isNumberInRange(value: unknown, min: number, max: number): boolean {
   return typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max;
 }
 
+function isValidBirthDate(value: unknown): boolean {
+  if (typeof value !== 'string') return false;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return false;
+
+  const ageMs = Date.now() - date.getTime();
+  const ageYears = ageMs / (1000 * 60 * 60 * 24 * 365.25);
+  return ageYears >= MIN_AGE && ageYears <= MAX_AGE;
+}
+
 export function validateOnboardingPayload(body: unknown): string | null {
   if (typeof body !== 'object' || body === null) {
     return 'Invalid request body.';
@@ -38,8 +49,8 @@ export function validateOnboardingPayload(body: unknown): string | null {
     }
   }
 
-  if (!isNumberInRange(payload.age, MIN_AGE, MAX_AGE)) {
-    return `Age must be a number between ${MIN_AGE} and ${MAX_AGE}.`;
+  if (!isValidBirthDate(payload.birthDate)) {
+    return `Birth date must indicate an age between ${MIN_AGE} and ${MAX_AGE}.`;
   }
 
   if (!isNumberInRange(payload.height, MIN_HEIGHT_CM, MAX_HEIGHT_CM)) {

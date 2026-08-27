@@ -1,5 +1,8 @@
 :root {
   /* Colors — Core Palette */
+  --color-dark-100: #1c1c1c;
+  --color-charcoal-900: #12161d;
+  --color-charcoal-800: #161e27;
   --color-navy-950: #0b1929;
   --color-navy-900: #0f2133;
   --color-navy-800: #142a3d;
@@ -25,14 +28,15 @@
   --color-border-strong: rgba(245, 246, 248, 0.24);
 
   /* Semantic backgrounds — components should use these, not raw navy values */
-  --background-primary: var(--color-navy-950);
-  --background-secondary: var(--color-navy-900);
+  --background-primary: var(--color-charcoal-900);
+  --background-secondary: var(--color-charcoal-800);
 
   /* Glass Surfaces */
   --surface-glass-bg: rgba(255, 255, 255, 0.06);
   --surface-glass-bg-strong: rgba(255, 255, 255, 0.1);
   --surface-glass-blur: 16px;
   --surface-glass-border: rgba(255, 255, 255, 0.14);
+  --surface-glass-dark-bg: rgba(18, 22, 29, 0.6);
 
   /* Spacing (8px base scale) */
   --space-1: 4px;
@@ -50,7 +54,7 @@
   --radius-lg: 24px;
 
   /* Layout */
-  --container-max-width: 1200px;
+  --container-max-width: 1500px;
 
   /* Z-Index */
   --z-modal-backdrop: 1000;
@@ -68,6 +72,7 @@
   /* Typography */
   --font-display: "Cabinet Grotesk", sans-serif;
   --font-body: "Satoshi", sans-serif;
+  --font-logo: "Boxing", serif;
 
   --font-size-xs: 13px;
   --font-size-sm: 15px;

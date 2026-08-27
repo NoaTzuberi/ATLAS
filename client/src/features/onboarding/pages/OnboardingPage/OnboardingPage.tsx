@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -47,7 +47,7 @@ function isStepValid(index: number, state: OnboardingFormState): boolean {
     case 1:
       return (
         state.name.trim().length > 0 &&
-        state.age !== '' &&
+        state.birthDate !== '' &&
         state.height !== '' &&
         state.weight !== ''
       );
@@ -141,7 +141,7 @@ export function OnboardingPage() {
   const continueLabel = isFirstStep ? 'Start' : isLastStep ? 'Create my profile' : 'Continue';
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section>
         <Container>
           <GlassCard className="onboarding-card">
@@ -180,6 +180,6 @@ export function OnboardingPage() {
           </GlassCard>
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

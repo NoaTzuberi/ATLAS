@@ -141,7 +141,7 @@ export async function listWorkoutTemplates(params: ListWorkoutTemplatesParams): 
   }
 
   const docs = await WorkoutTemplate.find(filter)
-    .sort({ createdBy: 1, name: 1 })
+    .sort({ createdBy: -1, name: 1 })
     .populate('exercises.exerciseId', EXERCISE_SUMMARY_FIELDS)
     .lean<WorkoutTemplateLeanDoc[]>();
 

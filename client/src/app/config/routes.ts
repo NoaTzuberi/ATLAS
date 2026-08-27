@@ -3,6 +3,8 @@ export const ROUTES = {
   SHOWCASE: '/showcase',
   LOGIN: '/login',
   REGISTER: '/register',
+  FORGOT_PASSWORD: '/forgot-password',
+  RESET_PASSWORD: '/reset-password',
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   SETTINGS: '/settings',
@@ -11,7 +13,6 @@ export const ROUTES = {
   ONBOARDING: '/onboarding',
   EXERCISES: '/exercises',
   CALENDAR: '/calendar',
-  COACH: '/coach',
 } as const;
 
 export const EXERCISE_DETAIL_PATH = '/exercises/:slug';

@@ -1,8 +1,13 @@
 import { apiClient } from '../api/apiClient';
 import type { ConversationMessage } from '../../features/coach/types';
 
-export async function sendMessage(message: string): Promise<{ reply: string }> {
-  const { data } = await apiClient.post<{ reply: string }>('/coach/message', { message });
+interface SendMessageResponse {
+  reply: string;
+  createdWorkout?: { id: string; name: string };
+}
+
+export async function sendMessage(message: string): Promise<SendMessageResponse> {
+  const { data } = await apiClient.post<SendMessageResponse>('/coach/message', { message });
   return data;
 }
 

@@ -3,7 +3,8 @@ import type { WorkoutCategory, WorkoutGoal } from '../types';
 export const WORKOUT_CATEGORY_OPTIONS: { value: WorkoutCategory; label: string }[] = [
   { value: 'push', label: 'Push' },
   { value: 'pull', label: 'Pull' },
-  { value: 'legs', label: 'Legs' },
+  { value: 'upper_body', label: 'Upper Body' },
+  { value: 'legs', label: 'Lower Body' },
   { value: 'full_body', label: 'Full Body' },
   { value: 'core', label: 'Core' },
 ];

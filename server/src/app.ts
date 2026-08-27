@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
+import { config } from './config/env';
 import { healthRouter } from './features/health/health.routes';
 import { authRouter } from './features/auth/auth.routes';
 import { usersRouter } from './features/users/users.routes';
@@ -15,7 +16,7 @@ import { aiCoachRouter } from './features/aiCoach/aiCoach.routes';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: config.clientOrigin }));
 app.use(express.json());
 
 app.use('/api', healthRouter);

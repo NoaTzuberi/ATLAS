@@ -15,6 +15,7 @@
 .active-workout-page .container {
   position: relative;
   z-index: 1;
+  max-width: 720px;
 }
 
 .active-workout-loading {

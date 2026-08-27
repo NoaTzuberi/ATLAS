@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -137,7 +137,7 @@ export function CalendarPage() {
   }
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="calendar-page">
         <Container>
           <div className="calendar-page-header">
@@ -287,6 +287,6 @@ export function CalendarPage() {
           </Button>
         </div>
       </Modal>
-    </PageLayout>
+    </AppShell>
   );
 }

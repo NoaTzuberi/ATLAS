@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PageLayout } from '../../../../components/layout/PageLayout/PageLayout';
+import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -167,7 +167,7 @@ export function ActiveWorkoutPage() {
 
   if (isLoading) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <div className="active-workout-loading">
@@ -175,24 +175,24 @@ export function ActiveWorkoutPage() {
             </div>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
   if (loadError || !workout) {
     return (
-      <PageLayout>
+      <AppShell>
         <Section>
           <Container>
             <p className="active-workout-error">{loadError ?? "This workout couldn't be found."}</p>
           </Container>
         </Section>
-      </PageLayout>
+      </AppShell>
     );
   }
 
   return (
-    <PageLayout>
+    <AppShell>
       <Section className="active-workout-page">
         <Container>
           <div className="active-workout-header">
@@ -298,6 +298,6 @@ export function ActiveWorkoutPage() {
           </div>
         </Container>
       </Section>
-    </PageLayout>
+    </AppShell>
   );
 }

@@ -27,10 +27,10 @@ export function BasicProfileStep({ formState, updateFormState }: BasicProfileSte
           onChange={(event) => updateFormState({ name: event.target.value })}
         />
         <Input
-          label="Age"
-          type="number"
-          value={formState.age}
-          onChange={(event) => updateFormState({ age: event.target.value })}
+          label="Birth Date"
+          type="date"
+          value={formState.birthDate}
+          onChange={(event) => updateFormState({ birthDate: event.target.value })}
         />
         <Input
           label="Height (cm)"

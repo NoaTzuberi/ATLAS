@@ -1,6 +1,6 @@
 import type { Difficulty, ExerciseMediaFields } from '../exercises/types';
 
-export type WorkoutCategory = 'push' | 'pull' | 'legs' | 'full_body' | 'core';
+export type WorkoutCategory = 'upper_body' | 'push' | 'pull' | 'legs' | 'full_body' | 'core';
 export type WorkoutGoal = 'strength' | 'hypertrophy' | 'endurance';
 
 export interface WorkoutTemplateExerciseSummary {

@@ -68,6 +68,7 @@ function summarizeMemories(memories: Awaited<ReturnType<typeof getMemories>>): s
 
 export interface SendMessageResult {
   reply: string;
+  createdWorkout?: { id: string; name: string };
 }
 
 export async function sendMessage(userId: string, userMessage: string): Promise<SendMessageResult> {
@@ -99,6 +100,7 @@ export async function sendMessage(userId: string, userMessage: string): Promise<
   const contents: Content[] = [...history, { role: 'user', parts: [{ text: userMessage }] }];
 
   let finalText = '';
+  let createdWorkout: { id: string; name: string } | undefined;
 
   for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration += 1) {
     let response;
@@ -112,6 +114,7 @@ export async function sendMessage(userId: string, userMessage: string): Promise<
         },
       });
     } catch (error) {
+      console.error('[AI Coach] Gemini API call failed:', error);
       if (error instanceof ApiError && error.status === 429) {
         throw new AgentRateLimitedError(
           "You've hit the AI Coach's rate limit for the moment — please wait about a minute and try again.",
@@ -140,6 +143,10 @@ export async function sendMessage(userId: string, userMessage: string): Promise<
       const toolName = call.name ?? '';
       try {
         const result = await executeTool(toolName, call.args ?? {}, userId);
+        if (toolName === 'createWorkout' || toolName === 'modifyWorkout') {
+          const workout = result as { id: string; name: string };
+          createdWorkout = { id: workout.id, name: workout.name };
+        }
         responseParts.push({
           functionResponse: { name: toolName, response: { output: result } },
         });
@@ -167,7 +174,7 @@ export async function sendMessage(userId: string, userMessage: string): Promise<
   conversation.messages.push(...newMessages);
   await conversation.save();
 
-  return { reply: finalText };
+  return { reply: finalText, createdWorkout };
 }
 
 export async function getConversationHistory(userId: string): Promise<ConversationMessage[]> {
