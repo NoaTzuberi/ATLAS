@@ -12,7 +12,7 @@
 
 .progress-ring-fill {
   stroke: var(--color-orange-500);
-  transition: stroke-dashoffset var(--transition-slow) var(--ease-standard);
+  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .progress-ring-glow .progress-ring-fill {
@@ -23,23 +23,9 @@
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   color: var(--color-orange-500);
-}
-
-@keyframes progress-ring-pulse {
-  0% {
-    transform: scale(0.92);
-  }
-  50% {
-    transform: scale(1.06);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.progress-ring-just-updated {
-  animation: progress-ring-pulse 0.6s var(--ease-standard);
 }

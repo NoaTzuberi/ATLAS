@@ -81,11 +81,6 @@ export function ExerciseLibraryPage() {
     <AppShell>
       <Section className="exercise-library-page">
         <Container>
-          <h1 className="exercise-library-title">Exercise Library</h1>
-          <p className="text-body exercise-library-subtitle">
-            Browse exercises by muscle, equipment, and difficulty.
-          </p>
-
           <GlassCard className="exercise-library-toolbar">
             <ExerciseFilters
               key={filterResetCount}

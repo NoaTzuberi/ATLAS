@@ -31,6 +31,10 @@
   --background-primary: var(--color-charcoal-900);
   --background-secondary: var(--color-charcoal-800);
 
+  /* Card accent glow — fades a warm accent to true zero alpha (never an opaque
+     color) so it can never mismatch whatever solid background sits behind it. */
+  --gradient-card-glow: linear-gradient(135deg, rgba(255, 122, 26, 0.1) 0%, rgba(255, 122, 26, 0.03) 45%, rgba(255, 122, 26, 0) 75%);
+
   /* Glass Surfaces */
   --surface-glass-bg: rgba(255, 255, 255, 0.06);
   --surface-glass-bg-strong: rgba(255, 255, 255, 0.1);

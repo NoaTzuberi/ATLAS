@@ -57,13 +57,7 @@ export function WorkoutsPage() {
     <AppShell>
       <Section className="workouts-page">
         <Container>
-          <div className="workouts-page-header">
-            <div>
-              <h1 className="workouts-page-title">Workouts</h1>
-              <p className="text-body workouts-page-subtitle">
-                Browse ready-made workouts or build your own.
-              </p>
-            </div>
+          <div className="workouts-page-actions-row">
             <Link to={ROUTES.WORKOUT_BUILDER}>
               <Button>Create Workout</Button>
             </Link>

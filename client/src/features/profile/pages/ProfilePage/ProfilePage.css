@@ -18,22 +18,10 @@
   max-width: 720px;
 }
 
-.profile-header {
-  margin-bottom: var(--space-5);
-}
-
-.profile-title {
-  font-family: var(--font-display);
-}
-
-.profile-subtitle {
-  margin-top: var(--space-2);
-}
-
 .profile-section-card {
   margin-bottom: var(--space-4);
   background:
-    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.06) 100%),
+    var(--gradient-card-glow),
     var(--background-secondary);
   border-color: rgba(245, 246, 248, 0.14);
 }

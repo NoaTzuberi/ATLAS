@@ -54,13 +54,6 @@ export function ProfilePage() {
     <AppShell>
       <Section className="profile-page">
         <Container>
-          <div className="profile-header">
-            <h1 className="profile-title">Profile</h1>
-            <p className="text-body profile-subtitle">
-              Manage your account and training preferences.
-            </p>
-          </div>
-
           <GlassCard className="profile-section-card profile-account-card">
             <h2>Account</h2>
             <div className="profile-account-row">

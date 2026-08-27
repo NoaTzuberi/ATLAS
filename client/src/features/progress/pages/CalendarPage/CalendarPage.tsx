@@ -140,11 +140,7 @@ export function CalendarPage() {
     <AppShell>
       <Section className="calendar-page">
         <Container>
-          <div className="calendar-page-header">
-            <div>
-              <h1 className="calendar-page-title">Calendar</h1>
-              <p className="text-body calendar-page-subtitle">Your gym sessions and activities.</p>
-            </div>
+          <div className="calendar-page-actions-row">
             <Button onClick={openLogActivity}>Log Activity</Button>
           </div>
 

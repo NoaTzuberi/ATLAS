@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
@@ -10,16 +11,15 @@ import { getDashboardSummary } from '../../../../services/dashboard/dashboardSer
 import { createProgressEntry } from '../../../../services/progress/progressService';
 import { useAuth } from '../../../../services/auth/AuthContext';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
-import { usePrevious } from '../../../../hooks/usePrevious';
 import { ProgressRing } from '../../components/ProgressRing/ProgressRing';
 import { AchievementBadges } from '../../components/AchievementBadges/AchievementBadges';
 import { FlameIcon, CalendarIcon, TrophyIcon, ScaleIcon, RepeatIcon } from '../../components/icons';
 import type { DashboardSummary, WeightTrendPoint } from '../../types';
 import './DashboardPage.css';
 
-const WEEKLY_GOAL = 3;
 const WORKOUT_MILESTONES = [10, 25, 50, 100, 250, 500];
 const STREAK_RING_TARGET = 7;
+const MILESTONE_SEGMENT_COUNT = 10;
 const WEIGHT_CHART_WIDTH = 400;
 const WEIGHT_CHART_HEIGHT = 100;
 
@@ -55,6 +55,18 @@ function buildWeightChartPoints(points: WeightTrendPoint[]): string {
     .join(' ');
 }
 
+/** Last 7 calendar days ending today, as single-letter weekday labels. */
+function getLast7DayLetters(): string[] {
+  const letters = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const days: string[] = [];
+  for (let i = 6; i >= 0; i -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    days.push(letters[date.getDay()]);
+  }
+  return days;
+}
+
 export function DashboardPage() {
   const { user } = useAuth();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -64,8 +76,12 @@ export function DashboardPage() {
   const [weightInput, setWeightInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
+  const [ringProgress, setRingProgress] = useState(0);
   const bentoRef = useStaggerReveal<HTMLDivElement>([summary]);
-  const previousSummary = usePrevious(summary);
+  const weekDotsRef = useRef<HTMLDivElement>(null);
+  const milestoneBarRef = useRef<HTMLDivElement>(null);
+  const weightPolylineRef = useRef<SVGPolylineElement>(null);
+  const weightEmptyLineRef = useRef<SVGLineElement>(null);
 
   async function loadSummary() {
     setIsLoading(true);
@@ -83,6 +99,61 @@ export function DashboardPage() {
   useEffect(() => {
     loadSummary();
   }, []);
+
+  // Sweep the streak ring in from empty to its real value — also fires
+  // smoothly on any later change since it always animates from wherever
+  // the ring currently sits toward the new target.
+  useEffect(() => {
+    if (!summary) return;
+    const raf = requestAnimationFrame(() => {
+      setRingProgress(summary.streak / STREAK_RING_TARGET);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [summary]);
+
+  // Stagger-fill the week dots and milestone segments, and draw in the
+  // weight line, whenever the underlying data changes.
+  useEffect(() => {
+    if (!summary) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const dots = weekDotsRef.current ? gsap.utils.toArray<HTMLElement>('.day-dot', weekDotsRef.current) : [];
+    const segments = milestoneBarRef.current
+      ? gsap.utils.toArray<HTMLElement>('.milestone-segment', milestoneBarRef.current)
+      : [];
+
+    const timeline = gsap.timeline();
+    if (dots.length > 0) {
+      timeline.fromTo(
+        dots,
+        { scale: 0.4, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.8)', stagger: 0.05 },
+        0,
+      );
+    }
+    if (segments.length > 0) {
+      timeline.fromTo(
+        segments,
+        { scaleY: 0.3, opacity: 0 },
+        { scaleY: 1, opacity: 1, duration: 0.35, ease: 'power2.out', stagger: 0.04 },
+        0,
+      );
+    }
+    const weightLineEl = weightPolylineRef.current ?? weightEmptyLineRef.current;
+    if (weightLineEl) {
+      const length = weightLineEl.getTotalLength();
+      timeline.fromTo(
+        weightLineEl,
+        { strokeDasharray: length, strokeDashoffset: length },
+        { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' },
+        0.1,
+      );
+    }
+
+    return () => {
+      timeline.kill();
+    };
+  }, [summary]);
 
   async function handleLogWeight() {
     const weight = Number(weightInput);
@@ -106,23 +177,18 @@ export function DashboardPage() {
   }
 
   const nextMilestone = summary ? getNextMilestone(summary.totalWorkouts) : WORKOUT_MILESTONES[0];
-  const streakChanged = previousSummary && summary && previousSummary.streak !== summary.streak;
-  const totalWorkoutsChanged =
-    previousSummary && summary && previousSummary.totalWorkouts !== summary.totalWorkouts;
-  const weekChanged =
-    previousSummary && summary && previousSummary.workoutsLast7Days !== summary.workoutsLast7Days;
+  const filledSegments = summary
+    ? Math.min(MILESTONE_SEGMENT_COUNT, Math.round((summary.totalWorkouts / nextMilestone) * MILESTONE_SEGMENT_COUNT))
+    : 0;
   const initial = user?.name?.trim().charAt(0).toUpperCase() ?? '?';
   const firstName = user?.name?.split(' ')[0] ?? 'there';
+  const dayLetters = getLast7DayLetters();
 
   return (
     <AppShell>
       <Container>
         <div className="dashboard-page">
-          <div className="dashboard-header">
-            <div>
-              <h1 className="dashboard-title">Dashboard</h1>
-              <p className="text-body dashboard-subtitle">Your training at a glance.</p>
-            </div>
+          <div className="dashboard-actions-row">
             <Button onClick={() => setIsLogWeightOpen(true)}>Log Weight</Button>
           </div>
 
@@ -154,46 +220,34 @@ export function DashboardPage() {
               <div className="bento-grid" ref={bentoRef}>
                 <GlassCard className="bento-tile bento-tile-streak">
                   <div className="dashboard-stat-hero-glow" aria-hidden="true" />
-                  <ProgressRing
-                    key={`streak-${summary.streak}`}
-                    progress={summary.streak / STREAK_RING_TARGET}
-                    size={96}
-                    strokeWidth={6}
-                    glow
-                    className={streakChanged ? 'progress-ring-just-updated' : undefined}
-                  >
-                    <FlameIcon />
+                  <ProgressRing progress={ringProgress} size={112} strokeWidth={7} glow>
+                    <span className="streak-ring-icon">
+                      <FlameIcon />
+                    </span>
+                    <span className="streak-ring-value">{summary.streak}</span>
                   </ProgressRing>
-                  <span className="dashboard-stat-value dashboard-stat-value-hero">{summary.streak}</span>
                   <span className="dashboard-stat-label">Day Streak</span>
-                  {summary.streak === 0 && (
-                    <span className="dashboard-stat-microcopy">Start your streak today</span>
-                  )}
+                  <span className="dashboard-stat-microcopy">
+                    {summary.streak === 0 ? 'Start today to light it up' : `${STREAK_RING_TARGET}-day ring`}
+                  </span>
                 </GlassCard>
 
                 <GlassCard className="bento-tile bento-tile-week">
                   <span className="dashboard-stat-badge" aria-hidden="true">
                     <CalendarIcon />
                   </span>
-                  <div
-                    key={`week-${summary.workoutsLast7Days}`}
-                    className={'dashboard-week-dots' + (weekChanged ? ' dashboard-stat-just-updated' : '')}
-                    aria-hidden="true"
-                  >
-                    {Array.from({ length: WEEKLY_GOAL }).map((_, index) => (
-                      <span
-                        key={index}
-                        className={
-                          'dashboard-week-dot' +
-                          (index < summary.workoutsLast7Days ? ' dashboard-week-dot-filled' : '')
-                        }
-                      />
-                    ))}
-                  </div>
-                  <span className="dashboard-stat-value">
-                    {summary.workoutsLast7Days}/{WEEKLY_GOAL}
-                  </span>
                   <span className="dashboard-stat-label">This Week</span>
+                  <div className="day-dots" ref={weekDotsRef}>
+                    {dayLetters.map((letter, index) => {
+                      const filled = index >= dayLetters.length - summary.workoutsLast7Days;
+                      return (
+                        <div className="day-dot-column" key={index}>
+                          <span className={'day-dot' + (filled ? ' day-dot-filled' : '')} />
+                          <span className="day-dot-letter">{letter}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </GlassCard>
 
                 <GlassCard className="bento-tile bento-tile-total">
@@ -203,19 +257,19 @@ export function DashboardPage() {
                   <span className="dashboard-stat-value">{summary.totalWorkouts}</span>
                   <span className="dashboard-stat-label">Total Workouts</span>
                   <div
-                    key={`milestone-${summary.totalWorkouts}`}
-                    className={
-                      'dashboard-milestone-bar' + (totalWorkoutsChanged ? ' dashboard-stat-just-updated' : '')
-                    }
+                    className="milestone-segments"
+                    ref={milestoneBarRef}
                     role="progressbar"
                     aria-valuenow={summary.totalWorkouts}
                     aria-valuemin={0}
                     aria-valuemax={nextMilestone}
                   >
-                    <div
-                      className="dashboard-milestone-bar-fill"
-                      style={{ width: `${Math.min(100, (summary.totalWorkouts / nextMilestone) * 100)}%` }}
-                    />
+                    {Array.from({ length: MILESTONE_SEGMENT_COUNT }).map((_, index) => (
+                      <span
+                        key={index}
+                        className={'milestone-segment' + (index < filledSegments ? ' milestone-segment-filled' : '')}
+                      />
+                    ))}
                   </div>
                   <span className="dashboard-milestone-label">
                     {summary.totalWorkouts} / {nextMilestone} to next milestone
@@ -263,11 +317,13 @@ export function DashboardPage() {
                       <line x1="0" y1="75" x2={WEIGHT_CHART_WIDTH} y2="75" className="weight-chart-gridline" />
                       {summary.weightTrend.length >= 2 ? (
                         <polyline
+                          ref={weightPolylineRef}
                           points={buildWeightChartPoints(summary.weightTrend)}
                           className="weight-chart-line"
                         />
                       ) : (
                         <line
+                          ref={weightEmptyLineRef}
                           x1="0"
                           y1={WEIGHT_CHART_HEIGHT / 2}
                           x2={WEIGHT_CHART_WIDTH}
@@ -277,7 +333,7 @@ export function DashboardPage() {
                       )}
                     </svg>
                     {summary.weightTrend.length < 2 && (
-                      <span className="weight-chart-empty-note">Log your weight to start your trend</span>
+                      <span className="weight-chart-empty-note">Log your weight to start the trend</span>
                     )}
                   </div>
                 </GlassCard>

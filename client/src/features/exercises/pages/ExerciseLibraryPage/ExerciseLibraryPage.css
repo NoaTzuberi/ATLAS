@@ -17,18 +17,10 @@
   z-index: 1;
 }
 
-.exercise-library-title {
-  font-family: var(--font-display);
-}
-
-.exercise-library-subtitle {
-  margin-bottom: var(--space-5);
-}
-
 .exercise-library-toolbar {
   margin-bottom: var(--space-6);
   background:
-    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.1) 100%),
+    var(--gradient-card-glow),
     var(--background-secondary);
   border-color: rgba(245, 246, 248, 0.14);
   box-shadow:

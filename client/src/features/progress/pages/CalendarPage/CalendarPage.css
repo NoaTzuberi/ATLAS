@@ -17,21 +17,10 @@
   z-index: 1;
 }
 
-.calendar-page-header {
+.calendar-page-actions-row {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
-  flex-wrap: wrap;
+  justify-content: flex-end;
   margin-bottom: var(--space-5);
-}
-
-.calendar-page-title {
-  font-family: var(--font-display);
-}
-
-.calendar-page-subtitle {
-  margin-top: var(--space-2);
 }
 
 .calendar-page-loading {
@@ -54,7 +43,7 @@
 .calendar-page-calendar,
 .calendar-page-day {
   background:
-    linear-gradient(135deg, rgba(18, 22, 29, 0.94) 0%, rgba(22, 30, 39, 0.9) 60%, rgba(255, 122, 26, 0.08) 100%),
+    var(--gradient-card-glow),
     var(--background-secondary);
   border-color: rgba(245, 246, 248, 0.14);
 }
