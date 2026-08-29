@@ -89,6 +89,34 @@
   font-size: var(--font-size-base);
 }
 
+.coach-widget-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.coach-widget-icon-button {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-neutral-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast) var(--ease-standard),
+    color var(--transition-fast) var(--ease-standard);
+}
+
+.coach-widget-icon-button:hover {
+  background-color: var(--surface-glass-bg);
+  color: var(--color-neutral-100);
+}
+
 .coach-widget-close {
   width: 28px;
   height: 28px;
@@ -292,4 +320,65 @@
 .coach-widget-send:disabled {
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
+}
+
+.coach-history-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.coach-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--surface-glass-bg);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast) var(--ease-standard),
+    background-color var(--transition-fast) var(--ease-standard);
+}
+
+.coach-history-item:hover {
+  border-color: rgba(255, 122, 26, 0.4);
+  background-color: var(--surface-glass-bg-strong);
+}
+
+.coach-history-item-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.coach-history-item-date {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-100);
+}
+
+.coach-history-item-time {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.coach-history-item-preview {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coach-history-item-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-orange-hover);
 }

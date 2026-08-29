@@ -1,12 +1,15 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../../middleware/auth.middleware';
-import { validateMessagePayload } from './aiCoach.validation';
+import { validateMessagePayload, validateSessionIdParam } from './aiCoach.validation';
 import {
   sendMessage,
   getConversationHistory,
+  listSessions,
+  getSessionById,
   AgentNotConfiguredError,
   AgentRateLimitedError,
   AgentUnavailableError,
+  SessionNotFoundError,
 } from './agent.service';
 
 export async function postMessage(req: AuthenticatedRequest, res: Response) {
@@ -17,7 +20,7 @@ export async function postMessage(req: AuthenticatedRequest, res: Response) {
   }
 
   try {
-    const result = await sendMessage(req.userId!, req.body.message);
+    const result = await sendMessage(req.userId!, req.body.message, req.body.sessionId);
     res.status(200).json(result);
   } catch (error) {
     if (error instanceof AgentNotConfiguredError) {
@@ -32,11 +35,39 @@ export async function postMessage(req: AuthenticatedRequest, res: Response) {
       res.status(503).json({ message: error.message });
       return;
     }
+    if (error instanceof SessionNotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
+    }
     throw error;
   }
 }
 
 export async function getConversation(req: AuthenticatedRequest, res: Response) {
-  const messages = await getConversationHistory(req.userId!);
-  res.status(200).json({ messages });
+  const conversation = await getConversationHistory(req.userId!);
+  res.status(200).json(conversation);
+}
+
+export async function getSessions(req: AuthenticatedRequest, res: Response) {
+  const sessions = await listSessions(req.userId!);
+  res.status(200).json({ sessions });
+}
+
+export async function getSession(req: AuthenticatedRequest, res: Response) {
+  const validationError = validateSessionIdParam(req.params.sessionId);
+  if (validationError) {
+    res.status(400).json({ message: validationError });
+    return;
+  }
+
+  try {
+    const session = await getSessionById(req.userId!, String(req.params.sessionId));
+    res.status(200).json(session);
+  } catch (error) {
+    if (error instanceof SessionNotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
+    }
+    throw error;
+  }
 }

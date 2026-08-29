@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import type { ConversationDocument, ConversationMessage } from './conversation.types';
+import type { ConversationSessionDocument, ConversationMessage } from './conversation.types';
 
 const messageSchema = new Schema<ConversationMessage>(
   {
@@ -10,12 +10,20 @@ const messageSchema = new Schema<ConversationMessage>(
   { _id: false },
 );
 
-/** One persistent conversation per user — a single ongoing thread with their
- * coach, not multiple named chats. Simpler and matches how a coaching
- * relationship actually works; multi-thread history is future scope. */
-const conversationSchema = new Schema<ConversationDocument>({
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+/** One document per conversation session. A user has many sessions over time —
+ * the most recent one (by lastMessageAt) is "active" until it goes stale past
+ * the inactivity timeout (see SESSION_TIMEOUT_MS in agent.service.ts), at which
+ * point the next message starts a new session instead of appending to it. */
+const conversationSessionSchema = new Schema<ConversationSessionDocument>({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  startedAt: { type: Date, required: true, default: () => new Date() },
+  lastMessageAt: { type: Date, required: true, default: () => new Date() },
   messages: { type: [messageSchema], default: [] },
 });
 
-export const Conversation = model<ConversationDocument>('Conversation', conversationSchema);
+conversationSessionSchema.index({ userId: 1, lastMessageAt: -1 });
+
+export const ConversationSession = model<ConversationSessionDocument>(
+  'ConversationSession',
+  conversationSessionSchema,
+);

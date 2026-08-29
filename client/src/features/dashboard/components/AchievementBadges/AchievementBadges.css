@@ -12,6 +12,55 @@
   width: 64px;
   background: linear-gradient(to right, transparent, var(--background-secondary));
   pointer-events: none;
+  z-index: 1;
+}
+
+.achievements-scroll-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 56px;
+  margin: auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--surface-glass-border);
+  background-color: var(--color-charcoal-900);
+  color: var(--color-orange-500);
+  cursor: pointer;
+  z-index: 2;
+  transition:
+    background-color var(--transition-base) var(--ease-standard),
+    border-color var(--transition-base) var(--ease-standard),
+    opacity var(--transition-base) var(--ease-standard);
+}
+
+.achievements-scroll-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.achievements-scroll-arrow-left {
+  left: -8px;
+}
+
+.achievements-scroll-arrow-right {
+  right: -8px;
+}
+
+.achievements-scroll-arrow:hover:not(:disabled),
+.achievements-scroll-arrow:focus-visible:not(:disabled) {
+  border-color: rgba(255, 122, 26, 0.4);
+  background-color: rgba(255, 122, 26, 0.16);
+  outline: none;
+}
+
+.achievements-scroll-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .achievements-grid {

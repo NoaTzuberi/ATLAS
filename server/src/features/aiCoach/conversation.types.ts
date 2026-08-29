@@ -8,7 +8,9 @@ export interface ConversationMessage {
   timestamp: Date;
 }
 
-export interface ConversationDocument {
+export interface ConversationSessionDocument {
   userId: Types.ObjectId;
+  startedAt: Date;
+  lastMessageAt: Date;
   messages: ConversationMessage[];
 }

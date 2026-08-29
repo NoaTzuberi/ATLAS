@@ -95,7 +95,7 @@ workouts
 activities
 progress
 personalRecords
-conversations
+conversationsessions
 aiMemory
 knowledgeChunks
 achievements
@@ -534,17 +534,17 @@ date:Date
 
 ⸻
 
-12. Conversations Collection
+12. Conversation Sessions Collection
 
 Purpose
 
-Store AI conversations.
+Store AI Coach conversations. One document per conversation session, not one per user — a user accumulates many sessions over time. The most recent session (by lastMessageAt) is the active chat until it goes stale past an inactivity timeout (4 hours), at which point the next message starts a new session instead of appending to it. This is what powers auto-archiving and the chat History list; older sessions are never deleted, only left behind as the active one moves forward.
 
 ⸻
 
 Collection:
 
-conversations
+conversationsessions
 
 ⸻
 
@@ -553,6 +553,8 @@ Schema:
 {
 _id:ObjectId,
 userId:ObjectId,
+startedAt:Date,
+lastMessageAt:Date,
 messages:[
 {
 role:
@@ -562,6 +564,8 @@ timestamp:Date
 }
 ]
 }
+
+Indexes: { userId:1, lastMessageAt:-1 } — supports "find this user's most recent session" and "list this user's sessions newest-first" (the History list).
 
 ⸻
 
@@ -769,7 +773,7 @@ Phase 3:
 
 aiMemory
 
-conversations
+conversationsessions
 
 Phase 4:
 

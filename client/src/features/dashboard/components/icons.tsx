@@ -105,6 +105,47 @@ export function CompassIcon() {
   );
 }
 
+export function DumbbellIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 14V18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7 11V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M11 15V17" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M11 16H21" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M21 15V17" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M25 11V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M29 14V18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function RepsIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 6L9 26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M23 6L20 26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7 12H25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M6 20H24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 5L8 12L15 19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function LockIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

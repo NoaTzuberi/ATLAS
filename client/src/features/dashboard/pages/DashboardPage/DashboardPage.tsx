@@ -13,8 +13,8 @@ import { useAuth } from '../../../../services/auth/AuthContext';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import { ProgressRing } from '../../components/ProgressRing/ProgressRing';
 import { AchievementBadges } from '../../components/AchievementBadges/AchievementBadges';
-import { FlameIcon, CalendarIcon, TrophyIcon, ScaleIcon, RepeatIcon } from '../../components/icons';
-import type { DashboardSummary, WeightTrendPoint } from '../../types';
+import { FlameIcon, CalendarIcon, TrophyIcon, ScaleIcon, DumbbellIcon, RepsIcon } from '../../components/icons';
+import type { DashboardPersonalRecord, DashboardSummary, WeightTrendPoint } from '../../types';
 import './DashboardPage.css';
 
 const WORKOUT_MILESTONES = [10, 25, 50, 100, 250, 500];
@@ -27,8 +27,41 @@ function getNextMilestone(total: number): number {
   return WORKOUT_MILESTONES.find((milestone) => milestone > total) ?? total + 50;
 }
 
-function formatPrValue(type: 'weight' | 'reps', value: number): string {
-  return type === 'weight' ? `${value}kg` : `${value} reps`;
+interface MergedPersonalRecord {
+  exerciseId: string;
+  exerciseName: string;
+  weight?: number;
+  reps?: number;
+  date: string;
+}
+
+/** Groups PRs by exercise so a lift with both a weight and a reps PR shows as
+ * one card instead of two separate rows for the same exercise. */
+function mergePersonalRecords(records: DashboardPersonalRecord[]): MergedPersonalRecord[] {
+  const byExercise = new Map<string, MergedPersonalRecord>();
+
+  for (const pr of records) {
+    const existing = byExercise.get(pr.exercise.id);
+    const merged: MergedPersonalRecord = existing ?? {
+      exerciseId: pr.exercise.id,
+      exerciseName: pr.exercise.name,
+      date: pr.date,
+    };
+
+    if (pr.type === 'weight' && merged.weight === undefined) {
+      merged.weight = pr.newValue;
+    }
+    if (pr.type === 'reps' && merged.reps === undefined) {
+      merged.reps = pr.newValue;
+    }
+    if (new Date(pr.date) > new Date(merged.date)) {
+      merged.date = pr.date;
+    }
+
+    byExercise.set(pr.exercise.id, merged);
+  }
+
+  return Array.from(byExercise.values());
 }
 
 function formatRelativeDate(dateStr: string): string {
@@ -183,6 +216,7 @@ export function DashboardPage() {
   const initial = user?.name?.trim().charAt(0).toUpperCase() ?? '?';
   const firstName = user?.name?.split(' ')[0] ?? 'there';
   const dayLetters = getLast7DayLetters();
+  const mergedPersonalRecords = summary ? mergePersonalRecords(summary.recentPersonalRecords) : [];
 
   return (
     <AppShell>
@@ -344,26 +378,31 @@ export function DashboardPage() {
                 <AchievementBadges summary={summary} />
               </GlassCard>
 
-              {summary.recentPersonalRecords.length > 0 && (
+              {mergedPersonalRecords.length > 0 && (
                 <GlassCard className="dashboard-prs">
                   <h2>Recent Personal Records</h2>
-                  <div className="dashboard-pr-list">
-                    {summary.recentPersonalRecords.map((pr) => (
-                      <div key={pr.id} className="dashboard-pr-row">
-                        <span
-                          className={
-                            'dashboard-pr-icon' +
-                            (pr.type === 'weight' ? ' dashboard-pr-icon-weight' : ' dashboard-pr-icon-reps')
-                          }
-                          aria-hidden="true"
-                        >
-                          {pr.type === 'weight' ? <TrophyIcon /> : <RepeatIcon />}
-                        </span>
-                        <div className="dashboard-pr-info">
-                          <span className="dashboard-pr-name">{pr.exercise.name}</span>
-                          <span className="dashboard-pr-detail text-caption">
-                            {formatPrValue(pr.type, pr.newValue)} · {formatRelativeDate(pr.date)}
-                          </span>
+                  <div className="pr-card-grid">
+                    {mergedPersonalRecords.map((pr) => (
+                      <div key={pr.exerciseId} className="pr-card">
+                        <span className="pr-card-name">{pr.exerciseName}</span>
+                        <div className="pr-card-stats">
+                          {pr.weight !== undefined && (
+                            <span className="pr-card-stat">
+                              <span className="pr-card-stat-icon" aria-hidden="true">
+                                <DumbbellIcon />
+                              </span>
+                              {pr.weight}kg
+                            </span>
+                          )}
+                          {pr.reps !== undefined && (
+                            <span className="pr-card-stat">
+                              <span className="pr-card-stat-icon" aria-hidden="true">
+                                <RepsIcon />
+                              </span>
+                              {pr.reps} reps
+                            </span>
+                          )}
+                          <span className="pr-card-date">{formatRelativeDate(pr.date)}</span>
                         </div>
                       </div>
                     ))}

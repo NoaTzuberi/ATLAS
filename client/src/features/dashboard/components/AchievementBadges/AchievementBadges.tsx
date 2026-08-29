@@ -9,6 +9,8 @@ import {
   CalendarIcon,
   RepeatIcon,
   LockIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '../icons';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import { listActivities } from '../../../../services/activities/activityService';
@@ -22,6 +24,8 @@ import './AchievementBadges.css';
 const DEFAULT_WEEKLY_TARGET_DAYS = 3;
 const CONSISTENCY_WEEKS_TO_CHECK = 8;
 const DAY_MS = 24 * 60 * 60 * 1000;
+const SCROLL_STEP = 196; // badge tile width (180px) + grid gap (16px)
+const SCROLL_END_THRESHOLD = 4;
 
 interface BadgeProgress {
   current: number;
@@ -263,6 +267,8 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
   const [weighInCount, setWeighInCount] = useState(0);
   const [weeklyTargetDays, setWeeklyTargetDays] = useState(DEFAULT_WEEKLY_TARGET_DAYS);
   const [consecutiveWeeksHittingGoal, setConsecutiveWeeksHittingGoal] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -369,8 +375,50 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
     previousEarnedRef.current = currentlyEarned;
   }, [summary, activityTypeCount, personalRecordCount, weighInCount, weeklyTargetDays, consecutiveWeeksHittingGoal]);
 
+  useEffect(() => {
+    const container = gridRef.current;
+    if (!container) return;
+
+    const updateScrollState = () => {
+      setCanScrollLeft(container.scrollLeft > SCROLL_END_THRESHOLD);
+      setCanScrollRight(
+        container.scrollLeft < container.scrollWidth - container.clientWidth - SCROLL_END_THRESHOLD,
+      );
+    };
+
+    updateScrollState();
+    container.addEventListener('scroll', updateScrollState);
+    window.addEventListener('resize', updateScrollState);
+    return () => {
+      container.removeEventListener('scroll', updateScrollState);
+      window.removeEventListener('resize', updateScrollState);
+    };
+  }, [summary]);
+
+  const scrollByStep = (direction: 1 | -1) => {
+    gridRef.current?.scrollBy({ left: direction * SCROLL_STEP, behavior: 'smooth' });
+  };
+
   return (
     <div className="achievements-scroll-wrapper">
+      <button
+        type="button"
+        className="achievements-scroll-arrow achievements-scroll-arrow-left"
+        onClick={() => scrollByStep(-1)}
+        disabled={!canScrollLeft}
+        aria-label="Scroll achievements left"
+      >
+        <ChevronLeftIcon />
+      </button>
+      <button
+        type="button"
+        className="achievements-scroll-arrow achievements-scroll-arrow-right"
+        onClick={() => scrollByStep(1)}
+        disabled={!canScrollRight}
+        aria-label="Scroll achievements right"
+      >
+        <ChevronRightIcon />
+      </button>
       <div className="achievements-grid" ref={gridRef}>
       {BADGES.map((badge) => {
         const { current, target, unitLabel } = badge.getProgress({
