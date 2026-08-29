@@ -1,20 +1,4 @@
-.workout-summary-page {
-  position: relative;
-  overflow: hidden;
-}
-
-.workout-summary-page::before {
-  content: '';
-  position: absolute;
-  inset: -20%;
-  z-index: 0;
-  background: radial-gradient(circle at 85% 0%, rgba(255, 122, 26, 0.12), transparent 55%);
-  pointer-events: none;
-}
-
 .workout-summary-page .container {
-  position: relative;
-  z-index: 1;
   max-width: 720px;
 }
 

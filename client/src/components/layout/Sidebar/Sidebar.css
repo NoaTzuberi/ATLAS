@@ -8,7 +8,7 @@
   flex-direction: column;
   gap: var(--space-6);
   padding: var(--space-4);
-  background-color: var(--background-primary);
+  background-color: transparent;
   border-right: 1px solid var(--surface-glass-border);
   z-index: 10;
 }
@@ -184,7 +184,10 @@
   }
 }
 
-/* Mobile — bottom tab bar; account/logout move off-screen, reachable from Profile instead */
+/* Mobile — bottom tab bar; account/logout move off-screen, reachable from Profile instead.
+   Unlike the desktop sidebar (which sits beside static content and can stay fully
+   transparent), this floats fixed over scrolling content, so it needs its own
+   backing for legibility — a real requirement, not a seam patch. */
 @media (max-width: 768px) {
   .app-sidebar {
     position: fixed;
@@ -197,6 +200,9 @@
     align-items: center;
     padding: 0 var(--space-2);
     gap: 0;
+    background-color: rgba(18, 22, 29, 0.9);
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
     border-right: none;
     border-top: 1px solid var(--surface-glass-border);
   }

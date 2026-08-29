@@ -1,9 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlagIcon, FlameIcon, StarIcon, TrophyIcon, ScaleIcon, CompassIcon, LockIcon } from '../icons';
+import {
+  FlagIcon,
+  FlameIcon,
+  StarIcon,
+  TrophyIcon,
+  ScaleIcon,
+  CompassIcon,
+  CalendarIcon,
+  RepeatIcon,
+  LockIcon,
+} from '../icons';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import { listActivities } from '../../../../services/activities/activityService';
+import { listPersonalRecords } from '../../../../services/personalRecords/personalRecordsService';
+import { listProgressEntries } from '../../../../services/progress/progressService';
+import { listWorkouts } from '../../../../services/workouts/workoutSessionService';
+import { getMyProfile } from '../../../../services/users/usersService';
 import type { DashboardSummary } from '../../types';
 import './AchievementBadges.css';
+
+const DEFAULT_WEEKLY_TARGET_DAYS = 3;
+const CONSISTENCY_WEEKS_TO_CHECK = 8;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 interface BadgeProgress {
   current: number;
@@ -14,6 +32,34 @@ interface BadgeProgress {
 interface BadgeContext {
   summary: DashboardSummary;
   activityTypeCount: number;
+  personalRecordCount: number;
+  weighInCount: number;
+  weeklyTargetDays: number;
+  consecutiveWeeksHittingGoal: number;
+}
+
+/** Counts consecutive rolling 7-day windows (most recent first) that meet the
+ * daily target, walking backward until one window falls short. */
+function countConsecutiveWeeksHittingGoal(
+  workoutTimestamps: number[],
+  targetDays: number,
+  weeksToCheck: number,
+): number {
+  const now = Date.now();
+  let consecutive = 0;
+
+  for (let week = 0; week < weeksToCheck; week += 1) {
+    const windowEnd = now - week * 7 * DAY_MS;
+    const windowStart = windowEnd - 7 * DAY_MS;
+    const count = workoutTimestamps.filter((t) => t > windowStart && t <= windowEnd).length;
+    if (count >= targetDays) {
+      consecutive += 1;
+    } else {
+      break;
+    }
+  }
+
+  return consecutive;
 }
 
 interface BadgeDefinition {
@@ -104,6 +150,104 @@ const BADGES: BadgeDefinition[] = [
       unitLabel: 'activity types',
     }),
   },
+  {
+    id: 'three-day-streak',
+    name: '3-Day Streak',
+    description: 'Train 3 days in a row',
+    icon: <FlameIcon />,
+    getProgress: ({ summary }) => ({ current: Math.min(summary.streak, 3), target: 3, unitLabel: 'days' }),
+  },
+  {
+    id: 'fourteen-day-streak',
+    name: '14-Day Streak',
+    description: 'Train 14 days in a row',
+    icon: <FlameIcon />,
+    getProgress: ({ summary }) => ({ current: Math.min(summary.streak, 14), target: 14, unitLabel: 'days' }),
+  },
+  {
+    id: 'sixty-day-streak',
+    name: '60-Day Streak',
+    description: 'Train 60 days in a row',
+    icon: <FlameIcon />,
+    getProgress: ({ summary }) => ({ current: Math.min(summary.streak, 60), target: 60, unitLabel: 'days' }),
+  },
+  {
+    id: 'five-prs',
+    name: '5 Personal Records',
+    description: 'Set 5 personal records',
+    icon: <StarIcon />,
+    getProgress: ({ personalRecordCount }) => ({
+      current: Math.min(personalRecordCount, 5),
+      target: 5,
+      unitLabel: 'PRs',
+    }),
+  },
+  {
+    id: 'twentyfive-prs',
+    name: '25 Personal Records',
+    description: 'Set 25 personal records',
+    icon: <StarIcon />,
+    getProgress: ({ personalRecordCount }) => ({
+      current: Math.min(personalRecordCount, 25),
+      target: 25,
+      unitLabel: 'PRs',
+    }),
+  },
+  {
+    id: 'two-hundred-workouts',
+    name: '200 Workouts',
+    description: 'Complete 200 workouts',
+    icon: <TrophyIcon />,
+    getProgress: ({ summary }) => ({
+      current: Math.min(summary.totalWorkouts, 200),
+      target: 200,
+      unitLabel: 'workouts',
+    }),
+  },
+  {
+    id: 'weekly-goal-hit',
+    name: 'Weekly Goal Hit',
+    description: 'Complete your set weekly training day target',
+    icon: <CalendarIcon />,
+    getProgress: ({ summary, weeklyTargetDays }) => ({
+      current: summary.workoutsLast7Days >= weeklyTargetDays ? 1 : 0,
+      target: 1,
+      unitLabel: '',
+    }),
+  },
+  {
+    id: 'consistency-champion',
+    name: 'Consistency Champion',
+    description: 'Hit your weekly goal 4 weeks in a row',
+    icon: <RepeatIcon />,
+    getProgress: ({ consecutiveWeeksHittingGoal }) => ({
+      current: Math.min(consecutiveWeeksHittingGoal, 4),
+      target: 4,
+      unitLabel: 'weeks',
+    }),
+  },
+  {
+    id: 'ten-weigh-ins',
+    name: '10 Weigh-Ins Logged',
+    description: 'Log your weight 10 times',
+    icon: <ScaleIcon />,
+    getProgress: ({ weighInCount }) => ({
+      current: Math.min(weighInCount, 10),
+      target: 10,
+      unitLabel: 'entries',
+    }),
+  },
+  {
+    id: 'all-rounder',
+    name: 'All-Rounder',
+    description: 'Log 5 different activity types',
+    icon: <CompassIcon />,
+    getProgress: ({ activityTypeCount }) => ({
+      current: Math.min(activityTypeCount, 5),
+      target: 5,
+      unitLabel: 'activity types',
+    }),
+  },
 ];
 
 interface AchievementBadgesProps {
@@ -115,6 +259,10 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
   const previousEarnedRef = useRef<Set<string>>();
   const [justEarnedIds, setJustEarnedIds] = useState<Set<string>>(new Set());
   const [activityTypeCount, setActivityTypeCount] = useState(0);
+  const [personalRecordCount, setPersonalRecordCount] = useState(0);
+  const [weighInCount, setWeighInCount] = useState(0);
+  const [weeklyTargetDays, setWeeklyTargetDays] = useState(DEFAULT_WEEKLY_TARGET_DAYS);
+  const [consecutiveWeeksHittingGoal, setConsecutiveWeeksHittingGoal] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -124,7 +272,7 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
         setActivityTypeCount(new Set(activities.map((activity) => activity.type)).size);
       })
       .catch(() => {
-        // Multi-Sport progress just stays at 0 if activities can't be loaded.
+        // Multi-Sport/All-Rounder progress just stays at 0 if activities can't be loaded.
       });
     return () => {
       cancelled = true;
@@ -132,7 +280,77 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
   }, []);
 
   useEffect(() => {
-    const ctx: BadgeContext = { summary, activityTypeCount };
+    let cancelled = false;
+    listPersonalRecords(50)
+      .then((records) => {
+        if (!cancelled) setPersonalRecordCount(records.length);
+      })
+      .catch(() => {
+        // PR badges just stay at 0 if records can't be loaded.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    listProgressEntries(50)
+      .then((entries) => {
+        if (!cancelled) setWeighInCount(entries.length);
+      })
+      .catch(() => {
+        // Weigh-in badge just stays at 0 if entries can't be loaded.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMyProfile()
+      .then((profile) => {
+        if (cancelled) return;
+        const minDays = profile.profile?.trainingFrequency?.minDays;
+        if (minDays) setWeeklyTargetDays(minDays);
+      })
+      .catch(() => {
+        // Falls back to DEFAULT_WEEKLY_TARGET_DAYS if the profile can't be loaded.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const from = new Date(Date.now() - CONSISTENCY_WEEKS_TO_CHECK * 7 * DAY_MS).toISOString();
+    listWorkouts({ from, status: 'completed' })
+      .then((workouts) => {
+        if (cancelled) return;
+        const timestamps = workouts.map((w) => new Date(w.date).getTime());
+        setConsecutiveWeeksHittingGoal(
+          countConsecutiveWeeksHittingGoal(timestamps, weeklyTargetDays, CONSISTENCY_WEEKS_TO_CHECK),
+        );
+      })
+      .catch(() => {
+        // Consistency Champion progress just stays at 0 if history can't be loaded.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [weeklyTargetDays]);
+
+  useEffect(() => {
+    const ctx: BadgeContext = {
+      summary,
+      activityTypeCount,
+      personalRecordCount,
+      weighInCount,
+      weeklyTargetDays,
+      consecutiveWeeksHittingGoal,
+    };
     const currentlyEarned = new Set(
       BADGES.filter((badge) => {
         const { current, target } = badge.getProgress(ctx);
@@ -149,12 +367,20 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
     }
 
     previousEarnedRef.current = currentlyEarned;
-  }, [summary, activityTypeCount]);
+  }, [summary, activityTypeCount, personalRecordCount, weighInCount, weeklyTargetDays, consecutiveWeeksHittingGoal]);
 
   return (
-    <div className="achievements-grid" ref={gridRef}>
+    <div className="achievements-scroll-wrapper">
+      <div className="achievements-grid" ref={gridRef}>
       {BADGES.map((badge) => {
-        const { current, target, unitLabel } = badge.getProgress({ summary, activityTypeCount });
+        const { current, target, unitLabel } = badge.getProgress({
+          summary,
+          activityTypeCount,
+          personalRecordCount,
+          weighInCount,
+          weeklyTargetDays,
+          consecutiveWeeksHittingGoal,
+        });
         const earned = current >= target;
         const justEarned = justEarnedIds.has(badge.id);
         const progressPct = Math.min(100, (current / target) * 100);
@@ -175,7 +401,8 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
             {!earned && (
               <>
                 <span className="badge-tile-progress-text">
-                  {current}/{target} {unitLabel}
+                  {current}/{target}
+                  {unitLabel && ` ${unitLabel}`}
                 </span>
                 <span className="badge-tile-lock" aria-hidden="true">
                   <LockIcon />
@@ -192,6 +419,7 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

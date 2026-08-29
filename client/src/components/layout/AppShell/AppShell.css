@@ -1,10 +1,22 @@
 .app-shell {
+  position: relative;
   display: flex;
   min-height: 100vh;
   background-color: var(--background-primary);
 }
 
+.app-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(circle at 10% 0%, rgba(255, 122, 26, 0.1), rgba(255, 122, 26, 0) 55%);
+  pointer-events: none;
+}
+
 .app-shell-main {
+  position: relative;
+  z-index: 1;
   flex: 1;
   min-width: 0;
   padding: var(--space-5);
