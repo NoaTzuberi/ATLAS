@@ -32,7 +32,31 @@
   --color-teal-strong: rgba(47, 191, 143, 0.24);
 
   --color-error-500: #e85d5d;
+  --color-error-hover: #ee8383;
   --color-error-soft: rgba(232, 93, 93, 0.16);
+  --color-error-strong: rgba(232, 93, 93, 0.26);
+
+  /* Workout category accents — one muted, editorial tone per category so
+     Push/Pull/Upper/Lower/Full/Core read as distinct at a glance. */
+  --color-rust-500: #b5543a;
+  --color-rust-hover: #d17456;
+  --color-rust-soft: rgba(181, 84, 58, 0.14);
+  --color-rust-strong: rgba(181, 84, 58, 0.24);
+
+  --color-terracotta-500: #c97a4a;
+  --color-terracotta-hover: #e0996a;
+  --color-terracotta-soft: rgba(201, 122, 74, 0.14);
+  --color-terracotta-strong: rgba(201, 122, 74, 0.24);
+
+  --color-olive-500: #8a8c4f;
+  --color-olive-hover: #a8ab6c;
+  --color-olive-soft: rgba(138, 140, 79, 0.14);
+  --color-olive-strong: rgba(138, 140, 79, 0.24);
+
+  --color-plum-500: #a56b8a;
+  --color-plum-hover: #c084a8;
+  --color-plum-soft: rgba(165, 107, 138, 0.14);
+  --color-plum-strong: rgba(165, 107, 138, 0.24);
 
   --color-neutral-100: #f5f6f8;
   --color-neutral-300: #c7cdd6;

@@ -9,6 +9,7 @@ import type {
 export interface ListExercisesParams {
   page?: number;
   limit?: number;
+  category?: string;
   muscle?: string;
   equipment?: string;
   difficulty?: Difficulty;

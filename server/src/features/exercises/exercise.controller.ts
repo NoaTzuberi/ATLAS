@@ -3,6 +3,7 @@ import { validateExerciseListQuery, validateSlugParam } from './exercise.validat
 import { listPublicExercises, getPublicExerciseBySlug, ExerciseNotFoundError } from './exercise.service';
 import type { ListExercisesParams } from './exercise.service';
 import type {
+  Category,
   Muscle,
   Equipment,
   Difficulty,
@@ -23,6 +24,7 @@ export async function listExercises(req: Request, res: Response) {
   const params: ListExercisesParams = {
     page: query.page ? Number(query.page) : undefined,
     limit: query.limit ? Number(query.limit) : undefined,
+    category: query.category as Category | undefined,
     muscle: query.muscle as Muscle | undefined,
     equipment: query.equipment as Equipment | undefined,
     difficulty: query.difficulty as Difficulty | undefined,

@@ -1,0 +1,124 @@
+.featured-workout-card {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+  border-color: rgba(255, 122, 26, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 246, 248, 0.05),
+    0 0 32px rgba(255, 122, 26, 0.14),
+    var(--shadow-md);
+}
+
+.featured-workout-cover {
+  position: relative;
+  flex: 0 0 42%;
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.featured-workout-cover-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* The source photos are light-toned editorial shots — darken and add a
+     touch of contrast so the cover reads as part of the dark theme rather
+     than sitting on top of it as a bright rectangle. */
+  filter: brightness(0.62) contrast(1.15);
+}
+
+.featured-workout-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 160px 110px at 0% 0%, rgba(8, 10, 14, 0.75) 0%, rgba(8, 10, 14, 0) 70%);
+  pointer-events: none;
+}
+
+.featured-workout-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Dissolves the photo into the info panel's exact background color instead
+     of ending on a hard vertical line at the cover/panel edge — widened so
+     the darkening is gradual across most of the image, not a thin edge. */
+  background: linear-gradient(to right, rgba(22, 30, 39, 0) 15%, var(--background-secondary) 100%);
+  pointer-events: none;
+}
+
+.featured-workout-cover-badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+}
+
+.featured-workout-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-5);
+  background:
+    var(--gradient-card-glow),
+    var(--background-secondary);
+}
+
+.featured-workout-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-orange-hover);
+}
+
+.featured-workout-reason {
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.featured-workout-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+}
+
+.featured-workout-description {
+  color: var(--color-neutral-500);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured-workout-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.featured-workout-cta {
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 720px) {
+  .featured-workout-card {
+    flex-direction: column;
+  }
+
+  .featured-workout-cover {
+    flex: none;
+    min-height: 140px;
+  }
+
+  /* Layout is stacked here, so the fade needs to run top-to-bottom into the
+     panel below instead of left-to-right into the panel on the right. */
+  .featured-workout-cover::after {
+    background: linear-gradient(to bottom, rgba(22, 30, 39, 0) 15%, var(--background-secondary) 100%);
+  }
+}

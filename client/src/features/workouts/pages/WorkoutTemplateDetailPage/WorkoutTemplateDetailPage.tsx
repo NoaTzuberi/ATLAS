@@ -7,9 +7,10 @@ import { Modal } from '../../../../components/common/Modal/Modal';
 import { Badge } from '../../../../components/common/Badge/Badge';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
 import { Button } from '../../../../components/common/Button/Button';
+import { CategoryBadge } from '../../components/CategoryBadge/CategoryBadge';
 import { ExerciseMedia } from '../../../exercises/components/ExerciseMedia/ExerciseMedia';
 import { muscleLabel, equipmentLabel } from '../../../exercises/data/filterOptions';
-import { workoutCategoryLabel, workoutGoalLabel } from '../../data/workoutOptions';
+import { workoutGoalLabel } from '../../data/workoutOptions';
 import { getWorkoutTemplateById, deleteWorkoutTemplate } from '../../../../services/workouts/workoutTemplatesService';
 import { startWorkout } from '../../../../services/workouts/workoutSessionService';
 import { ROUTES, workoutEditPath, workoutSessionPath } from '../../../../app/config/routes';
@@ -114,7 +115,7 @@ export function WorkoutTemplateDetailPage() {
         <h1 className="workout-detail-name">{template.name}</h1>
 
         <div className="workout-detail-tags">
-          {template.category && <Badge variant="accent">{workoutCategoryLabel(template.category)}</Badge>}
+          {template.category && <CategoryBadge category={template.category} />}
           {template.difficulty && <Badge variant="achievement">{template.difficulty}</Badge>}
           {template.goal.map((g) => (
             <Badge key={g}>{workoutGoalLabel(g)}</Badge>

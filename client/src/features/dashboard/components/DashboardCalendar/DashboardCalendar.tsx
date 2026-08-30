@@ -1,20 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { AppShell } from '../../../../components/layout/AppShell/AppShell';
-import { Container } from '../../../../components/layout/Container/Container';
-import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
 import { Button } from '../../../../components/common/Button/Button';
 import { Modal } from '../../../../components/common/Modal/Modal';
 import { Input } from '../../../../components/common/Input/Input';
-import { MonthCalendar, toDateKey } from '../../components/MonthCalendar/MonthCalendar';
+import { MonthCalendar, toDateKey } from '../MonthCalendar/MonthCalendar';
+import type { DayLogInfo } from '../MonthCalendar/MonthCalendar';
 import { WorkoutChip } from '../../../workouts/components/WorkoutChip/WorkoutChip';
 import { ACTIVITY_TYPE_OPTIONS, activityTypeLabel, activityTypeIcon } from '../../../activities/data/activityOptions';
 import { listWorkouts } from '../../../../services/workouts/workoutSessionService';
 import { createActivity, listActivities, deleteActivity } from '../../../../services/activities/activityService';
 import type { WorkoutSummary } from '../../../workouts/types';
 import type { Activity, ActivityType } from '../../../activities/types';
-import './CalendarPage.css';
+import './DashboardCalendar.css';
 
 function startOfMonthPadded(year: number, month: number): string {
   const date = new Date(year, month, -1);
@@ -26,7 +24,7 @@ function endOfMonthPadded(year: number, month: number): string {
   return date.toISOString();
 }
 
-export function CalendarPage() {
+export function DashboardCalendar() {
   const today = useMemo(() => new Date(), []);
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -70,8 +68,40 @@ export function CalendarPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
 
-  const workoutDates = useMemo(() => new Set(workouts.map((w) => toDateKey(new Date(w.date)))), [workouts]);
-  const activityDates = useMemo(() => new Set(activities.map((a) => toDateKey(new Date(a.date)))), [activities]);
+  // One heat-map tier per day: aggregate same-day workout volume, keep the
+  // first category logged that day for the cell icon, and separately track
+  // activity-only days so they get their own (cooler) tint.
+  const dayLogs = useMemo(() => {
+    const volumeByDay = new Map<string, number>();
+    const categoryByDay = new Map<string, WorkoutSummary['category']>();
+    for (const w of workouts) {
+      const key = toDateKey(new Date(w.date));
+      volumeByDay.set(key, (volumeByDay.get(key) ?? 0) + (w.totalVolume ?? 0));
+      if (!categoryByDay.has(key)) categoryByDay.set(key, w.category);
+    }
+    const maxVolume = Math.max(0, ...volumeByDay.values());
+
+    const activityByDay = new Map<string, ActivityType>();
+    for (const a of activities) {
+      const key = toDateKey(new Date(a.date));
+      if (!activityByDay.has(key)) activityByDay.set(key, a.type);
+    }
+
+    const map = new Map<string, DayLogInfo>();
+    const allDayKeys = new Set([...volumeByDay.keys(), ...activityByDay.keys()]);
+    for (const key of allDayKeys) {
+      const hasWorkout = volumeByDay.has(key);
+      const volume = volumeByDay.get(key) ?? 0;
+      map.set(key, {
+        hasWorkout,
+        hasActivity: activityByDay.has(key),
+        volumeTier: hasWorkout ? (maxVolume > 0 && volume >= maxVolume * 0.6 ? 2 : 1) : undefined,
+        workoutCategory: categoryByDay.get(key),
+        activityType: activityByDay.get(key),
+      });
+    }
+    return map;
+  }, [workouts, activities]);
 
   const selectedWorkouts = workouts.filter((w) => toDateKey(new Date(w.date)) === selectedDateKey);
   const selectedActivities = activities.filter((a) => toDateKey(new Date(a.date)) === selectedDateKey);
@@ -137,85 +167,83 @@ export function CalendarPage() {
   }
 
   return (
-    <AppShell>
-      <Section className="calendar-page">
-        <Container>
-          <div className="calendar-page-actions-row">
-            <Button onClick={openLogActivity}>Log Activity</Button>
+    <>
+      <GlassCard className="dashboard-calendar">
+        <div className="dashboard-calendar-header">
+          <h2>Calendar</h2>
+          <Button variant="secondary" onClick={openLogActivity}>
+            Log Activity
+          </Button>
+        </div>
+
+        {isLoading && (
+          <div className="dashboard-calendar-loading">
+            <Spinner size="lg" />
           </div>
+        )}
 
-          {isLoading && (
-            <div className="calendar-page-loading">
-              <Spinner size="lg" />
-            </div>
-          )}
+        {!isLoading && loadError && <p className="dashboard-error">{loadError}</p>}
 
-          {!isLoading && loadError && <p className="calendar-page-error">{loadError}</p>}
+        {!isLoading && !loadError && (
+          <div className="dashboard-calendar-layout">
+            <MonthCalendar
+              year={year}
+              month={month}
+              dayLogs={dayLogs}
+              selectedDateKey={selectedDateKey}
+              onSelectDate={setSelectedDateKey}
+              onPrevMonth={goToPrevMonth}
+              onNextMonth={goToNextMonth}
+            />
 
-          {!isLoading && !loadError && (
-            <div className="calendar-page-layout">
-              <GlassCard className="calendar-page-calendar">
-                <MonthCalendar
-                  year={year}
-                  month={month}
-                  workoutDates={workoutDates}
-                  activityDates={activityDates}
-                  selectedDateKey={selectedDateKey}
-                  onSelectDate={setSelectedDateKey}
-                  onPrevMonth={goToPrevMonth}
-                  onNextMonth={goToNextMonth}
-                />
-              </GlassCard>
+            <div className="dashboard-calendar-day">
+              <h3>{selectedDateKey}</h3>
 
-              <GlassCard className="calendar-page-day">
-                <h2>{selectedDateKey}</h2>
+              {selectedWorkouts.length === 0 && selectedActivities.length === 0 && (
+                <p className="text-body dashboard-calendar-day-empty">Nothing logged this day.</p>
+              )}
 
-                {selectedWorkouts.length === 0 && selectedActivities.length === 0 && (
-                  <p className="text-body calendar-page-empty">Nothing logged this day.</p>
-                )}
-
-                {selectedWorkouts.map((workout) => (
-                  <div key={workout.id} className="calendar-day-entry">
-                    <span className="calendar-day-entry-icon" aria-hidden="true">
-                      🏋
+              {selectedWorkouts.map((workout) => (
+                <div key={workout.id} className="dashboard-calendar-day-entry">
+                  <span className="dashboard-calendar-day-entry-icon" aria-hidden="true">
+                    🏋
+                  </span>
+                  <div>
+                    <span className="dashboard-calendar-day-entry-title">{workout.name}</span>
+                    <span className="dashboard-calendar-day-entry-meta text-caption">
+                      {workout.duration ? `${workout.duration} min` : ''}
+                      {workout.totalVolume ? ` — ${workout.totalVolume}kg volume` : ''}
                     </span>
-                    <div>
-                      <span className="calendar-day-entry-title">{workout.name}</span>
-                      <span className="calendar-day-entry-meta text-caption">
-                        {workout.duration ? `${workout.duration} min` : ''}
-                        {workout.totalVolume ? ` — ${workout.totalVolume}kg volume` : ''}
-                      </span>
-                    </div>
                   </div>
-                ))}
+                </div>
+              ))}
 
-                {selectedActivities.map((activity) => (
-                  <div key={activity.id} className="calendar-day-entry">
-                    <span className="calendar-day-entry-icon" aria-hidden="true">
-                      {activityTypeIcon(activity.type)}
+              {selectedActivities.map((activity) => (
+                <div key={activity.id} className="dashboard-calendar-day-entry">
+                  <span className="dashboard-calendar-day-entry-icon" aria-hidden="true">
+                    {activityTypeIcon(activity.type)}
+                  </span>
+                  <div>
+                    <span className="dashboard-calendar-day-entry-title">{activityTypeLabel(activity.type)}</span>
+                    <span className="dashboard-calendar-day-entry-meta text-caption">
+                      {activity.duration} min
+                      {activity.distance ? ` — ${activity.distance}km` : ''}
                     </span>
-                    <div>
-                      <span className="calendar-day-entry-title">{activityTypeLabel(activity.type)}</span>
-                      <span className="calendar-day-entry-meta text-caption">
-                        {activity.duration} min
-                        {activity.distance ? ` — ${activity.distance}km` : ''}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      className="calendar-day-entry-remove"
-                      onClick={() => handleDeleteActivity(activity.id)}
-                      aria-label="Delete activity"
-                    >
-                      &times;
-                    </button>
                   </div>
-                ))}
-              </GlassCard>
+                  <button
+                    type="button"
+                    className="dashboard-calendar-day-entry-remove"
+                    onClick={() => handleDeleteActivity(activity.id)}
+                    aria-label="Delete activity"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
             </div>
-          )}
-        </Container>
-      </Section>
+          </div>
+        )}
+      </GlassCard>
 
       <Modal isOpen={isLogActivityOpen} onClose={() => setIsLogActivityOpen(false)} title="Log Activity">
         <div className="log-activity-chips">
@@ -272,7 +300,7 @@ export function CalendarPage() {
           rows={2}
         />
 
-        {saveError && <p className="calendar-page-error">{saveError}</p>}
+        {saveError && <p className="dashboard-error">{saveError}</p>}
 
         <div className="log-activity-actions">
           <Button variant="ghost" onClick={() => setIsLogActivityOpen(false)}>
@@ -283,6 +311,6 @@ export function CalendarPage() {
           </Button>
         </div>
       </Modal>
-    </AppShell>
+    </>
   );
 }

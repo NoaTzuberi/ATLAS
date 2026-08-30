@@ -15,6 +15,10 @@
   background: linear-gradient(135deg, rgba(255, 122, 26, 0.12), rgba(18, 22, 29, 0.9));
 }
 
+.workouts-page-featured {
+  margin-top: var(--space-5);
+}
+
 .workouts-page-toolbar {
   margin-top: var(--space-5);
   margin-bottom: var(--space-6);

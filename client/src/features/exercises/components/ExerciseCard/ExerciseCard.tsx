@@ -2,20 +2,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
 import { Badge } from '../../../../components/common/Badge/Badge';
 import { ExerciseMedia } from '../ExerciseMedia/ExerciseMedia';
-import { muscleLabel, equipmentLabel } from '../../data/filterOptions';
+import { muscleLabel, equipmentLabel, equipmentIcon, muscleTagHue } from '../../data/filterOptions';
+import { SparkleIcon } from '../icons';
 import { exercisePath } from '../../../../app/config/routes';
 import type { PublicExercise } from '../../types';
 import './ExerciseCard.css';
 
-const MAX_VISIBLE_TAGS = 2;
-
-function visibleTags(values: string[], labelFor: (value: string) => string): string[] {
-  const labels = values.map(labelFor);
-  if (labels.length <= MAX_VISIBLE_TAGS) {
-    return labels;
-  }
-  return [...labels.slice(0, MAX_VISIBLE_TAGS), `+${labels.length - MAX_VISIBLE_TAGS} more`];
-}
+const MAX_VISIBLE_EQUIPMENT_TAGS = 2;
 
 interface ExerciseCardProps {
   exercise: PublicExercise;
@@ -23,8 +16,9 @@ interface ExerciseCardProps {
 
 export function ExerciseCard({ exercise }: ExerciseCardProps) {
   const location = useLocation();
-  const muscleTags = visibleTags(exercise.primaryMuscles, muscleLabel);
-  const equipmentTags = visibleTags(exercise.equipment, equipmentLabel);
+  const primaryMuscle = exercise.primaryMuscles[0];
+  const equipmentTags = exercise.equipment.slice(0, MAX_VISIBLE_EQUIPMENT_TAGS);
+  const extraEquipmentCount = exercise.equipment.length - equipmentTags.length;
 
   const isEnhanced = exercise.contentTier === 'enhanced';
 
@@ -37,19 +31,39 @@ export function ExerciseCard({ exercise }: ExerciseCardProps) {
       <GlassCard className="exercise-card">
         <div className="exercise-card-media-wrap">
           <ExerciseMedia media={exercise.media} alt={exercise.name} variant="card" />
-          {isEnhanced && <span className="exercise-card-enhanced-badge">Enhanced</span>}
+          {isEnhanced && (
+            <span className="exercise-card-enhanced-badge">
+              <SparkleIcon />
+              Enhanced
+            </span>
+          )}
         </div>
-        <h3 className="exercise-card-name">{exercise.name}</h3>
-        <div className="exercise-card-tags">
-          {muscleTags.map((tag) => (
-            <Badge key={`muscle-${tag}`} variant="accent">
-              {tag}
-            </Badge>
-          ))}
-          {equipmentTags.map((tag) => (
-            <Badge key={`equipment-${tag}`}>{tag}</Badge>
-          ))}
-          <Badge variant="achievement">{exercise.difficulty}</Badge>
+        <div className="exercise-card-body">
+          <h3 className="exercise-card-name">{exercise.name}</h3>
+          <div className="exercise-card-tags">
+            {primaryMuscle && (
+              <span className={`exercise-card-muscle-tag exercise-card-muscle-tag-${muscleTagHue(primaryMuscle)}`}>
+                {muscleLabel(primaryMuscle)}
+              </span>
+            )}
+            {equipmentTags.map((tag) => {
+              const Icon = equipmentIcon(tag);
+              return (
+                <span key={`equipment-${tag}`} className="exercise-card-equipment-tag">
+                  {Icon && (
+                    <span className="exercise-card-equipment-icon" aria-hidden="true">
+                      <Icon />
+                    </span>
+                  )}
+                  {equipmentLabel(tag)}
+                </span>
+              );
+            })}
+            {extraEquipmentCount > 0 && (
+              <span className="exercise-card-equipment-tag">+{extraEquipmentCount} more</span>
+            )}
+            <Badge variant="achievement">{exercise.difficulty}</Badge>
+          </div>
         </div>
       </GlassCard>
     </Link>

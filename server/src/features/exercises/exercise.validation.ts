@@ -1,4 +1,5 @@
 import {
+  CATEGORY_IDS,
   MUSCLE_IDS,
   EQUIPMENT_IDS,
   DIFFICULTY_IDS,
@@ -35,6 +36,10 @@ export function validateExerciseListQuery(query: unknown): string | null {
     if (!Number.isInteger(limit) || limit < MIN_LIMIT || limit > MAX_LIMIT) {
       return `limit must be an integer between ${MIN_LIMIT} and ${MAX_LIMIT}.`;
     }
+  }
+
+  if (params.category !== undefined && !isStringInSet(params.category, CATEGORY_IDS)) {
+    return 'category must be one of the supported category values.';
   }
 
   if (params.muscle !== undefined && !isStringInSet(params.muscle, MUSCLE_IDS)) {

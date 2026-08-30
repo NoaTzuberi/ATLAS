@@ -26,3 +26,17 @@
   color: var(--color-orange-500);
   background-color: var(--surface-glass-bg-strong);
 }
+
+.workout-chip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.workout-chip-icon svg {
+  width: 100%;
+  height: 100%;
+}

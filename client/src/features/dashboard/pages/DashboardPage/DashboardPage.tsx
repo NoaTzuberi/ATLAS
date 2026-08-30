@@ -15,6 +15,7 @@ import { StreakRing, STREAK_RING_TARGET } from '../../components/StreakRing/Stre
 import { WeekDotStrip } from '../../components/WeekDotStrip/WeekDotStrip';
 import { MilestoneBar } from '../../components/MilestoneBar/MilestoneBar';
 import { AchievementBadges } from '../../components/AchievementBadges/AchievementBadges';
+import { DashboardCalendar } from '../../components/DashboardCalendar/DashboardCalendar';
 import { FlameIcon, CalendarIcon, TrophyIcon, ScaleIcon, DumbbellIcon, RepsIcon } from '../../components/icons';
 import type { DashboardPersonalRecord, DashboardSummary, WeightTrendPoint } from '../../types';
 import './DashboardPage.css';
@@ -285,6 +286,8 @@ export function DashboardPage() {
                 <h2>Achievements</h2>
                 <AchievementBadges summary={summary} />
               </GlassCard>
+
+              <DashboardCalendar />
 
               {mergedPersonalRecords.length > 0 && (
                 <GlassCard className="dashboard-prs">

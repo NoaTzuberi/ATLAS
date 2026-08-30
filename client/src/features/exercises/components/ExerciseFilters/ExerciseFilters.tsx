@@ -8,6 +8,8 @@ import {
   EQUIPMENT_OPTIONS,
   DIFFICULTY_OPTIONS,
   MOVEMENT_TYPE_OPTIONS,
+  difficultyIcon,
+  movementTypeIcon,
 } from '../../data/filterOptions';
 import { useDebouncedValue } from '../../../../hooks/useDebouncedValue';
 import type { ExerciseFilterState } from '../../types';
@@ -73,12 +75,14 @@ export function ExerciseFilters({ filters, onChange, onClear }: ExerciseFiltersP
 
       <div className="exercise-filters-row">
         <Select
+          className="exercise-filter-select"
           placeholder="All muscles"
           value={filters.muscle ?? ''}
           onChange={(event) => onChange({ muscle: event.target.value || undefined })}
           options={MUSCLE_OPTIONS}
         />
         <Select
+          className="exercise-filter-select"
           placeholder="All equipment"
           value={filters.equipment ?? ''}
           onChange={(event) => onChange({ equipment: event.target.value || undefined })}
@@ -87,28 +91,36 @@ export function ExerciseFilters({ filters, onChange, onClear }: ExerciseFiltersP
       </div>
 
       <div className="exercise-filters-chips">
-        {DIFFICULTY_OPTIONS.map((option) => (
-          <FilterChip
-            key={option.value}
-            label={option.label}
-            selected={filters.difficulty === option.value}
-            onClick={() =>
-              onChange({ difficulty: filters.difficulty === option.value ? undefined : option.value })
-            }
-          />
-        ))}
-        {MOVEMENT_TYPE_OPTIONS.map((option) => (
-          <FilterChip
-            key={option.value}
-            label={option.label}
-            selected={filters.movementType === option.value}
-            onClick={() =>
-              onChange({
-                movementType: filters.movementType === option.value ? undefined : option.value,
-              })
-            }
-          />
-        ))}
+        {DIFFICULTY_OPTIONS.map((option) => {
+          const Icon = difficultyIcon(option.value);
+          return (
+            <FilterChip
+              key={option.value}
+              label={option.label}
+              icon={<Icon />}
+              selected={filters.difficulty === option.value}
+              onClick={() =>
+                onChange({ difficulty: filters.difficulty === option.value ? undefined : option.value })
+              }
+            />
+          );
+        })}
+        {MOVEMENT_TYPE_OPTIONS.map((option) => {
+          const Icon = movementTypeIcon(option.value);
+          return (
+            <FilterChip
+              key={option.value}
+              label={option.label}
+              icon={<Icon />}
+              selected={filters.movementType === option.value}
+              onClick={() =>
+                onChange({
+                  movementType: filters.movementType === option.value ? undefined : option.value,
+                })
+              }
+            />
+          );
+        })}
       </div>
 
       {hasActiveFilters && (

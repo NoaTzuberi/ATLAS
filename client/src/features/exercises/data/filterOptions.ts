@@ -1,3 +1,27 @@
+import type { ComponentType } from 'react';
+import {
+  BarbellIcon,
+  DumbbellIcon,
+  CableIcon,
+  MachineIcon,
+  KettlebellIcon,
+  ResistanceBandIcon,
+  BodyweightIcon,
+  EzCurlBarIcon,
+  ExerciseBallIcon,
+  FoamRollerIcon,
+  MedicineBallIcon,
+  NoEquipmentIcon,
+  OtherEquipmentIcon,
+  BattleRopeIcon,
+  PullUpBarIcon,
+  SignalOneIcon,
+  SignalTwoIcon,
+  SignalThreeIcon,
+  StrengthIcon,
+  MobilityIcon,
+  CardioIcon,
+} from '../components/icons';
 import type { Difficulty, MovementType } from '../types';
 
 export interface FilterOption {
@@ -66,4 +90,75 @@ export function muscleLabel(value: string): string {
 
 export function equipmentLabel(value: string): string {
   return EQUIPMENT_LABELS.get(value) ?? value;
+}
+
+const EQUIPMENT_ICONS: Record<string, ComponentType> = {
+  barbell: BarbellIcon,
+  dumbbell: DumbbellIcon,
+  cable: CableIcon,
+  machine: MachineIcon,
+  kettlebell: KettlebellIcon,
+  resistance_band: ResistanceBandIcon,
+  bodyweight: BodyweightIcon,
+  ez_curl_bar: EzCurlBarIcon,
+  exercise_ball: ExerciseBallIcon,
+  foam_roller: FoamRollerIcon,
+  medicine_ball: MedicineBallIcon,
+  no_equipment: NoEquipmentIcon,
+  other: OtherEquipmentIcon,
+  battle_rope: BattleRopeIcon,
+  pull_up_bar: PullUpBarIcon,
+};
+
+export function equipmentIcon(value: string): ComponentType | undefined {
+  return EQUIPMENT_ICONS[value];
+}
+
+const DIFFICULTY_ICONS: Record<Difficulty, ComponentType> = {
+  beginner: SignalOneIcon,
+  intermediate: SignalTwoIcon,
+  advanced: SignalThreeIcon,
+};
+
+export function difficultyIcon(value: Difficulty): ComponentType {
+  return DIFFICULTY_ICONS[value];
+}
+
+const MOVEMENT_TYPE_ICONS: Record<MovementType, ComponentType> = {
+  strength: StrengthIcon,
+  mobility: MobilityIcon,
+  cardio: CardioIcon,
+};
+
+export function movementTypeIcon(value: MovementType): ComponentType {
+  return MOVEMENT_TYPE_ICONS[value];
+}
+
+/** Muted editorial hue per muscle, reusing the exact 4-color mapping already
+ * established for workout categories (upper_body=blue, core=plum,
+ * lower_body=olive) — "back" gets teal, matching how Pull work uses teal
+ * there. Keeps muscle tags visually consistent with Workouts/Profile instead
+ * of introducing a new palette. */
+const MUSCLE_TAG_HUE: Record<string, 'upper_body' | 'back' | 'core' | 'lower_body'> = {
+  chest: 'upper_body',
+  shoulders: 'upper_body',
+  triceps: 'upper_body',
+  biceps: 'upper_body',
+  forearms: 'upper_body',
+  traps: 'upper_body',
+  neck: 'upper_body',
+  lats: 'back',
+  middle_back: 'back',
+  lower_back: 'back',
+  abdominals: 'core',
+  quadriceps: 'lower_body',
+  hamstrings: 'lower_body',
+  calves: 'lower_body',
+  glutes: 'lower_body',
+  abductors: 'lower_body',
+  adductors: 'lower_body',
+};
+
+export function muscleTagHue(value: string): 'upper_body' | 'back' | 'core' | 'lower_body' {
+  return MUSCLE_TAG_HUE[value] ?? 'upper_body';
 }

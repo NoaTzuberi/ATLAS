@@ -1,3 +1,5 @@
+import type { BadgeVariant } from '../../../components/common/Badge/Badge';
+import type { Difficulty } from '../../exercises/types';
 import type { WorkoutCategory, WorkoutGoal } from '../types';
 
 export const WORKOUT_CATEGORY_OPTIONS: { value: WorkoutCategory; label: string }[] = [
@@ -24,4 +26,14 @@ export function workoutCategoryLabel(value: string): string {
 
 export function workoutGoalLabel(value: string): string {
   return GOAL_LABELS.get(value as WorkoutGoal) ?? value;
+}
+
+const DIFFICULTY_BADGE_VARIANTS: Record<Difficulty, BadgeVariant> = {
+  beginner: 'success',
+  intermediate: 'achievement',
+  advanced: 'danger',
+};
+
+export function difficultyBadgeVariant(difficulty: Difficulty): BadgeVariant {
+  return DIFFICULTY_BADGE_VARIANTS[difficulty] ?? 'default';
 }

@@ -90,6 +90,16 @@ export function WorkoutBuilderPage() {
     setRows((prev) => [...prev, { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 }]);
   }
 
+  function toggleExercise(exercise: WorkoutExerciseRowValue['exercise']) {
+    setRows((prev) => {
+      const alreadyAdded = prev.some((row) => row.exercise.id === exercise.id);
+      if (alreadyAdded) {
+        return prev.filter((row) => row.exercise.id !== exercise.id);
+      }
+      return [...prev, { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 }];
+    });
+  }
+
   function updateRow(index: number, patch: Partial<WorkoutExerciseRowValue>) {
     setRows((prev) => prev.map((row, i) => (i === index ? { ...row, ...patch } : row)));
   }
@@ -237,7 +247,7 @@ export function WorkoutBuilderPage() {
 
           <GlassCard className="workout-builder-card">
             <h2>Add Exercises</h2>
-            <ExercisePicker addedExerciseIds={addedExerciseIds} onAdd={addExercise} />
+            <ExercisePicker addedExerciseIds={addedExerciseIds} onAdd={addExercise} onToggle={toggleExercise} />
           </GlassCard>
 
           {rows.length > 0 && (

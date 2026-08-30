@@ -1,4 +1,5 @@
 import { Exercise } from './exercise.model';
+import { scoreExercise } from './exerciseSearch';
 import type {
   Category,
   Muscle,
@@ -25,6 +26,7 @@ const DEFAULT_LIMIT = 20;
 export interface ListExercisesParams {
   page?: number;
   limit?: number;
+  category?: Category;
   muscle?: Muscle;
   equipment?: Equipment;
   difficulty?: Difficulty;
@@ -137,6 +139,7 @@ function buildPublicFilter(params: ListExercisesParams): Record<string, unknown>
     isActive: true,
   };
 
+  if (params.category) filter.category = params.category;
   if (params.muscle) filter.primaryMuscles = params.muscle;
   if (params.equipment) filter.equipment = params.equipment;
   if (params.difficulty) filter.difficulty = params.difficulty;
@@ -145,12 +148,6 @@ function buildPublicFilter(params: ListExercisesParams): Record<string, unknown>
   if (params.mechanic) filter.mechanic = params.mechanic;
   if (params.forceType) filter.forceType = params.forceType;
   if (params.isUnilateral !== undefined) filter.isUnilateral = params.isUnilateral;
-
-  if (params.search) {
-    const escaped = params.search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(escaped, 'i');
-    filter.$or = [{ name: pattern }, { aliases: pattern }];
-  }
 
   return filter;
 }
@@ -171,6 +168,10 @@ export async function listPublicExercises(
   const limit = params.limit ?? DEFAULT_LIMIT;
   const filter = buildPublicFilter(params);
 
+  if (params.search) {
+    return listPublicExercisesWithSearch(filter, params.search, page, limit);
+  }
+
   const [docs, total] = await Promise.all([
     Exercise.find(filter)
       .sort({ contentTier: 1, name: 1 })
@@ -182,6 +183,44 @@ export async function listPublicExercises(
 
   return {
     items: docs.map(toPublicExercise),
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
+}
+
+/**
+ * Search path: partial/multi-word matching and typo tolerance both need
+ * scoring text MongoDB's query language can't express directly, so this
+ * scores every candidate in Node instead of paginating in Mongo. Fine at
+ * today's scale — see exerciseSearch.ts for why. Structural filters
+ * (muscle/equipment/etc.) still narrow the candidate set in Mongo first;
+ * only the search term itself is scored/ranked/paginated in memory.
+ */
+async function listPublicExercisesWithSearch(
+  filter: Record<string, unknown>,
+  search: string,
+  page: number,
+  limit: number,
+): Promise<PaginatedExercises> {
+  const candidates = await Exercise.find(filter).lean<ExerciseLeanDoc[]>();
+
+  const scored = candidates
+    .map((doc) => ({ doc, score: scoreExercise(search, doc.name, doc.aliases) }))
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      if (a.doc.contentTier !== b.doc.contentTier) return a.doc.contentTier === 'enhanced' ? -1 : 1;
+      return a.doc.name.localeCompare(b.doc.name);
+    });
+
+  const total = scored.length;
+  const start = (page - 1) * limit;
+  const pageItems = scored.slice(start, start + limit).map((entry) => entry.doc);
+
+  return {
+    items: pageItems.map(toPublicExercise),
     page,
     limit,
     total,

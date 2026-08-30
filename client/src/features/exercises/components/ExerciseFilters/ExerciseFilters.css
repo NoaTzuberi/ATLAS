@@ -77,6 +77,24 @@
   gap: var(--space-3);
 }
 
+.exercise-filters-row .select-field.exercise-filter-select {
+  height: 44px;
+  border-radius: 999px;
+  background-color: rgba(3, 8, 15, 0.32);
+  border-color: transparent;
+  padding-left: var(--space-4);
+}
+
+.exercise-filters-row .select-field.exercise-filter-select:hover {
+  background-color: rgba(3, 8, 15, 0.4);
+}
+
+.exercise-filters-row .select-field.exercise-filter-select:focus {
+  background-color: rgba(3, 8, 15, 0.45);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.16);
+}
+
 .exercise-filters-chips {
   display: flex;
   flex-wrap: wrap;

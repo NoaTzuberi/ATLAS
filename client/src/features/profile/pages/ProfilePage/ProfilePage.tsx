@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import profileBannerImage from '../../../../assets/profile-bg-wide-dimmed.jpg';
 import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
@@ -177,31 +178,37 @@ export function ProfilePage() {
           <div className="profile-layout" ref={layoutRef}>
             <div className="profile-main-column">
               {!isLoading && !loadError && (
-                <GlassCard className="profile-header-card">
-                  <span className="profile-header-avatar" aria-hidden="true">
-                    {initial}
-                  </span>
-                  <div className="profile-header-text">
-                    <span className="profile-header-name">{user?.name}</span>
-                    {summaryLine && <span className="profile-header-summary">{summaryLine}</span>}
+                <GlassCard
+                  className="profile-header-card"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom, rgba(10, 12, 16, 0.5) 0%, rgba(10, 12, 16, 0.68) 60%, rgba(10, 12, 16, 0.88) 100%), url(${profileBannerImage})`,
+                  }}
+                >
+                  <div className="profile-header-banner">
+                    <span className="profile-header-avatar" aria-hidden="true">
+                      {initial}
+                    </span>
+                    <div className="profile-header-text">
+                      <span className="profile-header-name">{user?.name}</span>
+                      {summaryLine && <span className="profile-header-summary">{summaryLine}</span>}
+                    </div>
+                  </div>
+
+                  <div className="profile-header-footer">
+                    <div className="profile-account-row">
+                      <span className="text-label">Email</span>
+                      <span>{user?.email}</span>
+                    </div>
+                    <Link
+                      to={ROUTES.FORGOT_PASSWORD}
+                      state={{ email: user?.email }}
+                      className="profile-change-password-link"
+                    >
+                      Change password
+                    </Link>
                   </div>
                 </GlassCard>
               )}
-
-              <GlassCard className="profile-section-card profile-account-card">
-                <h2>Account</h2>
-                <div className="profile-account-row">
-                  <span className="text-label">Email</span>
-                  <span>{user?.email}</span>
-                </div>
-                <Link
-                  to={ROUTES.FORGOT_PASSWORD}
-                  state={{ email: user?.email }}
-                  className="profile-change-password-link"
-                >
-                  Change password
-                </Link>
-              </GlassCard>
 
               <GlassCard className="profile-section-card profile-training-card">
                 <h2>Training Profile</h2>

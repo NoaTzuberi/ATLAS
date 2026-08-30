@@ -27,7 +27,6 @@ const FOOTER_NAV_LINKS = [
   { to: ROUTES.DASHBOARD, label: 'Dashboard' },
   { to: ROUTES.EXERCISES, label: 'Exercises' },
   { to: ROUTES.WORKOUTS, label: 'Workouts' },
-  { to: ROUTES.CALENDAR, label: 'Calendar' },
   { to: ROUTES.PROFILE, label: 'Profile' },
 ];
 

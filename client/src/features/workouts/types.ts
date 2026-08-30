@@ -107,9 +107,11 @@ export interface FinishWorkoutResult {
 
 export interface WorkoutSummary {
   id: string;
+  templateId: string | null;
   name: string;
   date: string;
   status: WorkoutSessionStatus;
   duration?: number;
   totalVolume?: number;
+  category?: WorkoutCategory;
 }

@@ -7,6 +7,7 @@ import type { Muscle, Equipment } from '../exercises/exercise.constants';
 import type { ExerciseMedia } from '../exercises/exercise.types';
 import type { WorkoutSet } from './workout.types';
 import type { WorkoutStatus, PersonalRecordType } from './workout.constants';
+import type { WorkoutCategory } from '../workoutTemplates/workoutTemplate.constants';
 
 export class WorkoutNotFoundError extends Error {}
 export class WorkoutForbiddenError extends Error {}
@@ -221,11 +222,13 @@ export async function getWorkoutById(id: string, userId: string): Promise<Public
 
 export interface WorkoutSummary {
   id: string;
+  templateId: string | null;
   name: string;
   date: Date;
   status: WorkoutStatus;
   duration?: number;
   totalVolume?: number;
+  category?: WorkoutCategory;
 }
 
 export interface ListWorkoutsParams {
@@ -252,19 +255,34 @@ export async function listWorkoutSummaries(userId: string, params: ListWorkoutsP
     filter.date = dateFilter;
   }
 
-  let queryBuilder = Workout.find(filter).select('name date status duration totalVolume').sort({ date: -1 });
+  let queryBuilder = Workout.find(filter)
+    .select('templateId name date status duration totalVolume')
+    .populate('templateId', 'category')
+    .sort({ date: -1 });
   if (params.limit) {
     queryBuilder = queryBuilder.limit(params.limit);
   }
-  const docs = await queryBuilder.lean();
+  const docs = await queryBuilder.lean<
+    Array<{
+      _id: unknown;
+      templateId: { _id: unknown; category?: WorkoutCategory } | null;
+      name: string;
+      date: Date;
+      status: WorkoutStatus;
+      duration?: number;
+      totalVolume?: number;
+    }>
+  >();
 
   return docs.map((doc) => ({
     id: String(doc._id),
+    templateId: doc.templateId ? String(doc.templateId._id) : null,
     name: doc.name,
     date: doc.date,
     status: doc.status,
     duration: doc.duration,
     totalVolume: doc.totalVolume,
+    category: doc.templateId?.category,
   }));
 }
 

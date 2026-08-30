@@ -2,14 +2,13 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../app/config/routes';
 import { useAuth } from '../../../services/auth/AuthContext';
 import atlasLogo from '../../../assets/Logo/ATLASlogo3.png';
-import { GridIcon, DumbbellIcon, PulseIcon, CalendarIcon, ProfileIcon, LogOutIcon } from './icons';
+import { GridIcon, DumbbellIcon, PulseIcon, ProfileIcon, LogOutIcon } from './icons';
 import './Sidebar.css';
 
 const NAV_ITEMS = [
   { to: ROUTES.DASHBOARD, label: 'Dashboard', icon: <GridIcon /> },
   { to: ROUTES.WORKOUTS, label: 'Workouts', icon: <DumbbellIcon /> },
   { to: ROUTES.EXERCISES, label: 'Exercises', icon: <PulseIcon /> },
-  { to: ROUTES.CALENDAR, label: 'Calendar', icon: <CalendarIcon /> },
   { to: ROUTES.PROFILE, label: 'Profile', icon: <ProfileIcon /> },
 ];
 

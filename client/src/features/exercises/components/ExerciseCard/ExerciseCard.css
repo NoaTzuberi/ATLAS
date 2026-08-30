@@ -1,15 +1,14 @@
 .exercise-card-link {
   display: block;
+  height: 100%;
 }
 
 .exercise-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   height: 100%;
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
+  padding: 0;
+  overflow: hidden;
   border-color: rgba(245, 246, 248, 0.14);
   box-shadow: inset 0 1px 0 rgba(245, 246, 248, 0.05);
   transition:
@@ -19,7 +18,7 @@
 }
 
 .exercise-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px) scale(1.015);
   border-color: rgba(255, 122, 26, 0.3);
   box-shadow:
     inset 0 1px 0 rgba(245, 246, 248, 0.05),
@@ -28,29 +27,154 @@
 
 .exercise-card-media-wrap {
   position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Radial "editorial glow" behind the figure — same treatment as the
+   Dashboard's stat-card glows, tuned per card via the base background. */
+.exercise-card-media-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(255, 122, 26, 0.22) 0%,
+    rgba(255, 122, 26, 0.08) 40%,
+    rgba(255, 122, 26, 0) 72%
+  );
+  pointer-events: none;
+}
+
+.exercise-card-media-wrap .exercise-media {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+.exercise-card-media-wrap .exercise-media-image {
+  transition: transform var(--transition-base) var(--ease-standard);
+  transform: scale(1.16);
+}
+
+.exercise-card:hover .exercise-media-image {
+  transform: scale(1.24) rotate(-1.5deg);
 }
 
 .exercise-card-enhanced-badge {
   position: absolute;
+  z-index: 2;
   top: var(--space-2);
   right: var(--space-2);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  background-color: rgba(3, 8, 15, 0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px var(--space-2);
+  border-radius: 999px;
+  background-color: var(--color-amber-soft);
+  border: 1px solid rgba(217, 162, 76, 0.4);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: var(--color-orange-hover);
+  color: var(--color-amber-500);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
+}
+
+.exercise-card-enhanced-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.exercise-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  padding: var(--space-3);
+  background:
+    var(--gradient-card-glow),
+    var(--background-secondary);
 }
 
 .exercise-card-name {
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
+  /* Reserve room for 2 lines so a wrapped title never shifts the tag row
+     relative to a card with a single-line title. */
+  min-height: calc(2 * var(--line-height-tight) * 1em);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .exercise-card-tags {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+  margin-top: auto;
+}
+
+.exercise-card-muscle-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-transform: capitalize;
+}
+
+.exercise-card-muscle-tag-upper_body {
+  background-color: var(--color-blue-soft);
+  border: 1px solid rgba(79, 143, 224, 0.35);
+  color: var(--color-blue-hover);
+}
+
+.exercise-card-muscle-tag-back {
+  background-color: var(--color-teal-soft);
+  border: 1px solid rgba(47, 191, 143, 0.35);
+  color: var(--color-teal-hover);
+}
+
+.exercise-card-muscle-tag-core {
+  background-color: var(--color-plum-soft);
+  border: 1px solid rgba(165, 107, 138, 0.35);
+  color: var(--color-plum-hover);
+}
+
+.exercise-card-muscle-tag-lower_body {
+  background-color: var(--color-olive-soft);
+  border: 1px solid rgba(138, 140, 79, 0.35);
+  color: var(--color-olive-hover);
+}
+
+.exercise-card-equipment-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-glass-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-neutral-300);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: capitalize;
+}
+
+.exercise-card-equipment-icon {
+  display: flex;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+}
+
+.exercise-card-equipment-icon svg {
+  width: 100%;
+  height: 100%;
 }

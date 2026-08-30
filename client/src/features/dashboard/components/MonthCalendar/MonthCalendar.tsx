@@ -1,3 +1,7 @@
+import { getCategoryIcon } from '../../../workouts/data/categoryVisuals';
+import { activityTypeIcon } from '../../../activities/data/activityOptions';
+import type { WorkoutCategory } from '../../../workouts/types';
+import type { ActivityType } from '../../../activities/types';
 import './MonthCalendar.css';
 
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -13,11 +17,19 @@ export function toDateKey(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+export interface DayLogInfo {
+  hasWorkout: boolean;
+  hasActivity: boolean;
+  /** 1 = workout logged, 2 = workout volume in the top tier for the month. Only meaningful when hasWorkout. */
+  volumeTier?: 1 | 2;
+  workoutCategory?: WorkoutCategory;
+  activityType?: ActivityType;
+}
+
 interface MonthCalendarProps {
   year: number;
   month: number;
-  workoutDates: Set<string>;
-  activityDates: Set<string>;
+  dayLogs: Map<string, DayLogInfo>;
   selectedDateKey: string | null;
   onSelectDate: (dateKey: string) => void;
   onPrevMonth: () => void;
@@ -27,8 +39,7 @@ interface MonthCalendarProps {
 export function MonthCalendar({
   year,
   month,
-  workoutDates,
-  activityDates,
+  dayLogs,
   selectedDateKey,
   onSelectDate,
   onPrevMonth,
@@ -53,9 +64,9 @@ export function MonthCalendar({
         <button type="button" onClick={onPrevMonth} aria-label="Previous month">
           &larr;
         </button>
-        <h2>
+        <h3>
           {MONTH_LABELS[month]} {year}
-        </h2>
+        </h3>
         <button type="button" onClick={onNextMonth} aria-label="Next month">
           &rarr;
         </button>
@@ -73,18 +84,21 @@ export function MonthCalendar({
             return <div key={`blank-${index}`} className="month-calendar-cell month-calendar-cell-blank" />;
           }
 
-          const hasWorkout = workoutDates.has(cell.dateKey);
-          const hasActivity = activityDates.has(cell.dateKey);
+          const log = dayLogs.get(cell.dateKey);
           const isToday = cell.dateKey === todayKey;
           const isSelected = cell.dateKey === selectedDateKey;
 
           const classNames = [
             'month-calendar-cell',
+            log?.hasWorkout ? `month-calendar-cell-tier-${log.volumeTier ?? 1}` : '',
+            !log?.hasWorkout && log?.hasActivity ? 'month-calendar-cell-activity' : '',
             isToday ? 'month-calendar-cell-today' : '',
             isSelected ? 'month-calendar-cell-selected' : '',
           ]
             .filter(Boolean)
             .join(' ');
+
+          const CategoryIcon = log?.workoutCategory ? getCategoryIcon(log.workoutCategory) : null;
 
           return (
             <button
@@ -94,12 +108,15 @@ export function MonthCalendar({
               onClick={() => onSelectDate(cell.dateKey)}
             >
               <span className="month-calendar-day">{cell.day}</span>
-              {(hasWorkout || hasActivity) && (
-                <span className="month-calendar-dots">
-                  {hasWorkout && <span className="month-calendar-dot month-calendar-dot-workout" />}
-                  {hasActivity && <span className="month-calendar-dot month-calendar-dot-activity" />}
+              {CategoryIcon ? (
+                <span className="month-calendar-icon" aria-hidden="true">
+                  <CategoryIcon />
                 </span>
-              )}
+              ) : log?.hasActivity ? (
+                <span className="month-calendar-icon month-calendar-icon-emoji" aria-hidden="true">
+                  {activityTypeIcon(log.activityType ?? '')}
+                </span>
+              ) : null}
             </button>
           );
         })}
