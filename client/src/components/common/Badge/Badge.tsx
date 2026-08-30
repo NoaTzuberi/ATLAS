@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import './Badge.css';
 
-export type BadgeVariant = 'default' | 'accent' | 'achievement';
+export type BadgeVariant = 'default' | 'accent' | 'achievement' | 'success' | 'neutral';
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;

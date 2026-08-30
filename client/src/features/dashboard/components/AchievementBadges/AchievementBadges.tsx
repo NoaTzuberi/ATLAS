@@ -256,9 +256,13 @@ const BADGES: BadgeDefinition[] = [
 
 interface AchievementBadgesProps {
   summary: DashboardSummary;
+  /** When set, renders a short vertical list of the most notable badges
+   * (earned first, then closest-to-unlocking) instead of the full scroll
+   * strip — used for compact previews like the Profile page snapshot. */
+  limit?: number;
 }
 
-export function AchievementBadges({ summary }: AchievementBadgesProps) {
+export function AchievementBadges({ summary, limit }: AchievementBadgesProps) {
   const gridRef = useStaggerReveal<HTMLDivElement>([summary]);
   const previousEarnedRef = useRef<Set<string>>();
   const [justEarnedIds, setJustEarnedIds] = useState<Set<string>>(new Set());
@@ -399,6 +403,90 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
     gridRef.current?.scrollBy({ left: direction * SCROLL_STEP, behavior: 'smooth' });
   };
 
+  const ctx: BadgeContext = {
+    summary,
+    activityTypeCount,
+    personalRecordCount,
+    weighInCount,
+    weeklyTargetDays,
+    consecutiveWeeksHittingGoal,
+  };
+
+  const computedBadges = BADGES.map((badge) => {
+    const { current, target, unitLabel } = badge.getProgress(ctx);
+    return {
+      badge,
+      current,
+      target,
+      unitLabel,
+      earned: current >= target,
+      progressRatio: current / target,
+    };
+  });
+
+  // No "earned at" timestamps exist yet, so this favors earned badges (harder
+  // ones first, as a proxy for "most impressive") and otherwise falls back to
+  // whichever locked badge is closest to unlocking.
+  const displayBadges = limit
+    ? [...computedBadges]
+        .sort((a, b) => {
+          if (a.earned !== b.earned) return a.earned ? -1 : 1;
+          if (a.earned) return b.target - a.target;
+          return b.progressRatio - a.progressRatio;
+        })
+        .slice(0, limit)
+    : computedBadges;
+
+  function renderTile({ badge, current, target, unitLabel, earned }: (typeof computedBadges)[number]) {
+    const justEarned = justEarnedIds.has(badge.id);
+    const progressPct = Math.min(100, (current / target) * 100);
+
+    return (
+      <div
+        key={badge.id}
+        className={
+          'badge-tile' +
+          (limit ? ' badge-tile-compact' : '') +
+          (earned ? ' badge-tile-earned' : ' badge-tile-locked') +
+          (justEarned ? ' badge-tile-just-earned' : '')
+        }
+        tabIndex={0}
+      >
+        <span className="badge-tile-icon">{badge.icon}</span>
+        <span className="badge-tile-name">{badge.name}</span>
+
+        {!earned && (
+          <>
+            <span className="badge-tile-progress-text">
+              {current}/{target}
+              {unitLabel && ` ${unitLabel}`}
+            </span>
+            <span className="badge-tile-lock" aria-hidden="true">
+              <LockIcon />
+            </span>
+            <div className="badge-tile-progress-track" aria-hidden="true">
+              <div className="badge-tile-progress-fill" style={{ width: `${progressPct}%` }} />
+            </div>
+          </>
+        )}
+
+        {!limit && (
+          <span className="badge-tile-tooltip" role="tooltip">
+            {earned ? 'Unlocked' : badge.description}
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  if (limit) {
+    return (
+      <div className="achievements-grid achievements-grid-compact" ref={gridRef}>
+        {displayBadges.map(renderTile)}
+      </div>
+    );
+  }
+
   return (
     <div className="achievements-scroll-wrapper">
       <button
@@ -420,53 +508,7 @@ export function AchievementBadges({ summary }: AchievementBadgesProps) {
         <ChevronRightIcon />
       </button>
       <div className="achievements-grid" ref={gridRef}>
-      {BADGES.map((badge) => {
-        const { current, target, unitLabel } = badge.getProgress({
-          summary,
-          activityTypeCount,
-          personalRecordCount,
-          weighInCount,
-          weeklyTargetDays,
-          consecutiveWeeksHittingGoal,
-        });
-        const earned = current >= target;
-        const justEarned = justEarnedIds.has(badge.id);
-        const progressPct = Math.min(100, (current / target) * 100);
-
-        return (
-          <div
-            key={badge.id}
-            className={
-              'badge-tile' +
-              (earned ? ' badge-tile-earned' : ' badge-tile-locked') +
-              (justEarned ? ' badge-tile-just-earned' : '')
-            }
-            tabIndex={0}
-          >
-            <span className="badge-tile-icon">{badge.icon}</span>
-            <span className="badge-tile-name">{badge.name}</span>
-
-            {!earned && (
-              <>
-                <span className="badge-tile-progress-text">
-                  {current}/{target}
-                  {unitLabel && ` ${unitLabel}`}
-                </span>
-                <span className="badge-tile-lock" aria-hidden="true">
-                  <LockIcon />
-                </span>
-                <div className="badge-tile-progress-track" aria-hidden="true">
-                  <div className="badge-tile-progress-fill" style={{ width: `${progressPct}%` }} />
-                </div>
-              </>
-            )}
-
-            <span className="badge-tile-tooltip" role="tooltip">
-              {earned ? 'Unlocked' : badge.description}
-            </span>
-          </div>
-        );
-      })}
+        {displayBadges.map(renderTile)}
       </div>
     </div>
   );

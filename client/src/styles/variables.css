@@ -11,11 +11,25 @@
   --color-orange-hover: #ff9645;
   --color-orange-active: #e56a0f;
   --color-orange-soft: rgba(255, 122, 26, 0.14);
+  --color-orange-strong: rgba(255, 122, 26, 0.24);
 
   /* Supporting accent only — achievements, highlights, premium moments.
      Do not use for primary buttons or main CTAs. */
   --color-amber-500: #d9a24c;
   --color-amber-soft: rgba(217, 162, 76, 0.16);
+
+  /* Secondary section accents — used to differentiate categories of data
+     (e.g. Profile page sub-sections) without competing with the orange
+     brand accent used for primary actions and highlights. */
+  --color-blue-500: #4f8fe0;
+  --color-blue-hover: #7bb0ec;
+  --color-blue-soft: rgba(79, 143, 224, 0.14);
+  --color-blue-strong: rgba(79, 143, 224, 0.24);
+
+  --color-teal-500: #2fbf8f;
+  --color-teal-hover: #55d1a6;
+  --color-teal-soft: rgba(47, 191, 143, 0.14);
+  --color-teal-strong: rgba(47, 191, 143, 0.24);
 
   --color-error-500: #e85d5d;
   --color-error-soft: rgba(232, 93, 93, 0.16);

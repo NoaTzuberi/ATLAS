@@ -8,6 +8,9 @@
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
   text-transform: capitalize;
+  transition:
+    background-color var(--transition-fast) var(--ease-standard),
+    border-color var(--transition-fast) var(--ease-standard);
 }
 
 .badge-default {
@@ -18,12 +21,39 @@
 
 .badge-accent {
   background-color: var(--color-orange-soft);
-  border: 1px solid transparent;
+  border: 1px solid rgba(255, 122, 26, 0.35);
   color: var(--color-orange-hover);
+}
+
+.badge-accent:hover {
+  background-color: var(--color-orange-strong);
+  border-color: rgba(255, 122, 26, 0.5);
 }
 
 .badge-achievement {
   background-color: var(--color-amber-soft);
   border: 1px solid transparent;
   color: var(--color-amber-500);
+}
+
+.badge-success {
+  background-color: var(--color-teal-soft);
+  border: 1px solid rgba(47, 191, 143, 0.35);
+  color: var(--color-teal-hover);
+}
+
+.badge-success:hover {
+  background-color: var(--color-teal-strong);
+  border-color: rgba(47, 191, 143, 0.5);
+}
+
+.badge-neutral {
+  background-color: var(--surface-glass-bg-strong);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-neutral-100);
+}
+
+.badge-neutral:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(245, 246, 248, 0.4);
 }

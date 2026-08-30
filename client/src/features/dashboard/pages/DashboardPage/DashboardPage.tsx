@@ -11,21 +11,16 @@ import { getDashboardSummary } from '../../../../services/dashboard/dashboardSer
 import { createProgressEntry } from '../../../../services/progress/progressService';
 import { useAuth } from '../../../../services/auth/AuthContext';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
-import { ProgressRing } from '../../components/ProgressRing/ProgressRing';
+import { StreakRing, STREAK_RING_TARGET } from '../../components/StreakRing/StreakRing';
+import { WeekDotStrip } from '../../components/WeekDotStrip/WeekDotStrip';
+import { MilestoneBar } from '../../components/MilestoneBar/MilestoneBar';
 import { AchievementBadges } from '../../components/AchievementBadges/AchievementBadges';
 import { FlameIcon, CalendarIcon, TrophyIcon, ScaleIcon, DumbbellIcon, RepsIcon } from '../../components/icons';
 import type { DashboardPersonalRecord, DashboardSummary, WeightTrendPoint } from '../../types';
 import './DashboardPage.css';
 
-const WORKOUT_MILESTONES = [10, 25, 50, 100, 250, 500];
-const STREAK_RING_TARGET = 7;
-const MILESTONE_SEGMENT_COUNT = 10;
 const WEIGHT_CHART_WIDTH = 400;
 const WEIGHT_CHART_HEIGHT = 100;
-
-function getNextMilestone(total: number): number {
-  return WORKOUT_MILESTONES.find((milestone) => milestone > total) ?? total + 50;
-}
 
 interface MergedPersonalRecord {
   exerciseId: string;
@@ -88,18 +83,6 @@ function buildWeightChartPoints(points: WeightTrendPoint[]): string {
     .join(' ');
 }
 
-/** Last 7 calendar days ending today, as single-letter weekday labels. */
-function getLast7DayLetters(): string[] {
-  const letters = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  const days: string[] = [];
-  for (let i = 6; i >= 0; i -= 1) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    days.push(letters[date.getDay()]);
-  }
-  return days;
-}
-
 export function DashboardPage() {
   const { user } = useAuth();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -109,10 +92,7 @@ export function DashboardPage() {
   const [weightInput, setWeightInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
-  const [ringProgress, setRingProgress] = useState(0);
   const bentoRef = useStaggerReveal<HTMLDivElement>([summary]);
-  const weekDotsRef = useRef<HTMLDivElement>(null);
-  const milestoneBarRef = useRef<HTMLDivElement>(null);
   const weightPolylineRef = useRef<SVGPolylineElement>(null);
   const weightEmptyLineRef = useRef<SVGLineElement>(null);
 
@@ -133,58 +113,23 @@ export function DashboardPage() {
     loadSummary();
   }, []);
 
-  // Sweep the streak ring in from empty to its real value — also fires
-  // smoothly on any later change since it always animates from wherever
-  // the ring currently sits toward the new target.
-  useEffect(() => {
-    if (!summary) return;
-    const raf = requestAnimationFrame(() => {
-      setRingProgress(summary.streak / STREAK_RING_TARGET);
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [summary]);
-
-  // Stagger-fill the week dots and milestone segments, and draw in the
-  // weight line, whenever the underlying data changes.
+  // Draw in the weight line whenever the underlying data changes.
   useEffect(() => {
     if (!summary) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const dots = weekDotsRef.current ? gsap.utils.toArray<HTMLElement>('.day-dot', weekDotsRef.current) : [];
-    const segments = milestoneBarRef.current
-      ? gsap.utils.toArray<HTMLElement>('.milestone-segment', milestoneBarRef.current)
-      : [];
-
-    const timeline = gsap.timeline();
-    if (dots.length > 0) {
-      timeline.fromTo(
-        dots,
-        { scale: 0.4, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.8)', stagger: 0.05 },
-        0,
-      );
-    }
-    if (segments.length > 0) {
-      timeline.fromTo(
-        segments,
-        { scaleY: 0.3, opacity: 0 },
-        { scaleY: 1, opacity: 1, duration: 0.35, ease: 'power2.out', stagger: 0.04 },
-        0,
-      );
-    }
     const weightLineEl = weightPolylineRef.current ?? weightEmptyLineRef.current;
-    if (weightLineEl) {
-      const length = weightLineEl.getTotalLength();
-      timeline.fromTo(
-        weightLineEl,
-        { strokeDasharray: length, strokeDashoffset: length },
-        { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' },
-        0.1,
-      );
-    }
+    if (!weightLineEl) return;
+
+    const length = weightLineEl.getTotalLength();
+    const animation = gsap.fromTo(
+      weightLineEl,
+      { strokeDasharray: length, strokeDashoffset: length },
+      { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out', delay: 0.1 },
+    );
 
     return () => {
-      timeline.kill();
+      animation.kill();
     };
   }, [summary]);
 
@@ -209,13 +154,8 @@ export function DashboardPage() {
     }
   }
 
-  const nextMilestone = summary ? getNextMilestone(summary.totalWorkouts) : WORKOUT_MILESTONES[0];
-  const filledSegments = summary
-    ? Math.min(MILESTONE_SEGMENT_COUNT, Math.round((summary.totalWorkouts / nextMilestone) * MILESTONE_SEGMENT_COUNT))
-    : 0;
   const initial = user?.name?.trim().charAt(0).toUpperCase() ?? '?';
   const firstName = user?.name?.split(' ')[0] ?? 'there';
-  const dayLetters = getLast7DayLetters();
   const mergedPersonalRecords = summary ? mergePersonalRecords(summary.recentPersonalRecords) : [];
 
   return (
@@ -254,12 +194,7 @@ export function DashboardPage() {
               <div className="bento-grid" ref={bentoRef}>
                 <GlassCard className="bento-tile bento-tile-streak">
                   <div className="dashboard-stat-hero-glow" aria-hidden="true" />
-                  <ProgressRing progress={ringProgress} size={112} strokeWidth={7} glow>
-                    <span className="streak-ring-icon">
-                      <FlameIcon />
-                    </span>
-                    <span className="streak-ring-value">{summary.streak}</span>
-                  </ProgressRing>
+                  <StreakRing streak={summary.streak} />
                   <span className="dashboard-stat-label">Day Streak</span>
                   <span className="dashboard-stat-microcopy">
                     {summary.streak === 0 ? 'Start today to light it up' : `${STREAK_RING_TARGET}-day ring`}
@@ -271,17 +206,7 @@ export function DashboardPage() {
                     <CalendarIcon />
                   </span>
                   <span className="dashboard-stat-label">This Week</span>
-                  <div className="day-dots" ref={weekDotsRef}>
-                    {dayLetters.map((letter, index) => {
-                      const filled = index >= dayLetters.length - summary.workoutsLast7Days;
-                      return (
-                        <div className="day-dot-column" key={index}>
-                          <span className={'day-dot' + (filled ? ' day-dot-filled' : '')} />
-                          <span className="day-dot-letter">{letter}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <WeekDotStrip workoutsLast7Days={summary.workoutsLast7Days} />
                 </GlassCard>
 
                 <GlassCard className="bento-tile bento-tile-total">
@@ -290,24 +215,7 @@ export function DashboardPage() {
                   </span>
                   <span className="dashboard-stat-value">{summary.totalWorkouts}</span>
                   <span className="dashboard-stat-label">Total Workouts</span>
-                  <div
-                    className="milestone-segments"
-                    ref={milestoneBarRef}
-                    role="progressbar"
-                    aria-valuenow={summary.totalWorkouts}
-                    aria-valuemin={0}
-                    aria-valuemax={nextMilestone}
-                  >
-                    {Array.from({ length: MILESTONE_SEGMENT_COUNT }).map((_, index) => (
-                      <span
-                        key={index}
-                        className={'milestone-segment' + (index < filledSegments ? ' milestone-segment-filled' : '')}
-                      />
-                    ))}
-                  </div>
-                  <span className="dashboard-milestone-label">
-                    {summary.totalWorkouts} / {nextMilestone} to next milestone
-                  </span>
+                  <MilestoneBar totalWorkouts={summary.totalWorkouts} />
                 </GlassCard>
 
                 <GlassCard className="bento-tile bento-tile-weight">

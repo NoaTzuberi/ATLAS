@@ -234,3 +234,50 @@
 .badge-tile-just-earned {
   animation: badge-unlock 0.6s var(--ease-standard);
 }
+
+.achievements-grid-compact {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  padding: 0;
+  gap: var(--space-2);
+}
+
+.badge-tile-compact {
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex: none;
+  width: 100%;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+
+.badge-tile-compact .badge-tile-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.badge-tile-compact .badge-tile-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-xs);
+}
+
+.badge-tile-compact .badge-tile-progress-text {
+  display: none;
+}
+
+.badge-tile-compact .badge-tile-progress-track {
+  flex-basis: 100%;
+  margin-top: 0;
+}
+
+.badge-tile-compact .badge-tile-lock {
+  position: static;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}

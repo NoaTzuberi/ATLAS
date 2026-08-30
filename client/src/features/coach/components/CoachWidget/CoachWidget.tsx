@@ -5,7 +5,9 @@ import axios from 'axios';
 import { useAuth } from '../../../../services/auth/AuthContext';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
 import { sendMessage, getConversation, listSessions, getSession } from '../../../../services/coach/coachService';
+import { getMyProfile } from '../../../../services/users/usersService';
 import { workoutTemplatePath } from '../../../../app/config/routes';
+import { getSuggestedQuestions } from '../../data/suggestedQuestions';
 import type { ConversationMessage, SessionSummary } from '../../types';
 import './CoachWidget.css';
 
@@ -53,6 +55,15 @@ function BackIcon() {
   );
 }
 
+function CoachAvatar({ size = 'header' }: { size?: 'header' | 'inline' }) {
+  return (
+    <div className={size === 'header' ? 'coach-avatar coach-avatar-header' : 'coach-avatar coach-avatar-inline'}>
+      A
+      {size === 'header' && <span className="coach-status-dot" aria-hidden="true" />}
+    </div>
+  );
+}
+
 function formatSessionDate(iso: string): string {
   const date = new Date(iso);
   const sameYear = date.getFullYear() === new Date().getFullYear();
@@ -90,6 +101,8 @@ export function CoachWidget() {
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string>();
+  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(() => getSuggestedQuestions(undefined));
+  const [hasLoadedProfile, setHasLoadedProfile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -106,6 +119,16 @@ export function CoachWidget() {
         setHasLoadedHistory(true);
       });
   }, [isOpen, hasLoadedHistory]);
+
+  useEffect(() => {
+    if (!isOpen || hasLoadedProfile) return;
+    setHasLoadedProfile(true);
+    getMyProfile()
+      .then((profile) => setSuggestedQuestions(getSuggestedQuestions(profile.profile?.goals)))
+      .catch(() => {
+        // Starter questions just stay generic — not worth surfacing an error for this.
+      });
+  }, [isOpen, hasLoadedProfile]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -142,8 +165,8 @@ export function CoachWidget() {
     setError(undefined);
   }
 
-  async function handleSend() {
-    const trimmed = input.trim();
+  async function handleSend(textOverride?: string) {
+    const trimmed = (textOverride ?? input).trim();
     if (!trimmed || isSending) return;
 
     const isResuming = view === 'session' && viewedSessionId;
@@ -211,7 +234,10 @@ export function CoachWidget() {
           <div className="coach-widget-header">
             {view === 'chat' ? (
               <>
-                <span className="coach-widget-header-title">Coach</span>
+                <div className="coach-widget-header-identity">
+                  <CoachAvatar size="header" />
+                  <span className="coach-widget-header-title">Coach</span>
+                </div>
                 <div className="coach-widget-header-actions">
                   <button
                     type="button"
@@ -302,41 +328,83 @@ export function CoachWidget() {
               )}
 
               {view === 'chat' && !isLoadingHistory && messages.length === 0 && (
-                <p className="text-body coach-widget-empty">
-                  Ask me anything about your training — I can build a workout, explain an exercise, or check how your
-                  progress is trending.
-                </p>
+                <div className="coach-widget-empty-state">
+                  <p className="text-body coach-widget-empty">
+                    Ask me anything about your training — I can build a workout, explain an exercise, or check how
+                    your progress is trending.
+                  </p>
+                  <div className="coach-suggestions">
+                    {suggestedQuestions.map((question, index) => (
+                      <button
+                        key={question}
+                        type="button"
+                        className="coach-suggestion-chip"
+                        style={{ animationDelay: `${index * 60}ms` }}
+                        onClick={() => handleSend(question)}
+                        disabled={isSending}
+                      >
+                        {question}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {(view === 'chat' ? !isLoadingHistory : !isLoadingSession) &&
-                activeMessages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={
-                      'coach-widget-message' +
-                      (message.role === 'user' ? ' coach-widget-message-user' : ' coach-widget-message-atlas')
-                    }
-                  >
-                    {message.role === 'atlas' && <span className="coach-widget-message-label">ATLAS</span>}
-                    <p className="coach-widget-message-content">{message.content}</p>
-                    {message.createdWorkout && (
-                      <Link
-                        to={workoutTemplatePath(message.createdWorkout.id)}
-                        className="coach-widget-workout-link"
+                activeMessages.map((message, index) => {
+                  const prev = activeMessages[index - 1];
+                  const next = activeMessages[index + 1];
+                  const isFirstInGroup = !prev || prev.role !== message.role;
+                  const isLastInGroup = !next || next.role !== message.role;
+                  const isUser = message.role === 'user';
+
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        'coach-message-row' +
+                        (isUser ? ' coach-message-row-user' : ' coach-message-row-atlas') +
+                        (isFirstInGroup && index !== 0 ? ' coach-message-row-start' : '') +
+                        (!isFirstInGroup ? ' coach-message-row-grouped' : '')
+                      }
+                    >
+                      {!isUser && (
+                        <div className="coach-message-avatar-slot">
+                          {isFirstInGroup && <CoachAvatar size="inline" />}
+                        </div>
+                      )}
+                      <div
+                        className={
+                          'coach-widget-message' +
+                          (isUser ? ' coach-widget-message-user' : ' coach-widget-message-atlas') +
+                          (isLastInGroup ? ' coach-widget-message-tail' : '')
+                        }
                       >
-                        View &quot;{message.createdWorkout.name}&quot; →
-                      </Link>
-                    )}
-                  </div>
-                ))}
+                        <p className="coach-widget-message-content">{message.content}</p>
+                        {message.createdWorkout && (
+                          <Link
+                            to={workoutTemplatePath(message.createdWorkout.id)}
+                            className="coach-widget-workout-link"
+                          >
+                            View &quot;{message.createdWorkout.name}&quot; →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
 
               {isSending && (
-                <div className="coach-widget-message coach-widget-message-atlas">
-                  <span className="coach-widget-message-label">ATLAS</span>
-                  <div className="coach-typing-dots">
-                    <span />
-                    <span />
-                    <span />
+                <div className="coach-message-row coach-message-row-atlas coach-message-row-start">
+                  <div className="coach-message-avatar-slot">
+                    <CoachAvatar size="inline" />
+                  </div>
+                  <div className="coach-widget-message coach-widget-message-atlas coach-widget-message-tail coach-widget-message-typing">
+                    <div className="coach-typing-dots">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
                   </div>
                 </div>
               )}
@@ -358,7 +426,7 @@ export function CoachWidget() {
               <button
                 type="button"
                 className="coach-widget-send"
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={!input.trim() || isSending}
                 aria-label="Send message"
               >

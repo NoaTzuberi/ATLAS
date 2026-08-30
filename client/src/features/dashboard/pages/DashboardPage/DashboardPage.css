@@ -163,24 +163,6 @@
   pointer-events: none;
 }
 
-.streak-ring-icon {
-  display: flex;
-  width: 20px;
-  height: 20px;
-}
-
-.streak-ring-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.streak-ring-value {
-  font-family: var(--font-display);
-  font-size: var(--font-size-3xl);
-  color: var(--color-orange-hover);
-  line-height: 1;
-}
-
 .dashboard-stat-badge {
   display: flex;
   align-items: center;
@@ -218,67 +200,6 @@
   font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
   margin-top: calc(-1 * var(--space-1));
-}
-
-/* This Week — 7-day dot strip */
-.day-dots {
-  display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-
-.day-dot-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-.day-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--surface-glass-bg-strong);
-  background-color: transparent;
-  transition: background-color var(--transition-base) var(--ease-standard);
-}
-
-.day-dot-filled {
-  background-color: var(--color-orange-500);
-  border-color: var(--color-orange-500);
-  box-shadow: 0 0 8px rgba(255, 122, 26, 0.55);
-}
-
-.day-dot-letter {
-  font-size: 10px;
-  color: var(--color-neutral-500);
-}
-
-/* Total Workouts — segmented milestone bar */
-.milestone-segments {
-  display: flex;
-  align-items: stretch;
-  gap: 3px;
-  width: 100%;
-  height: 14px;
-  margin-top: var(--space-1);
-}
-
-.milestone-segment {
-  flex: 1;
-  border-radius: 3px;
-  background-color: var(--surface-glass-bg-strong);
-  transform-origin: center;
-}
-
-.milestone-segment-filled {
-  background-color: var(--color-orange-500);
-  box-shadow: 0 0 6px rgba(255, 122, 26, 0.45);
-}
-
-.dashboard-milestone-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
 }
 
 .dashboard-achievements {
