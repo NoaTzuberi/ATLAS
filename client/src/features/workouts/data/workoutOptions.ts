@@ -1,6 +1,8 @@
+import type { ComponentType } from 'react';
 import type { BadgeVariant } from '../../../components/common/Badge/Badge';
 import type { Difficulty } from '../../exercises/types';
 import type { WorkoutCategory, WorkoutGoal } from '../types';
+import { StrengthGoalIcon, HypertrophyGoalIcon, EnduranceGoalIcon } from '../components/icons';
 
 export const WORKOUT_CATEGORY_OPTIONS: { value: WorkoutCategory; label: string }[] = [
   { value: 'push', label: 'Push' },
@@ -26,6 +28,31 @@ export function workoutCategoryLabel(value: string): string {
 
 export function workoutGoalLabel(value: string): string {
   return GOAL_LABELS.get(value as WorkoutGoal) ?? value;
+}
+
+const GOAL_ICONS: Record<WorkoutGoal, ComponentType> = {
+  strength: StrengthGoalIcon,
+  hypertrophy: HypertrophyGoalIcon,
+  endurance: EnduranceGoalIcon,
+};
+
+export function workoutGoalIcon(value: WorkoutGoal): ComponentType {
+  return GOAL_ICONS[value];
+}
+
+export type WorkoutGoalAccent = 'orange' | 'plum' | 'blue';
+
+/** Strength keeps the app's primary orange; Hypertrophy and Endurance get
+ * their own hue so the three goals read as distinct identities at a glance,
+ * matching the accent-per-card pattern already used on the Profile page. */
+const GOAL_ACCENTS: Record<WorkoutGoal, WorkoutGoalAccent> = {
+  strength: 'orange',
+  hypertrophy: 'plum',
+  endurance: 'blue',
+};
+
+export function workoutGoalAccent(value: WorkoutGoal): WorkoutGoalAccent {
+  return GOAL_ACCENTS[value];
 }
 
 const DIFFICULTY_BADGE_VARIANTS: Record<Difficulty, BadgeVariant> = {

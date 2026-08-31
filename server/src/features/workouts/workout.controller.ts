@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthenticatedRequest } from '../../middleware/auth.middleware';
 import {
   validateIdParam,
+  validateExerciseIdParam,
   validateStartWorkoutPayload,
   validateProgressPayload,
   validateFinishWorkoutPayload,
@@ -15,6 +16,7 @@ import {
   abandonWorkout,
   finishWorkout,
   listWorkoutSummaries,
+  getLastLoggedExercise,
   WorkoutNotFoundError,
   WorkoutNotActiveError,
 } from './workout.service';
@@ -34,6 +36,17 @@ export async function getList(req: AuthenticatedRequest, res: Response) {
     status: query.status as WorkoutStatus | undefined,
   });
   res.status(200).json({ items: workouts });
+}
+
+export async function getExerciseHistory(req: AuthenticatedRequest, res: Response) {
+  const validationError = validateExerciseIdParam(req.params.exerciseId);
+  if (validationError) {
+    res.status(400).json({ message: validationError });
+    return;
+  }
+
+  const history = await getLastLoggedExercise(req.userId!, String(req.params.exerciseId));
+  res.status(200).json({ history });
 }
 
 export async function postStartWorkout(req: AuthenticatedRequest, res: Response) {

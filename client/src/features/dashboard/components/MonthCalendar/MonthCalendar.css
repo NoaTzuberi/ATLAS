@@ -1,27 +1,33 @@
 .month-calendar {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  width: max-content;
 }
 
 .month-calendar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .month-calendar-header h3 {
   font-family: var(--font-display);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
+  white-space: nowrap;
 }
 
 .month-calendar-header button {
-  width: 36px;
-  height: 36px;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background-color: transparent;
   color: var(--color-neutral-300);
+  font-size: var(--font-size-xs);
+  line-height: 1;
   cursor: pointer;
   transition:
     border-color var(--transition-fast) var(--ease-standard),
@@ -35,27 +41,28 @@
 
 .month-calendar-weekdays {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 44px);
+  gap: var(--space-1);
   text-align: center;
   color: var(--color-neutral-500);
-  font-size: var(--font-size-xs);
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .month-calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 44px);
+  grid-auto-rows: 44px;
   gap: var(--space-1);
 }
 
 .month-calendar-cell {
-  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 1px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   background-color: var(--surface-glass-bg);
@@ -115,14 +122,15 @@
 
 .month-calendar-day {
   font-size: var(--font-size-sm);
+  line-height: 1;
 }
 
 .month-calendar-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   color: var(--color-orange-hover);
 }
 
@@ -136,6 +144,6 @@
 }
 
 .month-calendar-icon-emoji {
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
 }

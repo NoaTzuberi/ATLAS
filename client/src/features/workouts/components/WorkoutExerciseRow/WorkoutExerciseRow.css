@@ -1,27 +1,49 @@
 .workout-exercise-row {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
-  background-color: var(--surface-glass-bg);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  transition: border-color var(--transition-base) var(--ease-standard);
+}
+
+.workout-exercise-row:hover {
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .workout-exercise-row-order {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 2px;
+  width: 24px;
+  flex-shrink: 0;
 }
 
 .workout-exercise-row-order button {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-neutral-300);
   cursor: pointer;
+  transition:
+    border-color var(--transition-fast) var(--ease-standard),
+    color var(--transition-fast) var(--ease-standard),
+    background-color var(--transition-fast) var(--ease-standard);
+}
+
+.workout-exercise-row-order button svg {
+  width: 11px;
+  height: 11px;
 }
 
 .workout-exercise-row-order button:disabled {
@@ -30,13 +52,14 @@
 }
 
 .workout-exercise-row-order button:hover:not(:disabled) {
-  border-color: var(--color-border-strong);
-  color: var(--color-neutral-100);
+  border-color: rgba(255, 122, 26, 0.4);
+  background-color: rgba(255, 122, 26, 0.12);
+  color: var(--color-orange-hover);
 }
 
 .workout-exercise-row-media {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -47,20 +70,112 @@
   height: 100%;
 }
 
-.workout-exercise-row-main {
-  flex: 1;
+.workout-exercise-row-info {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  flex: 1 1 auto;
   min-width: 0;
+  gap: 1px;
 }
 
 .workout-exercise-row-name {
-  font-weight: var(--font-weight-semibold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.workout-exercise-row-history {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--color-neutral-500);
 }
 
 .workout-exercise-row-fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  display: flex;
+  flex-shrink: 0;
   gap: var(--space-2);
+}
+
+.workout-exercise-row-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.workout-exercise-row-field-sets,
+.workout-exercise-row-field-reps,
+.workout-exercise-row-field-rest {
+  width: 84px;
+}
+
+.workout-exercise-row-field-weight {
+  width: 92px;
+}
+
+.workout-exercise-row-field label {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+}
+
+.workout-exercise-row-field .input-group {
+  gap: 0;
+}
+
+.workout-exercise-row-field .input-field {
+  width: 100%;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-100);
+  text-align: center;
+  padding: 6px 8px;
+}
+
+/* Native number-input spin arrows eat into the field's usable width and
+   crowd the digits — hide them so the full box is just the value. */
+.workout-exercise-row-field .input-field[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.workout-exercise-row-field .input-field[type='number']::-webkit-outer-spin-button,
+.workout-exercise-row-field .input-field[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.workout-exercise-row-remove {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast) var(--ease-standard),
+    border-color var(--transition-fast) var(--ease-standard),
+    color var(--transition-fast) var(--ease-standard);
+}
+
+.workout-exercise-row-remove svg {
+  width: 13px;
+  height: 13px;
+}
+
+.workout-exercise-row-remove:hover {
+  background-color: var(--color-error-soft);
+  border-color: rgba(232, 93, 93, 0.4);
+  color: var(--color-error-500);
 }

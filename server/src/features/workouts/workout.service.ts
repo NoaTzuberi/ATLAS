@@ -132,10 +132,17 @@ interface WeightMemoryEntry {
 }
 
 interface UnpopulatedWorkoutLeanDoc {
+  date: Date;
   exercises: Array<{ exerciseId: unknown; sets: WorkoutSet[] }>;
 }
 
-async function getWeightMemory(userId: string, exerciseId: Types.ObjectId): Promise<WeightMemoryEntry[]> {
+/** Most recent completed session that logged this exact exercise (by id, not
+ * name), regardless of which template it came from or whether it was created
+ * by the user or a system template. Recency, not an average across sessions. */
+async function findLastCompletedExerciseEntry(
+  userId: string,
+  exerciseId: Types.ObjectId,
+): Promise<{ date: Date; sets: WorkoutSet[] } | null> {
   const previous = await Workout.findOne({
     userId,
     status: 'completed',
@@ -144,12 +151,47 @@ async function getWeightMemory(userId: string, exerciseId: Types.ObjectId): Prom
     .sort({ date: -1 })
     .lean<UnpopulatedWorkoutLeanDoc>();
 
-  if (!previous) return [];
+  if (!previous) return null;
 
   const entry = previous.exercises.find((e) => String(e.exerciseId) === String(exerciseId));
-  if (!entry) return [];
+  if (!entry) return null;
 
-  return entry.sets.map((s) => ({ weight: s.weight, reps: s.reps }));
+  return { date: previous.date, sets: entry.sets };
+}
+
+async function getWeightMemory(userId: string, exerciseId: Types.ObjectId): Promise<WeightMemoryEntry[]> {
+  const found = await findLastCompletedExerciseEntry(userId, exerciseId);
+  return found ? found.sets.map((s) => ({ weight: s.weight, reps: s.reps })) : [];
+}
+
+export interface LastLoggedExercise {
+  sets: number;
+  reps: number;
+  weight: number;
+  date: Date;
+}
+
+/**
+ * Powers the Create Workout builder's history autofill: the single most
+ * recent completed set logged for this exercise (last completed set of the
+ * last completed session that included it), collapsed into one
+ * sets/reps/weight starting point. Only completed sets count — an abandoned
+ * warm-up set shouldn't shape the suggestion.
+ */
+export async function getLastLoggedExercise(userId: string, exerciseId: string): Promise<LastLoggedExercise | null> {
+  const found = await findLastCompletedExerciseEntry(userId, new Types.ObjectId(exerciseId));
+  if (!found) return null;
+
+  const completedSets = found.sets.filter((s) => s.completed);
+  if (completedSets.length === 0) return null;
+
+  const last = completedSets[completedSets.length - 1];
+  return {
+    sets: completedSets.length,
+    reps: last.reps,
+    weight: last.weight,
+    date: found.date,
+  };
 }
 
 /**

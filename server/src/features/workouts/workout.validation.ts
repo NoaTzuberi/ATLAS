@@ -8,6 +8,13 @@ export function validateIdParam(id: unknown): string | null {
   return null;
 }
 
+export function validateExerciseIdParam(id: unknown): string | null {
+  if (typeof id !== 'string' || !mongoose.isValidObjectId(id)) {
+    return 'A valid exercise id is required.';
+  }
+  return null;
+}
+
 export function validateListQuery(query: unknown): string | null {
   if (typeof query !== 'object' || query === null) {
     return 'Invalid query parameters.';

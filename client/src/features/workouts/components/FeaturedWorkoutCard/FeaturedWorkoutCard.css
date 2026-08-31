@@ -15,37 +15,18 @@
   flex: 0 0 42%;
   min-height: 220px;
   overflow: hidden;
+  /* Clean hard edge at the seam — no gradient/fade/blend of any kind. */
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
 }
 
+/* The photo itself: zero filter, zero blend-mode, zero overlay. Renders
+   exactly as the source file looks. */
 .featured-workout-cover-image {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* The source photos are light-toned editorial shots — darken and add a
-     touch of contrast so the cover reads as part of the dark theme rather
-     than sitting on top of it as a bright rectangle. */
-  filter: brightness(0.62) contrast(1.15);
-}
-
-.featured-workout-cover::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 160px 110px at 0% 0%, rgba(8, 10, 14, 0.75) 0%, rgba(8, 10, 14, 0) 70%);
-  pointer-events: none;
-}
-
-.featured-workout-cover::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  /* Dissolves the photo into the info panel's exact background color instead
-     of ending on a hard vertical line at the cover/panel edge — widened so
-     the darkening is gradual across most of the image, not a thin edge. */
-  background: linear-gradient(to right, rgba(22, 30, 39, 0) 15%, var(--background-secondary) 100%);
-  pointer-events: none;
 }
 
 .featured-workout-cover-badge {
@@ -114,11 +95,9 @@
   .featured-workout-cover {
     flex: none;
     min-height: 140px;
-  }
-
-  /* Layout is stacked here, so the fade needs to run top-to-bottom into the
-     panel below instead of left-to-right into the panel on the right. */
-  .featured-workout-cover::after {
-    background: linear-gradient(to bottom, rgba(22, 30, 39, 0) 15%, var(--background-secondary) 100%);
+    /* Stacked layout — the hard edge runs along the bottom into the panel
+       below instead of the right edge into the panel beside it. */
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   }
 }

@@ -5,6 +5,7 @@ import { ExerciseMedia } from '../../../exercises/components/ExerciseMedia/Exerc
 import { WorkoutChip } from '../WorkoutChip/WorkoutChip';
 import { listExercises } from '../../../../services/exercises/exercisesService';
 import { useDebouncedValue } from '../../../../hooks/useDebouncedValue';
+import { muscleLabel, muscleTagHue } from '../../../exercises/data/filterOptions';
 import { EXERCISE_CATEGORY_OPTIONS } from './exerciseCategoryOptions';
 import type { PublicExercise, Category } from '../../../exercises/types';
 import './ExercisePicker.css';
@@ -140,13 +141,24 @@ export function ExercisePicker({ addedExerciseIds, onAdd, onToggle }: ExercisePi
         <ul className="exercise-picker-results">
           {results.map((exercise) => {
             const alreadyAdded = addedExerciseIds.has(exercise.id);
+            const primaryMuscle = exercise.primaryMuscles[0];
             return (
               <li key={exercise.id} className="exercise-picker-result">
                 <div className="exercise-picker-result-media">
                   <ExerciseMedia media={exercise.media} alt={exercise.name} variant="card" />
                 </div>
-                <span className="exercise-picker-result-name">{exercise.name}</span>
+                <div className="exercise-picker-result-info">
+                  <span className="exercise-picker-result-name">{exercise.name}</span>
+                  {primaryMuscle && (
+                    <span
+                      className={`exercise-picker-result-tag exercise-picker-result-tag-${muscleTagHue(primaryMuscle)}`}
+                    >
+                      {muscleLabel(primaryMuscle)}
+                    </span>
+                  )}
+                </div>
                 <Button
+                  className="exercise-picker-result-add"
                   variant="ghost"
                   onClick={() => onAdd(exercise)}
                   disabled={alreadyAdded}

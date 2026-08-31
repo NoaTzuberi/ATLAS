@@ -7,3 +7,13 @@
   box-shadow: var(--shadow-md);
   padding: var(--space-4);
 }
+
+.glass-card--flat {
+  background-color: var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.1);
+  border-radius: 4px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  padding: 0;
+}

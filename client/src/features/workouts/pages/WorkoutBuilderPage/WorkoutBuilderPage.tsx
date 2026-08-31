@@ -4,25 +4,32 @@ import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import { Input } from '../../../../components/common/Input/Input';
-import { Select } from '../../../../components/common/Select/Select';
 import { Button } from '../../../../components/common/Button/Button';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
-import { WorkoutChip } from '../../components/WorkoutChip/WorkoutChip';
-import { ExercisePicker } from '../../components/ExercisePicker/ExercisePicker';
-import { WorkoutExerciseRow } from '../../components/WorkoutExerciseRow/WorkoutExerciseRow';
+import { OnboardingProgress } from '../../../onboarding/components/OnboardingProgress/OnboardingProgress';
+import { WorkoutSummaryCard } from '../../components/WorkoutSummaryCard/WorkoutSummaryCard';
+import { MuscleCoverageMap } from '../../components/MuscleCoverageMap/MuscleCoverageMap';
+import { BasicsStep } from '../../steps/BasicsStep/BasicsStep';
+import { GoalCategoryStep } from '../../steps/GoalCategoryStep/GoalCategoryStep';
+import { AddExercisesStep } from '../../steps/AddExercisesStep/AddExercisesStep';
+import { ReviewWorkoutStep } from '../../steps/ReviewWorkoutStep/ReviewWorkoutStep';
 import type { WorkoutExerciseRowValue } from '../../components/WorkoutExerciseRow/WorkoutExerciseRow';
-import { WORKOUT_CATEGORY_OPTIONS, WORKOUT_GOAL_OPTIONS } from '../../data/workoutOptions';
-import { DIFFICULTY_OPTIONS } from '../../../exercises/data/filterOptions';
+import { BasicInfoIcon, GoalCategoryStepIcon, AddExercisesIcon, ReviewStepIcon } from '../../components/icons';
 import {
   getWorkoutTemplateById,
   createWorkoutTemplate,
   updateWorkoutTemplate,
 } from '../../../../services/workouts/workoutTemplatesService';
+import { getExerciseHistory } from '../../../../services/workouts/workoutSessionService';
 import { ROUTES, workoutTemplatePath } from '../../../../app/config/routes';
+import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
 import type { WorkoutCategory, WorkoutGoal } from '../../types';
 import type { Difficulty } from '../../../exercises/types';
 import './WorkoutBuilderPage.css';
+
+const STEP_COUNT = 4;
+const STEP_TITLES = ['Basics', 'Goal & Category', 'Add Exercises', 'Review & Save'];
+const STEP_ICONS = [BasicInfoIcon, GoalCategoryStepIcon, AddExercisesIcon, ReviewStepIcon];
 
 export function WorkoutBuilderPage() {
   const { id } = useParams<{ id?: string }>();
@@ -33,6 +40,7 @@ export function WorkoutBuilderPage() {
   const [loadError, setLoadError] = useState<string>();
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string>();
+  const [stepIndex, setStepIndex] = useState(0);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -41,6 +49,7 @@ export function WorkoutBuilderPage() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('');
   const [duration, setDuration] = useState<string>('');
   const [rows, setRows] = useState<WorkoutExerciseRowValue[]>([]);
+  const layoutRef = useStaggerReveal<HTMLDivElement>([isLoading]);
 
   useEffect(() => {
     if (!id) return;
@@ -86,18 +95,52 @@ export function WorkoutBuilderPage() {
     setGoal((prev) => (prev.includes(value) ? prev.filter((g) => g !== value) : [...prev, value]));
   }
 
+  function buildDefaultRow(exercise: WorkoutExerciseRowValue['exercise']): WorkoutExerciseRowValue {
+    return { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 };
+  }
+
+  /** Fills in Sets/Reps/Weight from the user's most recent logged session for this
+   * exercise, if any — added as a follow-up patch so the row appears instantly with
+   * generic defaults and then "upgrades" once history resolves, rather than making
+   * every add wait on a network round-trip. */
+  function applyExerciseHistory(exerciseId: string) {
+    getExerciseHistory(exerciseId)
+      .then((history) => {
+        if (!history) return;
+        setRows((prev) =>
+          prev.map((row) =>
+            row.exercise.id === exerciseId
+              ? {
+                  ...row,
+                  defaultSets: history.sets,
+                  defaultReps: String(history.reps),
+                  defaultWeight: history.weight > 0 ? history.weight : row.defaultWeight,
+                  lastLogged: { sets: history.sets, reps: history.reps, weight: history.weight },
+                }
+              : row,
+          ),
+        );
+      })
+      .catch(() => {
+        // No history available (or the lookup failed) — keep the generic defaults.
+      });
+  }
+
   function addExercise(exercise: WorkoutExerciseRowValue['exercise']) {
-    setRows((prev) => [...prev, { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 }]);
+    setRows((prev) => [...prev, buildDefaultRow(exercise)]);
+    applyExerciseHistory(exercise.id);
   }
 
   function toggleExercise(exercise: WorkoutExerciseRowValue['exercise']) {
-    setRows((prev) => {
-      const alreadyAdded = prev.some((row) => row.exercise.id === exercise.id);
-      if (alreadyAdded) {
-        return prev.filter((row) => row.exercise.id !== exercise.id);
-      }
-      return [...prev, { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 }];
-    });
+    const alreadyAdded = rows.some((row) => row.exercise.id === exercise.id);
+    setRows((prev) =>
+      alreadyAdded
+        ? prev.filter((row) => row.exercise.id !== exercise.id)
+        : [...prev, buildDefaultRow(exercise)],
+    );
+    if (!alreadyAdded) {
+      applyExerciseHistory(exercise.id);
+    }
   }
 
   function updateRow(index: number, patch: Partial<WorkoutExerciseRowValue>) {
@@ -115,6 +158,29 @@ export function WorkoutBuilderPage() {
 
   function removeRow(index: number) {
     setRows((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function isStepValid(index: number): boolean {
+    switch (index) {
+      case 0:
+        return name.trim().length > 0;
+      case 2:
+        return rows.length > 0;
+      default:
+        return true;
+    }
+  }
+
+  function handleBack() {
+    setStepIndex((index) => Math.max(0, index - 1));
+  }
+
+  function handleContinue() {
+    if (stepIndex === STEP_COUNT - 1) {
+      handleSave();
+      return;
+    }
+    setStepIndex((index) => index + 1);
   }
 
   async function handleSave() {
@@ -184,6 +250,51 @@ export function WorkoutBuilderPage() {
   }
 
   const addedExerciseIds = new Set(rows.map((row) => row.exercise.id));
+  const isFirstStep = stepIndex === 0;
+  const isLastStep = stepIndex === STEP_COUNT - 1;
+  const StepIcon = STEP_ICONS[stepIndex];
+  const showSidePanel = rows.length > 0;
+
+  const steps = [
+    <BasicsStep
+      key="basics"
+      name={name}
+      onNameChange={setName}
+      description={description}
+      onDescriptionChange={setDescription}
+      duration={duration}
+      onDurationChange={setDuration}
+    />,
+    <GoalCategoryStep
+      key="goal-category"
+      category={category}
+      onCategoryChange={setCategory}
+      difficulty={difficulty}
+      onDifficultyChange={setDifficulty}
+      goal={goal}
+      onToggleGoal={toggleGoal}
+    />,
+    <AddExercisesStep
+      key="add-exercises"
+      addedExerciseIds={addedExerciseIds}
+      onAdd={addExercise}
+      onToggle={toggleExercise}
+      rows={rows}
+      onChangeRow={updateRow}
+      onMoveRow={moveRow}
+      onRemoveRow={removeRow}
+    />,
+    <ReviewWorkoutStep
+      key="review"
+      name={name}
+      description={description}
+      category={category}
+      difficulty={difficulty}
+      duration={duration}
+      goal={goal}
+      rows={rows}
+    />,
+  ];
 
   return (
     <AppShell>
@@ -191,94 +302,45 @@ export function WorkoutBuilderPage() {
         <Container>
           <h1 className="workout-builder-title">{isEditMode ? 'Edit Workout' : 'Create Workout'}</h1>
 
-          <GlassCard className="workout-builder-card">
-            <Input label="Name" value={name} onChange={(event) => setName(event.target.value)} />
+          <div className="workout-builder-layout" ref={layoutRef}>
+            <div className="workout-builder-main">
+              <GlassCard className="workout-builder-panel">
+                <div className="workout-builder-panel-header">
+                  <span className="workout-builder-panel-icon" aria-hidden="true">
+                    <StepIcon />
+                  </span>
+                  <h2>{STEP_TITLES[stepIndex]}</h2>
+                </div>
 
-            <label className="workout-builder-field-label" htmlFor="workout-description">
-              Description
-            </label>
-            <textarea
-              id="workout-description"
-              className="workout-builder-textarea"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              placeholder="Optional description"
-              rows={3}
-            />
+                <OnboardingProgress currentStep={stepIndex + 1} totalSteps={STEP_COUNT} />
 
-            <div className="workout-builder-row">
-              <Select
-                label="Category"
-                placeholder="No category"
-                value={category}
-                onChange={(event) => setCategory(event.target.value as WorkoutCategory | '')}
-                options={WORKOUT_CATEGORY_OPTIONS}
-              />
-              <Select
-                label="Difficulty"
-                placeholder="No difficulty"
-                value={difficulty}
-                onChange={(event) => setDifficulty(event.target.value as Difficulty | '')}
-                options={DIFFICULTY_OPTIONS}
-              />
-              <Input
-                label="Duration (min)"
-                type="number"
-                min={1}
-                value={duration}
-                onChange={(event) => setDuration(event.target.value)}
-              />
+                {steps[stepIndex]}
+
+                {formError && <p className="workout-builder-error">{formError}</p>}
+
+                <div className="workout-builder-step-nav">
+                  {!isFirstStep && (
+                    <Button variant="secondary" onClick={handleBack} disabled={isSaving}>
+                      Back
+                    </Button>
+                  )}
+                  <div className="workout-builder-nav-spacer" />
+                  <Button variant="ghost" onClick={() => navigate(ROUTES.WORKOUTS)} disabled={isSaving}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleContinue} loading={isSaving} disabled={!isStepValid(stepIndex)}>
+                    {isLastStep ? 'Save Workout' : 'Continue'}
+                  </Button>
+                </div>
+              </GlassCard>
             </div>
 
-            <div>
-              <span className="workout-builder-field-label">Goal</span>
-              <div className="workout-builder-chips">
-                {WORKOUT_GOAL_OPTIONS.map((option) => (
-                  <WorkoutChip
-                    key={option.value}
-                    label={option.label}
-                    selected={goal.includes(option.value)}
-                    onClick={() => toggleGoal(option.value)}
-                  />
-                ))}
+            {showSidePanel && (
+              <div className="workout-builder-side">
+                <WorkoutSummaryCard rows={rows} />
+                <MuscleCoverageMap rows={rows} />
               </div>
-            </div>
-          </GlassCard>
-
-          <GlassCard className="workout-builder-card">
-            <h2>Add Exercises</h2>
-            <ExercisePicker addedExerciseIds={addedExerciseIds} onAdd={addExercise} onToggle={toggleExercise} />
-          </GlassCard>
-
-          {rows.length > 0 && (
-            <GlassCard className="workout-builder-card">
-              <h2>Exercises ({rows.length})</h2>
-              <div className="workout-builder-rows">
-                {rows.map((row, index) => (
-                  <WorkoutExerciseRow
-                    key={row.exercise.id}
-                    value={row}
-                    isFirst={index === 0}
-                    isLast={index === rows.length - 1}
-                    onChange={(patch) => updateRow(index, patch)}
-                    onMoveUp={() => moveRow(index, -1)}
-                    onMoveDown={() => moveRow(index, 1)}
-                    onRemove={() => removeRow(index)}
-                  />
-                ))}
-              </div>
-            </GlassCard>
-          )}
-
-          {formError && <p className="workout-builder-error">{formError}</p>}
-
-          <div className="workout-builder-actions">
-            <Button variant="ghost" onClick={() => navigate(ROUTES.WORKOUTS)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSave} loading={isSaving}>
-              Save Workout
-            </Button>
+            )}
           </div>
         </Container>
       </Section>

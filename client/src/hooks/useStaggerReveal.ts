@@ -19,7 +19,7 @@ export function useStaggerReveal<T extends HTMLElement>(deps: unknown[] = []) {
     const animation = gsap.fromTo(
       children,
       { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08, clearProps: 'transform' },
     );
 
     return () => {

@@ -11,7 +11,15 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.dashboard-calendar-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
 }
 
 .dashboard-calendar-loading {
@@ -22,32 +30,85 @@
 
 .dashboard-calendar-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: var(--space-4);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-6);
   align-items: start;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 560px) {
   .dashboard-calendar-layout {
     grid-template-columns: 1fr;
   }
 }
 
 .dashboard-calendar-day {
-  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-5);
   border-radius: var(--radius-md);
   background-color: var(--surface-glass-bg);
   border: 1px solid var(--surface-glass-border);
 }
 
+.dashboard-calendar-month-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dashboard-calendar-month-summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dashboard-calendar-month-summary-value {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  line-height: 1;
+}
+
+.dashboard-calendar-month-summary-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .dashboard-calendar-day h3 {
   font-family: var(--font-display);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-300);
   margin-bottom: var(--space-3);
 }
 
 .dashboard-calendar-day-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-height: 100px;
   color: var(--color-neutral-500);
+  text-align: center;
+}
+
+.dashboard-calendar-day-empty-icon {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  color: var(--color-neutral-500);
+  opacity: 0.6;
+}
+
+.dashboard-calendar-day-empty-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .dashboard-calendar-day-entry {

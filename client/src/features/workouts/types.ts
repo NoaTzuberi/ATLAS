@@ -115,3 +115,12 @@ export interface WorkoutSummary {
   totalVolume?: number;
   category?: WorkoutCategory;
 }
+
+/** The single most recent completed set logged for a specific exercise (by
+ * id), used to suggest a starting point when adding it to a new workout. */
+export interface LastLoggedExercise {
+  sets: number;
+  reps: number;
+  weight: number;
+  date: string;
+}

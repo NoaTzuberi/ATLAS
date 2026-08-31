@@ -10,6 +10,7 @@ import { WorkoutChip } from '../../../workouts/components/WorkoutChip/WorkoutChi
 import { ACTIVITY_TYPE_OPTIONS, activityTypeLabel, activityTypeIcon } from '../../../activities/data/activityOptions';
 import { listWorkouts } from '../../../../services/workouts/workoutSessionService';
 import { createActivity, listActivities, deleteActivity } from '../../../../services/activities/activityService';
+import { CalendarIcon } from '../icons';
 import type { WorkoutSummary } from '../../../workouts/types';
 import type { Activity, ActivityType } from '../../../activities/types';
 import './DashboardCalendar.css';
@@ -170,8 +171,8 @@ export function DashboardCalendar() {
     <>
       <GlassCard className="dashboard-calendar">
         <div className="dashboard-calendar-header">
-          <h2>Calendar</h2>
-          <Button variant="secondary" onClick={openLogActivity}>
+          <span className="dashboard-calendar-label">Calendar</span>
+          <Button variant="ghost" onClick={openLogActivity}>
             Log Activity
           </Button>
         </div>
@@ -197,10 +198,30 @@ export function DashboardCalendar() {
             />
 
             <div className="dashboard-calendar-day">
+              <div className="dashboard-calendar-month-summary">
+                <div className="dashboard-calendar-month-summary-stat">
+                  <span className="dashboard-calendar-month-summary-value">{workouts.length}</span>
+                  <span className="dashboard-calendar-month-summary-label">
+                    Workout{workouts.length === 1 ? '' : 's'} this month
+                  </span>
+                </div>
+                <div className="dashboard-calendar-month-summary-stat">
+                  <span className="dashboard-calendar-month-summary-value">{activities.length}</span>
+                  <span className="dashboard-calendar-month-summary-label">
+                    Activit{activities.length === 1 ? 'y' : 'ies'} this month
+                  </span>
+                </div>
+              </div>
+
               <h3>{selectedDateKey}</h3>
 
               {selectedWorkouts.length === 0 && selectedActivities.length === 0 && (
-                <p className="text-body dashboard-calendar-day-empty">Nothing logged this day.</p>
+                <div className="dashboard-calendar-day-empty">
+                  <span className="dashboard-calendar-day-empty-icon" aria-hidden="true">
+                    <CalendarIcon />
+                  </span>
+                  <p className="text-body">Nothing logged this day.</p>
+                </div>
               )}
 
               {selectedWorkouts.map((workout) => (

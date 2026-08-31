@@ -3,10 +3,13 @@ import './GlassCard.css';
 
 interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  variant?: 'default' | 'flat';
 }
 
-export function GlassCard({ className, children, ...rest }: GlassCardProps) {
-  const classNames = ['glass-card', className].filter(Boolean).join(' ');
+export function GlassCard({ className, children, variant = 'default', ...rest }: GlassCardProps) {
+  const classNames = ['glass-card', variant === 'flat' && 'glass-card--flat', className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classNames} {...rest}>

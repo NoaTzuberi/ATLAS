@@ -1,0 +1,34 @@
+.muscle-map-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+}
+
+.muscle-map-title {
+  align-self: flex-start;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-300);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.muscle-map-figure {
+  width: 100%;
+  max-width: 170px;
+  height: auto;
+}
+
+.muscle-map-region rect,
+.muscle-map-region ellipse {
+  stroke-width: 1;
+}
+
+.muscle-map-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  text-align: center;
+  margin: 0;
+}

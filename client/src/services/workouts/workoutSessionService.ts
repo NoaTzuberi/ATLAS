@@ -5,6 +5,7 @@ import type {
   WorkoutSessionExerciseInput,
   FinishWorkoutResult,
   WorkoutSummary,
+  LastLoggedExercise,
 } from '../../features/workouts/types';
 
 export interface ListWorkoutsParams {
@@ -16,6 +17,13 @@ export interface ListWorkoutsParams {
 export async function listWorkouts(params: ListWorkoutsParams = {}): Promise<WorkoutSummary[]> {
   const { data } = await apiClient.get<{ items: WorkoutSummary[] }>('/workouts', { params });
   return data.items;
+}
+
+export async function getExerciseHistory(exerciseId: string): Promise<LastLoggedExercise | null> {
+  const { data } = await apiClient.get<{ history: LastLoggedExercise | null }>(
+    `/workouts/exercise-history/${exerciseId}`,
+  );
+  return data.history;
 }
 
 export async function startWorkout(templateId: string): Promise<WorkoutSession> {

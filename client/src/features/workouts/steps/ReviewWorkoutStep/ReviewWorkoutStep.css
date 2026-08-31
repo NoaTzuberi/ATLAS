@@ -1,0 +1,58 @@
+.review-workout-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.review-workout-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+}
+
+.review-workout-description {
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+.review-workout-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.review-workout-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.review-workout-exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.review-workout-exercise-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: var(--font-size-sm);
+}
+
+.review-workout-exercise-name {
+  font-weight: var(--font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-workout-exercise-detail {
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-xs);
+}

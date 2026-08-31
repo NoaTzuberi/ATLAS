@@ -1,0 +1,133 @@
+.workout-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.workout-summary-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-300);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.workout-summary-stats {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.workout-summary-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.workout-summary-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-orange-soft);
+  color: var(--color-orange-500);
+}
+
+.workout-summary-stat-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.workout-summary-stat > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workout-summary-stat-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-100);
+  line-height: 1.1;
+  animation: workout-summary-pop 0.3s ease-out;
+}
+
+.workout-summary-stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+}
+
+@keyframes workout-summary-pop {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.workout-summary-muscles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.workout-summary-muscles-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+}
+
+.workout-summary-muscle-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.workout-summary-muscle-chip {
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  animation: workout-summary-pop 0.3s ease-out;
+}
+
+.workout-summary-muscle-chip-upper_body {
+  background-color: var(--color-blue-soft);
+  border: 1px solid rgba(79, 143, 224, 0.35);
+  color: var(--color-blue-hover);
+}
+
+.workout-summary-muscle-chip-back {
+  background-color: var(--color-teal-soft);
+  border: 1px solid rgba(47, 191, 143, 0.35);
+  color: var(--color-teal-hover);
+}
+
+.workout-summary-muscle-chip-core {
+  background-color: var(--color-plum-soft);
+  border: 1px solid rgba(165, 107, 138, 0.35);
+  color: var(--color-plum-hover);
+}
+
+.workout-summary-muscle-chip-lower_body {
+  background-color: var(--color-olive-soft);
+  border: 1px solid rgba(138, 140, 79, 0.35);
+  color: var(--color-olive-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workout-summary-stat-value,
+  .workout-summary-muscle-chip {
+    animation: none;
+  }
+}

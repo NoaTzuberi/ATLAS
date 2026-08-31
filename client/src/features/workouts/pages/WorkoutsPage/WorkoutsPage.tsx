@@ -18,7 +18,7 @@ import { getActiveWorkout, listWorkouts } from '../../../../services/workouts/wo
 import { getMyProfile } from '../../../../services/users/usersService';
 import { ROUTES, workoutSessionPath } from '../../../../app/config/routes';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
-import type { WorkoutCategory, WorkoutTemplate, WorkoutSession } from '../../types';
+import type { WorkoutCategory, WorkoutTemplate, WorkoutSession, WorkoutSummary } from '../../types';
 import './WorkoutsPage.css';
 
 // `error instanceof Error` is true for AxiosError too, so it can't tell a raw
@@ -40,6 +40,7 @@ export function WorkoutsPage() {
   const [loadError, setLoadError] = useState<string>();
   const [activeWorkout, setActiveWorkout] = useState<WorkoutSession | null>(null);
   const [completionCounts, setCompletionCounts] = useState<Map<string, number>>(new Map());
+  const [completedSessions, setCompletedSessions] = useState<WorkoutSummary[]>([]);
   const [allTemplates, setAllTemplates] = useState<WorkoutTemplate[]>([]);
   const [onboardingGoals, setOnboardingGoals] = useState<string[]>();
   const gridRef = useStaggerReveal<HTMLDivElement>([templates]);
@@ -54,6 +55,7 @@ export function WorkoutsPage() {
         counts.set(session.templateId, (counts.get(session.templateId) ?? 0) + 1);
       }
       setCompletionCounts(counts);
+      setCompletedSessions(sessions);
     });
 
     listWorkoutTemplates({}).then(setAllTemplates);
@@ -88,7 +90,7 @@ export function WorkoutsPage() {
     };
   }, [category, mineOnly]);
 
-  const recommended = getRecommendedTemplate(allTemplates, onboardingGoals);
+  const recommended = getRecommendedTemplate(allTemplates, onboardingGoals, completedSessions);
 
   return (
     <AppShell>

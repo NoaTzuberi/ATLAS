@@ -5,6 +5,7 @@ import {
   getActive,
   getList,
   getById,
+  getExerciseHistory,
   patchProgress,
   postAbandon,
   postFinish,
@@ -16,6 +17,7 @@ workoutsRouter.use(requireAuth);
 
 workoutsRouter.post('/start', postStartWorkout);
 workoutsRouter.get('/active', getActive);
+workoutsRouter.get('/exercise-history/:exerciseId', getExerciseHistory);
 workoutsRouter.get('/', getList);
 workoutsRouter.get('/:id', getById);
 workoutsRouter.patch('/:id/progress', patchProgress);

@@ -108,8 +108,8 @@ export function ExerciseLibraryPage() {
           {!isLoading && !loadError && result && result.items.length > 0 && (
             <>
               <div className="exercise-library-grid">
-                {result.items.map((exercise) => (
-                  <ExerciseCard key={exercise.id} exercise={exercise} />
+                {result.items.map((exercise, index) => (
+                  <ExerciseCard key={exercise.id} exercise={exercise} index={index} />
                 ))}
               </div>
               <ExercisePagination page={result.page} totalPages={result.totalPages} onPageChange={setPage} />
