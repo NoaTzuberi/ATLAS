@@ -64,3 +64,12 @@
   width: 16px;
   height: 16px;
 }
+
+.modal-panel--flat {
+  background-color: var(--background-secondary);
+  border-color: rgba(245, 246, 248, 0.1);
+  border-radius: 4px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: var(--shadow-lg);
+}

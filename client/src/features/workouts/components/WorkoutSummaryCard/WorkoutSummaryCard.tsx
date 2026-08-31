@@ -1,5 +1,6 @@
+import { Badge } from '../../../../components/common/Badge/Badge';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import { muscleLabel, muscleTagHue } from '../../../exercises/data/filterOptions';
+import { muscleLabel } from '../../../exercises/data/filterOptions';
 import { estimateWorkoutMinutes } from '../../data/workoutEstimate';
 import { collectCoveredMuscles } from '../../data/bodyRegions';
 import { ExerciseCountIcon, DurationIcon } from '../icons';
@@ -24,24 +25,20 @@ export function WorkoutSummaryCard({ rows }: WorkoutSummaryCardProps) {
           <span className="workout-summary-stat-icon" aria-hidden="true">
             <ExerciseCountIcon />
           </span>
-          <div>
-            <span key={exerciseCount} className="workout-summary-stat-value">
-              {exerciseCount}
-            </span>
-            <span className="workout-summary-stat-label">{exerciseCount === 1 ? 'Exercise' : 'Exercises'}</span>
-          </div>
+          <span key={exerciseCount} className="workout-summary-stat-value">
+            {exerciseCount}
+          </span>
+          <span className="workout-summary-stat-label">{exerciseCount === 1 ? 'Exercise' : 'Exercises'}</span>
         </div>
 
         <div className="workout-summary-stat">
           <span className="workout-summary-stat-icon" aria-hidden="true">
             <DurationIcon />
           </span>
-          <div>
-            <span key={estimatedMinutes} className="workout-summary-stat-value">
-              ~{estimatedMinutes}
-            </span>
-            <span className="workout-summary-stat-label">Est. minutes</span>
-          </div>
+          <span key={estimatedMinutes} className="workout-summary-stat-value">
+            ~{estimatedMinutes}
+          </span>
+          <span className="workout-summary-stat-label">Est. minutes</span>
         </div>
       </div>
 
@@ -50,12 +47,9 @@ export function WorkoutSummaryCard({ rows }: WorkoutSummaryCardProps) {
           <span className="workout-summary-muscles-label">Muscles covered</span>
           <div className="workout-summary-muscle-chips">
             {coveredMuscles.map((muscle) => (
-              <span
-                key={muscle}
-                className={`workout-summary-muscle-chip workout-summary-muscle-chip-${muscleTagHue(muscle)}`}
-              >
+              <Badge key={muscle} variant="accent" className="workout-summary-muscle-chip">
                 {muscleLabel(muscle)}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>

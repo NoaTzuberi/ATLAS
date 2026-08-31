@@ -15,5 +15,5 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   box-shadow: none;
-  padding: 0;
+  /* padding removed from here — back to default var(--space-4) */
 }

@@ -37,9 +37,14 @@ export function ExerciseCard({ exercise, index }: ExerciseCardProps) {
           <ExerciseMedia media={exercise.media} alt={exercise.name} variant="card" />
         </div>
         <div className="exercise-card-body">
-          <div className="exercise-card-name-row">
-            <span className="exercise-card-index">{String(index + 1).padStart(2, '0')}</span>
-            <h3 className="exercise-card-name">{exercise.name}</h3>
+          <div className="exercise-card-title">
+            <div className="exercise-card-name-row">
+              <span className="exercise-card-index">{String(index + 1).padStart(2, '0')}</span>
+              <div className="exercise-card-title">
+                <h3 className="exercise-card-name">{exercise.name}</h3>
+                <span className="exercise-card-underline" />
+              </div>
+            </div>
           </div>
           <div className="exercise-card-tags">
             {primaryMuscle && (

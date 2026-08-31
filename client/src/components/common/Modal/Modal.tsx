@@ -8,10 +8,11 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   className?: string;
+  variant?: 'default' | 'flat';
   children: ReactNode;
 }
 
-export function Modal({ isOpen, onClose, title, className, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, className, variant = 'default', children }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -25,7 +26,9 @@ export function Modal({ isOpen, onClose, title, className, children }: ModalProp
 
   if (!isOpen) return null;
 
-  const panelClassNames = ['modal-panel', className].filter(Boolean).join(' ');
+  const panelClassNames = ['modal-panel', variant === 'flat' && 'modal-panel--flat', className]
+    .filter(Boolean)
+    .join(' ');
 
   return createPortal(
     <div className="modal-backdrop" onClick={onClose}>

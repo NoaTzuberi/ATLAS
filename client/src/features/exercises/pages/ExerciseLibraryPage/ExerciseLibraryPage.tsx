@@ -81,14 +81,14 @@ export function ExerciseLibraryPage() {
     <AppShell>
       <Section className="exercise-library-page">
         <Container>
-          <GlassCard className="exercise-library-toolbar">
+          <div className="exercise-library-toolbar">
             <ExerciseFilters
               key={filterResetCount}
               filters={filters}
               onChange={updateFilters}
               onClear={clearFilters}
             />
-          </GlassCard>
+          </div>
 
           {isLoading && (
             <div className="exercise-library-loading">

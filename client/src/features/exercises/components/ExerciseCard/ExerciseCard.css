@@ -40,6 +40,9 @@
   border-right-color: var(--color-orange-500, #ff7a1a);
   opacity: 0;
 }
+.glass-card.exercise-card {
+  padding: 0;
+}
 
 .exercise-card:hover {
   border-color: rgba(255, 122, 26, 0.22);
@@ -114,32 +117,34 @@
   flex-shrink: 0;
 }
 
+.exercise-card-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
 .exercise-card-name {
-  position: relative;
-  display: inline-block;
   font-family: var(--font-body);
   font-weight: var(--font-weight-bold);
-  min-height: calc(2 * var(--line-height-tight) * 1em);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.exercise-card-name::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px;
+.exercise-card-underline {
+  display: block;
   height: 1px;
   width: 24px;
   background: var(--color-orange-500, #ff7a1a);
-  opacity: 0;
-  transition: opacity var(--transition-base) var(--ease-standard);
 }
 
-.exercise-card:hover .exercise-card-name::after {
-  opacity: 1;
+
+.exercise-card-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .exercise-card-tags {
@@ -154,7 +159,7 @@
   display: inline-flex;
   align-items: center;
   padding: var(--space-1) var(--space-2);
-  border-radius: 2px; /* לא pill */
+  border-radius: 2px;
   font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);

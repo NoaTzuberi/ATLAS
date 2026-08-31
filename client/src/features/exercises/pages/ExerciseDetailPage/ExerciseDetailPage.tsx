@@ -4,15 +4,20 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { Location } from 'react-router-dom';
 import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Modal } from '../../../../components/common/Modal/Modal';
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
 import { Button } from '../../../../components/common/Button/Button';
 import { ExerciseMedia } from '../../components/ExerciseMedia/ExerciseMedia';
 import { getExerciseBySlug } from '../../../../services/exercises/exercisesService';
-import { muscleLabel, equipmentLabel } from '../../data/filterOptions';
+import { muscleLabel, equipmentLabel, muscleTagHue } from '../../data/filterOptions';
 import { ROUTES } from '../../../../app/config/routes';
 import type { PublicExercise } from '../../types';
 import './ExerciseDetailPage.css';
+
+const DIFFICULTY_LEVELS: Record<string, number> = {
+  beginner: 1,
+  intermediate: 2,
+  advanced: 3,
+};
 
 function hasInstructions(exercise: PublicExercise): boolean {
   return Boolean(
@@ -72,7 +77,7 @@ export function ExerciseDetailPage() {
 
   if (isLoading) {
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="exercise-detail-modal">
+      <Modal isOpen onClose={handleClose} variant="flat" className="exercise-detail-modal">
         <div className="exercise-detail-loading">
           <Spinner size="lg" />
         </div>
@@ -80,7 +85,7 @@ export function ExerciseDetailPage() {
     );
   } else if (notFound || !exercise) {
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="exercise-detail-modal exercise-detail-modal-compact">
+      <Modal isOpen onClose={handleClose} variant="flat" className="exercise-detail-modal exercise-detail-modal-compact">
         <div className="exercise-detail-not-found">
           <h2>This exercise couldn&apos;t be found.</h2>
           <Button variant="secondary" onClick={handleClose}>
@@ -94,9 +99,10 @@ export function ExerciseDetailPage() {
     const showMistakes = exercise.commonMistakes.length > 0;
     const showTips = exercise.tips.length > 0;
     const showSparseNote = !showInstructions && !showMistakes && !showTips;
+    const difficultyLevel = DIFFICULTY_LEVELS[exercise.difficulty] ?? 1;
 
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="exercise-detail-modal">
+      <Modal isOpen onClose={handleClose} variant="flat" className="exercise-detail-modal">
         <ExerciseMedia media={exercise.media} alt={exercise.name} variant="detail" />
 
         <h1 className="exercise-detail-name">{exercise.name}</h1>
@@ -112,14 +118,27 @@ export function ExerciseDetailPage() {
 
         <div className="exercise-detail-tags">
           {exercise.primaryMuscles.map((muscle) => (
-            <Badge key={muscle} variant="accent">
+            <span key={muscle} className={`exercise-detail-tag exercise-detail-tag-${muscleTagHue(muscle)}`}>
               {muscleLabel(muscle)}
-            </Badge>
+            </span>
           ))}
           {exercise.equipment.map((item) => (
-            <Badge key={item}>{equipmentLabel(item)}</Badge>
+            <span key={item} className="exercise-detail-tag-equipment">
+              {equipmentLabel(item)}
+            </span>
           ))}
-          <Badge variant="achievement">{exercise.difficulty}</Badge>
+        </div>
+
+        <div className="exercise-detail-difficulty">
+          <span className="exercise-detail-difficulty-label">{exercise.difficulty}</span>
+          <div className="exercise-detail-difficulty-bars">
+            {[1, 2, 3].map((level) => (
+              <span
+                key={level}
+                className={`exercise-detail-difficulty-bar${level <= difficultyLevel ? ' is-filled' : ''}`}
+              />
+            ))}
+          </div>
         </div>
 
         {showInstructions && (
