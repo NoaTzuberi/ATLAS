@@ -3,8 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Section } from '../../../../components/layout/Section/Section';
 import { Container } from '../../../../components/layout/Container/Container';
-import dashboardShot1 from '../../../../assets/screenshots/dashboard-1.png';
-import dashboardShot2 from '../../../../assets/screenshots/dashboard-2.png';
+import dashboardShot1 from '../../../../assets/homePage/profile.png';
+import dashboardShot2 from '../../../../assets/homePage/dashboard.png';
 import './DashboardPreview.css';
 
 gsap.registerPlugin(ScrollTrigger);

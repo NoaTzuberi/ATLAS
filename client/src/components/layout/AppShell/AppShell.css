@@ -6,9 +6,18 @@
   background-image: url("data:image/svg+xml,...");
 }
 
+/* `fixed` (not `absolute`) is load-bearing here: .app-shell is a flex
+   container that grows taller than 100vh to fit its content, and an
+   `absolute; inset:0` pseudo-element sizes to that full scrollable height —
+   so these gradients' percentage-based ellipses were being measured against
+   a height that varies with page content (a short loading-spinner page vs.
+   a long loaded grid of cards), making the effect look weak on short pages
+   and strong on tall ones purely by coincidence of content length. `fixed`
+   sizes them to the actual viewport instead, so the effect is consistent
+   regardless of how tall the page ends up being, and stays put on scroll. */
 .app-shell::before {
   content: '';
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   background:
@@ -20,7 +29,7 @@
 
 .app-shell::after {
   content: '';
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   background-image:
@@ -28,9 +37,6 @@
     linear-gradient(90deg, rgba(245, 246, 248, 0.025) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
-  /* Widened + pushed further out so the grid keeps presence past the first
-     screenful on content-dense pages, instead of fading out by ~70% down
-     a comparatively small ellipse. */
   mask-image: radial-gradient(ellipse 100% 90% at 50% 0%, black 0%, transparent 88%);
   -webkit-mask-image: radial-gradient(ellipse 100% 90% at 50% 0%, black 0%, transparent 88%);
 }

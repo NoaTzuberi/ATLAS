@@ -43,12 +43,13 @@ export function WorkoutsPage() {
   const [completedSessions, setCompletedSessions] = useState<WorkoutSummary[]>([]);
   const [allTemplates, setAllTemplates] = useState<WorkoutTemplate[]>([]);
   const [onboardingGoals, setOnboardingGoals] = useState<string[]>();
+  const [isRecommendationLoading, setIsRecommendationLoading] = useState(true);
   const gridRef = useStaggerReveal<HTMLDivElement>([templates]);
 
   useEffect(() => {
     getActiveWorkout().then(setActiveWorkout);
 
-    listWorkouts({ status: 'completed' }).then((sessions) => {
+    const sessionsPromise = listWorkouts({ status: 'completed' }).then((sessions) => {
       const counts = new Map<string, number>();
       for (const session of sessions) {
         if (!session.templateId) continue;
@@ -58,12 +59,22 @@ export function WorkoutsPage() {
       setCompletedSessions(sessions);
     });
 
-    listWorkoutTemplates({}).then(setAllTemplates);
-    getMyProfile()
+    const templatesPromise = listWorkoutTemplates({}).then(setAllTemplates);
+
+    const profilePromise = getMyProfile()
       .then((profile) => setOnboardingGoals(profile.profile?.goals))
       .catch(() => {
         // Featured section just falls back to "recently added" — not worth surfacing an error for this.
       });
+
+    // The featured card depends on all three of these, but none of them are
+    // reflected in the grid's own `isLoading` — without this, the card used
+    // to pop in over whatever was already painted (including bare AppShell
+    // background) the moment these resolved, rather than reserving its own
+    // space from first paint like the rest of the page's loading states do.
+    Promise.all([sessionsPromise, templatesPromise, profilePromise]).finally(() => {
+      setIsRecommendationLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -111,7 +122,13 @@ export function WorkoutsPage() {
             </GlassCard>
           )}
 
-          {recommended && (
+          {isRecommendationLoading && (
+            <div className="workouts-page-featured workouts-page-featured-loading">
+              <Spinner size="lg" />
+            </div>
+          )}
+
+          {!isRecommendationLoading && recommended && (
             <div className="workouts-page-featured">
               <FeaturedWorkoutCard
                 template={recommended.template}
