@@ -1,17 +1,12 @@
 import type { WorkoutExerciseRowValue } from '../components/WorkoutExerciseRow/WorkoutExerciseRow';
 
-export type BodyRegion =
-  | 'chest'
-  | 'shoulders'
-  | 'biceps'
-  | 'triceps'
-  | 'forearms'
-  | 'abs'
-  | 'back'
-  | 'quads'
-  | 'hamstrings'
-  | 'calves'
-  | 'glutes';
+/** Only muscle groups that are actually visible on a front-view diagram.
+ * Back/lats, glutes and hamstrings are real muscles the app tracks (they
+ * still show up as chips in the workout summary via collectCoveredMuscles
+ * below), but there is no honest front-facing shape to light up for them —
+ * see the attribution comment in MuscleCoverageMap.tsx for why we don't fake
+ * one with a relabeled front-view shape. */
+export type BodyRegion = 'chest' | 'shoulders' | 'biceps' | 'triceps' | 'forearms' | 'abs' | 'quads' | 'calves';
 
 export const BODY_REGIONS: BodyRegion[] = [
   'chest',
@@ -20,11 +15,8 @@ export const BODY_REGIONS: BodyRegion[] = [
   'triceps',
   'forearms',
   'abs',
-  'back',
   'quads',
-  'hamstrings',
   'calves',
-  'glutes',
 ];
 
 export const BODY_REGION_LABELS: Record<BodyRegion, string> = {
@@ -34,17 +26,17 @@ export const BODY_REGION_LABELS: Record<BodyRegion, string> = {
   triceps: 'Triceps',
   forearms: 'Forearms',
   abs: 'Abs',
-  back: 'Back',
   quads: 'Quads',
-  hamstrings: 'Hamstrings',
   calves: 'Calves',
-  glutes: 'Glutes',
 };
 
 /** Maps the app's exercise muscle IDs (see exercises/data/filterOptions.ts
  * MUSCLE_OPTIONS) onto the coarser regions the body diagram can actually
  * draw as distinct shapes. Neck/traps fold into shoulders; abductors/
- * adductors fold into quads — close enough for a legible small diagram. */
+ * adductors fold into quads — close enough for a legible small diagram.
+ * Lats/middle_back/lower_back, glutes and hamstrings are deliberately
+ * unmapped — not visible from the front, so they never light up a region
+ * (muscleToRegion returns undefined and computeRegionCoverage skips them). */
 const MUSCLE_TO_REGION: Record<string, BodyRegion> = {
   chest: 'chest',
   shoulders: 'shoulders',
@@ -54,15 +46,10 @@ const MUSCLE_TO_REGION: Record<string, BodyRegion> = {
   triceps: 'triceps',
   forearms: 'forearms',
   abdominals: 'abs',
-  lats: 'back',
-  middle_back: 'back',
-  lower_back: 'back',
   quadriceps: 'quads',
   abductors: 'quads',
   adductors: 'quads',
-  hamstrings: 'hamstrings',
   calves: 'calves',
-  glutes: 'glutes',
 };
 
 export function muscleToRegion(muscle: string): BodyRegion | undefined {

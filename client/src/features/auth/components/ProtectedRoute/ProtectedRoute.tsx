@@ -44,7 +44,8 @@ export function ProtectedRoute() {
   }
 
   if (user) {
-    const isOnboardingRoute = location.pathname === ROUTES.ONBOARDING;
+    const isOnboardingRoute =
+      location.pathname === ROUTES.ONBOARDING || location.pathname.startsWith(`${ROUTES.ONBOARDING}/`);
 
     // Force incomplete users into onboarding, but let completed users revisit it
     // voluntarily (e.g. the "Update Training Profile" CTA on the Profile page).

@@ -1,4 +1,3 @@
-
 .workouts-page-actions-row {
   display: flex;
   justify-content: flex-end;
@@ -11,8 +10,8 @@
   justify-content: space-between;
   gap: var(--space-3);
   flex-wrap: wrap;
-  border-color: rgba(255, 122, 26, 0.4);
-  background: linear-gradient(135deg, rgba(255, 122, 26, 0.12), rgba(18, 22, 29, 0.9));
+  border-color: rgba(255, 122, 26, 0.35);
+  background-color: rgba(255, 122, 26, 0.06);
 }
 
 .workouts-page-featured {
@@ -27,11 +26,8 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-3);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
-  border-color: rgba(245, 246, 248, 0.14);
-  box-shadow: inset 0 1px 0 rgba(245, 246, 248, 0.05), var(--shadow-md);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(245, 246, 248, 0.06);
 }
 
 .workouts-page-chips {
@@ -59,11 +55,6 @@
   max-width: 480px;
   margin-inline: auto;
   padding: var(--space-7) var(--space-6);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
-  border-color: rgba(245, 246, 248, 0.14);
-  box-shadow: inset 0 1px 0 rgba(245, 246, 248, 0.05);
 }
 
 .workouts-page-grid {

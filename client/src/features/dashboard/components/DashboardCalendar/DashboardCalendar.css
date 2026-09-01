@@ -1,9 +1,10 @@
 .dashboard-calendar {
   margin-bottom: var(--space-5);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
-  border-color: rgba(245, 246, 248, 0.14);
+  border-color: rgba(245, 246, 248, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dashboard-calendar-header {
@@ -15,9 +16,10 @@
 }
 
 .dashboard-calendar-label {
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-neutral-500);
 }
@@ -46,9 +48,10 @@
   flex-direction: column;
   height: 100%;
   padding: var(--space-5);
-  border-radius: var(--radius-md);
-  background-color: var(--surface-glass-bg);
-  border: 1px solid var(--surface-glass-border);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  border: 1px solid rgba(245, 246, 248, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .dashboard-calendar-month-summary {
@@ -67,12 +70,20 @@
 }
 
 .dashboard-calendar-month-summary-value {
-  font-family: var(--font-display);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xl);
   line-height: 1;
+  animation: dashboard-stat-fade-in 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-calendar-month-summary-value {
+    animation: none;
+  }
 }
 
 .dashboard-calendar-month-summary-label {
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
   text-transform: uppercase;
@@ -80,7 +91,7 @@
 }
 
 .dashboard-calendar-day h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-base);
   color: var(--color-neutral-300);
   margin-bottom: var(--space-3);
@@ -140,7 +151,7 @@
   margin-left: auto;
   width: 28px;
   height: 28px;
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   border: 1px solid var(--color-border);
   background: none;
   color: var(--color-neutral-500);
@@ -169,7 +180,10 @@
 .log-activity-field-label {
   display: block;
   margin-bottom: var(--space-2);
-  font-size: var(--font-size-sm);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   font-weight: var(--font-weight-medium);
   color: var(--color-neutral-300);
 }
@@ -183,7 +197,7 @@
 .log-activity-difficulty-star {
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   border: 1px solid var(--color-border);
   background-color: transparent;
   color: var(--color-neutral-500);
@@ -201,9 +215,9 @@
   font-family: var(--font-body);
   font-size: var(--font-size-base);
   color: var(--color-neutral-100);
-  background-color: var(--surface-glass-bg);
-  border: 1px solid var(--surface-glass-border);
-  border-radius: var(--radius-md);
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(245, 246, 248, 0.1);
+  border-radius: 4px;
   padding: var(--space-2) var(--space-3);
   resize: vertical;
   margin-bottom: var(--space-4);
@@ -211,7 +225,7 @@
 
 .log-activity-notes:focus {
   outline: none;
-  border-color: var(--color-orange-500);
+  border-color: rgba(255, 122, 26, 0.5);
 }
 
 .log-activity-actions {

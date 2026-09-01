@@ -5,11 +5,11 @@ import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Container } from '../../../../components/layout/Container/Container';
 import { Section } from '../../../../components/layout/Section/Section';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
-import { FlagIcon, CalendarIcon, CompassIcon, DumbbellIcon } from '../../components/icons';
+import { FlagIcon, CalendarIcon, CompassIcon, DumbbellIcon, EditIcon } from '../../components/icons';
 import { GOAL_OPTIONS, EQUIPMENT_OPTIONS } from '../../../onboarding/data/options';
 import { ACTIVITIES } from '../../../onboarding/data/activities';
+import type { OnboardingStepId } from '../../../onboarding/data/stepVideoMap';
 import { getMyProfile } from '../../../../services/users/usersService';
 import type { MyProfileResponse } from '../../../../services/users/usersService';
 import { getDashboardSummary } from '../../../../services/dashboard/dashboardService';
@@ -20,7 +20,7 @@ import { MilestoneBar } from '../../../dashboard/components/MilestoneBar/Milesto
 import { AchievementBadges } from '../../../dashboard/components/AchievementBadges/AchievementBadges';
 import { useAuth } from '../../../../services/auth/AuthContext';
 import { useStaggerReveal } from '../../../../hooks/useStaggerReveal';
-import { ROUTES } from '../../../../app/config/routes';
+import { ROUTES, onboardingEditPath } from '../../../../app/config/routes';
 import './ProfilePage.css';
 
 const GOAL_LABELS = new Map(GOAL_OPTIONS.map((option) => [option.id, option.label]));
@@ -42,9 +42,9 @@ function BadgeList({
   return (
     <div className="profile-summary-badges">
       {ids.map((id) => (
-        <Badge key={id} variant={variant}>
+        <span key={id} className={`profile-tag profile-tag-${variant}`}>
           {labels.get(id) ?? id}
-        </Badge>
+        </span>
       ))}
     </div>
   );
@@ -59,10 +59,10 @@ function ActivityBadgeList({ ids }: { ids: string[] }) {
       {ids.map((id) => {
         const activity = ACTIVITIES_BY_ID.get(id);
         return (
-          <Badge key={id} variant="success">
+          <span key={id} className="profile-tag profile-tag-success">
             {activity?.emoji && <span aria-hidden="true">{activity.emoji}</span>}
             {activity?.label ?? id}
-          </Badge>
+          </span>
         );
       })}
     </div>
@@ -76,17 +76,26 @@ interface TrainingBlockProps {
   title: string;
   accent: TrainingAccent;
   className?: string;
+  editStep?: OnboardingStepId;
   children: React.ReactNode;
 }
 
-function TrainingBlock({ icon, title, accent, className, children }: TrainingBlockProps) {
+function TrainingBlock({ icon, title, accent, className, editStep, children }: TrainingBlockProps) {
   return (
-    <GlassCard className={['training-block', `training-block-${accent}`, className].filter(Boolean).join(' ')}>
+    <GlassCard
+      variant="flat"
+      className={['training-block', `training-block-${accent}`, className].filter(Boolean).join(' ')}
+    >
       <div className="training-block-header">
         <span className={`training-block-icon training-block-icon-${accent}`} aria-hidden="true">
           {icon}
         </span>
         <h3 className="training-block-title">{title}</h3>
+        {editStep && (
+          <Link to={onboardingEditPath(editStep)} className="training-block-edit" aria-label={`Edit ${title}`}>
+            <EditIcon />
+          </Link>
+        )}
       </div>
       {children}
     </GlassCard>
@@ -179,6 +188,7 @@ export function ProfilePage() {
             <div className="profile-main-column">
               {!isLoading && !loadError && (
                 <GlassCard
+                  variant="flat"
                   className="profile-header-card"
                   style={{
                     backgroundImage: `linear-gradient(to bottom, rgba(10, 12, 16, 0.5) 0%, rgba(10, 12, 16, 0.68) 60%, rgba(10, 12, 16, 0.88) 100%), url(${profileBannerImage})`,
@@ -210,7 +220,7 @@ export function ProfilePage() {
                 </GlassCard>
               )}
 
-              <GlassCard className="profile-section-card profile-training-card">
+              <GlassCard variant="flat" className="profile-section-card profile-training-card">
                 <h2>Training Profile</h2>
 
                 {isLoading && (
@@ -223,7 +233,13 @@ export function ProfilePage() {
 
                 {!isLoading && !loadError && (
                   <div className="training-block-grid" ref={trainingBlocksRef}>
-                    <TrainingBlock icon={<FlagIcon />} title="Goals" accent="orange" className="training-block-goals">
+                    <TrainingBlock
+                      icon={<FlagIcon />}
+                      title="Goals"
+                      accent="orange"
+                      className="training-block-goals"
+                      editStep="goals"
+                    >
                       <BadgeList ids={profile?.profile?.goals ?? []} labels={GOAL_LABELS} variant="accent" />
                     </TrainingBlock>
 
@@ -232,6 +248,7 @@ export function ProfilePage() {
                       title="Training Frequency"
                       accent="blue"
                       className="training-block-frequency"
+                      editStep="frequency"
                     >
                       {frequency ? (
                         <>
@@ -251,6 +268,7 @@ export function ProfilePage() {
                       title="Preferred Activities"
                       accent="teal"
                       className="training-block-activities"
+                      editStep="activities"
                     >
                       <ActivityBadgeList ids={profile?.profile?.preferredActivities ?? []} />
                     </TrainingBlock>
@@ -260,20 +278,21 @@ export function ProfilePage() {
                       title="Equipment"
                       accent="gray"
                       className="training-block-equipment"
+                      editStep="equipment"
                     >
                       <BadgeList ids={profile?.profile?.equipment ?? []} labels={EQUIPMENT_LABELS} variant="neutral" />
                     </TrainingBlock>
                   </div>
                 )}
 
-                <Link to={ROUTES.ONBOARDING} className="btn btn-primary profile-onboarding-cta">
-                  <span className="btn-label">Update Training Profile</span>
+                <Link to={ROUTES.ONBOARDING} className="profile-redo-onboarding-link">
+                  Redo full onboarding
                 </Link>
               </GlassCard>
             </div>
 
             <div className="profile-side-column">
-              <GlassCard className="profile-section-card profile-stats-card">
+              <GlassCard variant="flat" className="profile-section-card profile-stats-card">
                 <h2>Your Progress</h2>
 
                 {isStatsLoading && (

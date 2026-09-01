@@ -1,4 +1,3 @@
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
 import { muscleLabel } from '../../../exercises/data/filterOptions';
 import { estimateWorkoutMinutes } from '../../data/workoutEstimate';
@@ -17,29 +16,27 @@ export function WorkoutSummaryCard({ rows }: WorkoutSummaryCardProps) {
   const coveredMuscles = collectCoveredMuscles(rows);
 
   return (
-    <GlassCard className="workout-summary-card">
+    <GlassCard className="workout-summary-card" variant="flat">
       <span className="workout-summary-title">Workout Summary</span>
 
-      <div className="workout-summary-stats">
-        <div className="workout-summary-stat">
-          <span className="workout-summary-stat-icon" aria-hidden="true">
-            <ExerciseCountIcon />
-          </span>
-          <span key={exerciseCount} className="workout-summary-stat-value">
-            {exerciseCount}
-          </span>
+      <div className="workout-summary-stat">
+        <span className="workout-summary-stat-icon" aria-hidden="true">
+          <ExerciseCountIcon />
+        </span>
+        <span className="workout-summary-stat-text">
+          <span className="workout-summary-stat-value">{exerciseCount}</span>
           <span className="workout-summary-stat-label">{exerciseCount === 1 ? 'Exercise' : 'Exercises'}</span>
-        </div>
+        </span>
+      </div>
 
-        <div className="workout-summary-stat">
-          <span className="workout-summary-stat-icon" aria-hidden="true">
-            <DurationIcon />
-          </span>
-          <span key={estimatedMinutes} className="workout-summary-stat-value">
-            ~{estimatedMinutes}
-          </span>
+      <div className="workout-summary-stat">
+        <span className="workout-summary-stat-icon" aria-hidden="true">
+          <DurationIcon />
+        </span>
+        <span className="workout-summary-stat-text">
+          <span className="workout-summary-stat-value">~{estimatedMinutes}</span>
           <span className="workout-summary-stat-label">Est. minutes</span>
-        </div>
+        </span>
       </div>
 
       {coveredMuscles.length > 0 && (
@@ -47,9 +44,9 @@ export function WorkoutSummaryCard({ rows }: WorkoutSummaryCardProps) {
           <span className="workout-summary-muscles-label">Muscles covered</span>
           <div className="workout-summary-muscle-chips">
             {coveredMuscles.map((muscle) => (
-              <Badge key={muscle} variant="accent" className="workout-summary-muscle-chip">
+              <span key={muscle} className="workout-summary-muscle-chip">
                 {muscleLabel(muscle)}
-              </Badge>
+              </span>
             ))}
           </div>
         </div>

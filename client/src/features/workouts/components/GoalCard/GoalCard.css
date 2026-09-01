@@ -5,52 +5,33 @@
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 4px;
+  border: 1px solid rgba(245, 246, 248, 0.1);
+  background: var(--background-secondary);
   color: var(--color-neutral-300);
   cursor: pointer;
   transition:
-    background-color var(--transition-base) var(--ease-standard),
-    border-color var(--transition-base) var(--ease-standard),
-    box-shadow var(--transition-base) var(--ease-standard),
-    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color var(--transition-base) var(--ease-standard);
+    background-color var(--transition-fast) var(--ease-standard),
+    border-color var(--transition-fast) var(--ease-standard),
+    color var(--transition-fast) var(--ease-standard);
 }
 
 .goal-card:hover {
-  border-color: rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px);
-}
-
-.goal-card:active {
-  transform: scale(0.97);
+  border-color: rgba(245, 246, 248, 0.2);
 }
 
 .goal-card-selected {
-  transform: translateY(-2px) scale(1.02);
+  border-width: 1px;
 }
 
-/* Distinct accent per goal — Strength keeps the app's primary orange,
-   Hypertrophy gets a muted plum/pink, Endurance a cooler blue. Unselected
-   cards show the tint only on the icon; selecting a card brings the same
-   hue into the border/glow/background so the identity carries through. */
 .goal-card-orange .goal-card-icon {
   color: var(--color-orange-500);
 }
 
 .goal-card-orange.goal-card-selected {
-  border-color: rgba(255, 122, 26, 0.45);
-  background: linear-gradient(150deg, rgba(255, 122, 26, 0.2) 0%, rgba(22, 30, 39, 0.94) 65%);
+  border-color: var(--color-orange-500);
+  background: rgba(255, 122, 26, 0.08);
   color: var(--color-orange-hover);
-  box-shadow: 0 0 24px rgba(255, 122, 26, 0.25);
-}
-
-.goal-card-orange.goal-card-selected:hover {
-  border-color: rgba(255, 122, 26, 0.6);
 }
 
 .goal-card-plum .goal-card-icon {
@@ -58,14 +39,9 @@
 }
 
 .goal-card-plum.goal-card-selected {
-  border-color: rgba(165, 107, 138, 0.45);
-  background: linear-gradient(150deg, rgba(165, 107, 138, 0.2) 0%, rgba(22, 30, 39, 0.94) 65%);
+  border-color: var(--color-plum-500);
+  background: rgba(165, 107, 138, 0.08);
   color: var(--color-plum-hover);
-  box-shadow: 0 0 24px rgba(165, 107, 138, 0.25);
-}
-
-.goal-card-plum.goal-card-selected:hover {
-  border-color: rgba(165, 107, 138, 0.6);
 }
 
 .goal-card-blue .goal-card-icon {
@@ -73,14 +49,9 @@
 }
 
 .goal-card-blue.goal-card-selected {
-  border-color: rgba(79, 143, 224, 0.45);
-  background: linear-gradient(150deg, rgba(79, 143, 224, 0.2) 0%, rgba(22, 30, 39, 0.94) 65%);
+  border-color: var(--color-blue-500);
+  background: rgba(79, 143, 224, 0.08);
   color: var(--color-blue-hover);
-  box-shadow: 0 0 24px rgba(79, 143, 224, 0.25);
-}
-
-.goal-card-blue.goal-card-selected:hover {
-  border-color: rgba(79, 143, 224, 0.6);
 }
 
 .goal-card-icon {
@@ -88,7 +59,7 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  transition: color var(--transition-base) var(--ease-standard);
+  transition: color var(--transition-fast) var(--ease-standard);
 }
 
 .goal-card-icon svg {
@@ -97,12 +68,9 @@
 }
 
 .goal-card-label {
-  font-size: var(--font-size-sm);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .goal-card {
-    transition: background-color var(--transition-base) var(--ease-standard), border-color var(--transition-base) var(--ease-standard);
-  }
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }

@@ -121,7 +121,7 @@ export function WorkoutsPage() {
             </div>
           )}
 
-          <GlassCard className="workouts-page-toolbar">
+          <div className="workouts-page-toolbar">
             <div className="workouts-page-chips">
               <WorkoutChip
                 label="All"
@@ -142,7 +142,7 @@ export function WorkoutsPage() {
               })}
             </div>
             <WorkoutChip label="My Workouts" selected={mineOnly} onClick={() => setMineOnly((v) => !v)} />
-          </GlassCard>
+          </div>
 
           {isLoading && (
             <div className="workouts-page-loading">
@@ -153,7 +153,7 @@ export function WorkoutsPage() {
           {!isLoading && loadError && <p className="workouts-page-error">{loadError}</p>}
 
           {!isLoading && !loadError && templates.length === 0 && (
-            <GlassCard className="workouts-page-empty">
+            <GlassCard className="workouts-page-empty" variant='flat'>
               <h2>
                 {mineOnly
                   ? "You haven't created any workouts yet."

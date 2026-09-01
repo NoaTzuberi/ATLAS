@@ -17,33 +17,36 @@
 .exercise-picker-search-icon {
   position: absolute;
   left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
   width: 17px;
   height: 17px;
   color: var(--color-neutral-500);
   pointer-events: none;
 }
 
-.exercise-picker-search-input {
+/* Scoped through .exercise-picker .exercise-picker-search (not just the
+   input's own class) so this reliably outranks WorkoutBuilderPage.css's
+   `.workout-builder-page .input-field` page-wide reskin — that rule's
+   shorthand `padding` was silently winning on specificity and resetting
+   padding-left back to 16px, which is what caused the icon/text overlap. */
+.exercise-picker .exercise-picker-search .exercise-picker-search-input {
   width: 100%;
   height: 44px;
-  padding-left: var(--space-6);
-  background-color: rgba(3, 8, 15, 0.32);
-  border-color: transparent;
-  border-radius: 999px;
-  box-shadow: inset 0 1px 3px rgba(3, 8, 15, 0.35);
+  padding-left: 44px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(245, 246, 248, 0.1);
+  border-radius: 4px;
+  box-shadow: none;
 }
 
 .exercise-picker-search-input:hover:not(:disabled) {
-  background-color: rgba(3, 8, 15, 0.4);
-  border-color: transparent;
+  border-color: rgba(245, 246, 248, 0.18);
 }
 
 .exercise-picker-search-input:focus {
-  background-color: rgba(3, 8, 15, 0.45);
-  border-color: transparent;
-  box-shadow:
-    inset 0 1px 3px rgba(3, 8, 15, 0.35),
-    0 0 0 3px rgba(255, 122, 26, 0.16);
+  border-color: rgba(255, 122, 26, 0.5);
+  box-shadow: none;
 }
 
 .exercise-picker-status {
@@ -63,16 +66,16 @@
   align-items: center;
   gap: var(--space-2);
   padding: 6px var(--space-2);
-  border-radius: var(--radius-sm);
-  background-color: var(--surface-glass-bg);
-  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  border: 1px solid rgba(245, 246, 248, 0.1);
 }
 
 .exercise-picker-result-media {
   width: 34px;
   height: 34px;
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -81,9 +84,6 @@
   height: 100%;
 }
 
-/* No flex-grow anywhere in this row — media, info, and the Add button all
-   pack together at the row's start instead of the button being pushed to
-   the far right edge of a (potentially very wide) full-width row. */
 .exercise-picker-result-info {
   display: flex;
   align-items: center;
@@ -101,11 +101,13 @@
   align-items: center;
   flex-shrink: 0;
   padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-size: 11px;
+  border-radius: 2px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .exercise-picker-result-tag-upper_body {
@@ -143,12 +145,14 @@
   flex-direction: column;
   gap: var(--space-3);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(245, 246, 248, 0.06);
 }
 
 .exercise-picker-browse-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--color-neutral-500);
 }
 
@@ -172,49 +176,41 @@
   flex-direction: column;
   gap: var(--space-2);
   padding: var(--space-2);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(245, 246, 248, 0.14);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
+  border-radius: 4px;
+  border: 1px solid rgba(245, 246, 248, 0.1);
+  background: var(--background-secondary);
   cursor: pointer;
   text-align: left;
-  box-shadow: inset 0 1px 0 rgba(245, 246, 248, 0.05);
   transition:
-    transform var(--transition-base) var(--ease-standard),
-    border-color var(--transition-base) var(--ease-standard),
-    box-shadow var(--transition-base) var(--ease-standard);
+    border-color var(--transition-fast) var(--ease-standard),
+    box-shadow var(--transition-fast) var(--ease-standard);
 }
 
 .picker-exercise-card:hover {
-  transform: translateY(-4px);
   border-color: rgba(255, 122, 26, 0.3);
-  box-shadow:
-    inset 0 1px 0 rgba(245, 246, 248, 0.05),
-    var(--shadow-lg);
 }
 
 .picker-exercise-card-added {
-  border-color: rgba(255, 122, 26, 0.5);
-  box-shadow:
-    inset 0 1px 0 rgba(245, 246, 248, 0.05),
-    0 0 24px rgba(255, 122, 26, 0.22);
+  border-color: var(--color-orange-500);
 }
 
 .picker-exercise-card-media {
   position: relative;
-  border-radius: var(--radius-sm);
+  border-radius: 2px;
   overflow: hidden;
 }
 
-/* Radial glow behind the exercise media — same warm accent used for the
-   picker card's own selected-state glow, just softer and always present so
-   the media reads as sitting on a premium lit backdrop rather than a flat box. */
 .picker-exercise-card-media::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 35%, rgba(255, 122, 26, 0.16) 0%, rgba(255, 122, 26, 0) 70%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 122, 26, 0.05) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
@@ -224,35 +220,14 @@
   top: var(--space-1);
   right: var(--space-1);
   z-index: 2;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 4px;
   background-color: var(--color-orange-500);
-  color: var(--color-navy-950);
-  box-shadow:
-    0 0 0 2px rgba(22, 30, 39, 0.9),
-    0 0 12px rgba(255, 122, 26, 0.65);
-  animation: picker-check-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-@keyframes picker-check-in {
-  from {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .picker-exercise-card-check {
-    animation: none;
-  }
+  color: var(--background-primary);
 }
 
 .picker-exercise-card-name {

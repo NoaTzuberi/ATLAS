@@ -76,4 +76,37 @@ isolated from the RepDB pack.
 
 ⸻
 
+react-body-highlighter (muscle-coverage body diagram)
+
+Source: https://github.com/giavinh79/react-body-highlighter
+(npm package "react-body-highlighter", version 2.0.5)
+License: MIT — Copyright (c) 2020 GV79
+
+⸻
+
+What this covers
+
+The front-view (anterior) muscle-shaped SVG polygon coordinates used to draw
+the human silhouette on the Create Workout page's live muscle-coverage map
+(client/src/features/workouts/components/MuscleCoverageMap/MuscleCoverageMap.tsx).
+
+Only the polygon coordinate data was copied — the `anteriorData` shape
+definitions, in their original 0–100 × 0–200 coordinate space — remapped from
+that library's own muscle-slug taxonomy onto ATLAS's own BodyRegion keys
+(client/src/features/workouts/data/bodyRegions.ts). The react-body-highlighter
+package itself was not installed as a dependency: its <Model> component owns
+its own data/coloring API, which didn't fit the exercise-count intensity
+scaling and glow behavior built for this feature, so only the underlying
+shape data was reused, redrawn with ATLAS's own colors, glow, and animation.
+
+⸻
+
+Required attribution
+
+MIT requires the copyright notice and permission notice be included with
+substantial portions of the software reused. That notice is kept in a code
+comment at the top of MuscleCoverageMap.tsx, alongside this entry.
+
+⸻
+
 End of Third-Party Content Notice

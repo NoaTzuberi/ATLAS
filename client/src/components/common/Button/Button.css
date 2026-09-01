@@ -99,6 +99,19 @@
   color: var(--color-neutral-100);
 }
 
+/* Same danger tint recipe as Badge's danger variant — the app's one
+   established destructive-action color language. */
+.btn-danger {
+  background-color: var(--color-error-soft);
+  border-color: rgba(232, 93, 93, 0.35);
+  color: var(--color-error-hover);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-error-strong);
+  border-color: rgba(232, 93, 93, 0.5);
+}
+
 .btn-icon,
 .btn-label {
   display: inline-flex;

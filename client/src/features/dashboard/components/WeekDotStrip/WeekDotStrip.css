@@ -33,7 +33,7 @@
 .day-dot-filled {
   background-color: var(--color-orange-500);
   border-color: var(--color-orange-500);
-  box-shadow: 0 0 8px rgba(255, 122, 26, 0.55);
+  box-shadow: 0 0 4px rgba(255, 122, 26, 0.35);
 }
 
 .day-dot-letter {

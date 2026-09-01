@@ -25,6 +25,15 @@ export const WORKOUT_EDIT_PATH = '/workouts/:id/edit';
 export const WORKOUT_SESSION_PATH = '/workouts/session/:id';
 export const WORKOUT_SESSION_SUMMARY_PATH = '/workouts/session/:id/summary';
 
+// `step` is a plain string here (not the feature's OnboardingStepId union) so this
+// app-level config file stays free of any feature-level import — callers pass a
+// valid step id and OnboardingPage itself validates it at render time.
+export const ONBOARDING_EDIT_PATH = '/onboarding/:step';
+
+export function onboardingEditPath(step: string): string {
+  return `/onboarding/${step}`;
+}
+
 export function workoutTemplatePath(id: string): string {
   return `/workouts/${id}`;
 }

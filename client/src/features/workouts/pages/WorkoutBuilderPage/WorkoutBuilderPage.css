@@ -1,12 +1,10 @@
 .workout-builder-title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xl);
   margin-bottom: var(--space-4);
 }
 
-/* Main step card + side panel (live summary/muscle map), pinned alongside
-   every step once exercises exist rather than only on a single "review"
-   screen — reordered to sit above the step card on narrow viewports. */
 .workout-builder-layout {
   display: flex;
   align-items: flex-start;
@@ -39,51 +37,48 @@
   }
 }
 
-/* Frosted glass panels — same recipe as the AI Coach chat window
-   (rgba fill + backdrop-filter blur + subtle border), just opaque enough to
-   stay readable over long form content. */
 .workout-builder-panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: 20px;
-  background: rgba(20, 20, 24, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 16px 40px rgba(3, 8, 15, 0.35);
+  padding: var(--space-4);
+  border-radius: 4px;
+  border-color: rgba(245, 246, 248, 0.1);
 }
 
 .workout-builder-panel-header {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(245, 246, 248, 0.06);
 }
 
 .workout-builder-panel-header h2 {
-  font-family: var(--font-body);
-  font-size: var(--font-size-lg);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-neutral-300);
 }
 
 .workout-builder-panel-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--color-orange-soft);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 122, 26, 0.35);
+  background: rgba(255, 122, 26, 0.08);
   color: var(--color-orange-500);
 }
 
 .workout-builder-panel-icon svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 }
 
 .workout-builder-step-fields {
@@ -97,7 +92,7 @@
   flex-direction: column;
   gap: var(--space-3);
   padding-top: var(--space-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-top: 1px solid rgba(245, 246, 248, 0.06);
 }
 
 .workout-builder-step-nav {
@@ -114,42 +109,41 @@
 .workout-builder-field-label {
   display: block;
   margin-bottom: var(--space-1);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-neutral-300);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-neutral-500);
 }
 
-/* Glass input treatment, scoped to this page so the shared Input component's
-   look elsewhere in the app (login, onboarding, etc.) is untouched. */
 .workout-builder-page .input-field,
 .workout-builder-textarea {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(245, 246, 248, 0.1);
+  border-radius: 4px;
   padding: 6px var(--space-3);
   font-size: var(--font-size-sm);
   transition:
     background-color var(--transition-fast) var(--ease-standard),
-    border-color var(--transition-fast) var(--ease-standard),
-    box-shadow var(--transition-fast) var(--ease-standard);
+    border-color var(--transition-fast) var(--ease-standard);
 }
 
 .workout-builder-page .input-label {
-  font-size: var(--font-size-xs);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .workout-builder-page .input-field:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(245, 246, 248, 0.18);
 }
 
 .workout-builder-page .input-field:focus,
 .workout-builder-textarea:focus {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: var(--color-orange-500);
-  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.16);
+  background: rgba(0, 0, 0, 0.32);
+  border-color: rgba(255, 122, 26, 0.5);
+  box-shadow: none;
 }
 
 .workout-builder-textarea {
@@ -204,4 +198,80 @@
 .workout-builder-error {
   color: var(--color-error-500);
   margin-bottom: 0;
+}
+.workout-builder-row-basics {
+  grid-template-columns: 2fr 1fr;
+}
+
+@media (max-width: 480px) {
+  .workout-builder-row-basics {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workout-builder-panel .onboarding-progress {
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(245, 246, 248, 0.06);
+}
+
+.workout-builder-panel .onboarding-progress-track {
+  gap: 3px;
+}
+
+.workout-builder-panel .onboarding-progress-dot {
+  width: 16px;
+  height: 3px;
+  border-radius: 1px;
+  background-color: rgba(245, 246, 248, 0.12);
+}
+
+.workout-builder-panel .onboarding-progress-dot-filled {
+  background-color: var(--color-orange-500);
+}
+
+.workout-builder-panel .onboarding-progress-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-neutral-500);
+}
+
+.workout-builder-panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(245, 246, 248, 0.06);
+}
+
+.workout-builder-panel-header h2 {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-neutral-300);
+}
+
+.workout-builder-panel .onboarding-progress {
+  margin-left: auto;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.workout-builder-step-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.workout-builder-step-divider {
+  height: 1px;
+  background: rgba(245, 246, 248, 0.06);
 }

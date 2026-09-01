@@ -10,13 +10,14 @@
   stroke: var(--surface-glass-bg-strong);
 }
 
+/* The active arc is a "lit up" indicator, not a decorative card — a tight,
+   small glow here is fine even though full tiles/cards don't get one. At
+   0% progress the arc has no visible length, so this has no effect until
+   there's real progress to show. */
 .progress-ring-fill {
   stroke: var(--color-orange-500);
+  filter: drop-shadow(0 0 4px rgba(255, 122, 26, 0.35));
   transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.progress-ring-glow .progress-ring-fill {
-  filter: drop-shadow(0 0 6px rgba(255, 122, 26, 0.55));
 }
 
 .progress-ring-content {

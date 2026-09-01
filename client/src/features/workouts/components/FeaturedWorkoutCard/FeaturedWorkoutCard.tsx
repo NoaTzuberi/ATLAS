@@ -1,10 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { Button } from '../../../../components/common/Button/Button';
 import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
 import { workoutTemplatePath } from '../../../../app/config/routes';
-import { difficultyBadgeVariant } from '../../data/workoutOptions';
 import { getCategoryVisual } from '../../data/categoryVisuals';
 import type { WorkoutTemplate } from '../../types';
 import './FeaturedWorkoutCard.css';
@@ -21,7 +19,7 @@ export function FeaturedWorkoutCard({ template, reason, isPersonalized }: Featur
   const { coverImage, Icon } = getCategoryVisual(template.category);
 
   return (
-    <GlassCard className="featured-workout-card">
+    <GlassCard className="featured-workout-card" variant="flat">
       <div className="featured-workout-cover">
         <div className="featured-workout-cover-image" style={{ backgroundImage: `url(${coverImage})` }} />
         {template.category && (
@@ -32,13 +30,14 @@ export function FeaturedWorkoutCard({ template, reason, isPersonalized }: Featur
         <span className="featured-workout-label">{isPersonalized ? 'Recommended for you' : 'Recently added'}</span>
         {reason && <p className="featured-workout-reason">{reason}</p>}
         <h2 className="featured-workout-name">{template.name}</h2>
+        <span className="featured-workout-underline" />
         {template.description && <p className="featured-workout-description text-body">{template.description}</p>}
         <div className="featured-workout-meta">
-          {template.difficulty && (
-            <Badge variant={difficultyBadgeVariant(template.difficulty)}>{template.difficulty}</Badge>
-          )}
           <span>{template.exercises.length} exercises</span>
           {template.duration && <span>{template.duration} min</span>}
+          {template.difficulty && (
+            <span className="featured-workout-difficulty-tag">{template.difficulty}</span>
+          )}
         </div>
         <Link
           to={workoutTemplatePath(template.id)}

@@ -26,8 +26,8 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  border-radius: 50%;
-  border: 1px solid var(--surface-glass-border);
+  border-radius: 4px;
+  border: 1px solid rgba(245, 246, 248, 0.1);
   background-color: var(--color-charcoal-900);
   color: var(--color-orange-500);
   cursor: pointer;
@@ -89,7 +89,7 @@
 
 .achievements-grid::-webkit-scrollbar-thumb {
   background-color: rgba(255, 122, 26, 0.4);
-  border-radius: 999px;
+  border-radius: 2px;
 }
 
 .achievements-grid::-webkit-scrollbar-thumb:hover {
@@ -107,13 +107,15 @@
   justify-content: center;
   gap: 6px;
   padding: var(--space-3) var(--space-2) 10px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--surface-glass-border);
-  background: var(--surface-glass-bg);
+  border-radius: 4px;
+  border: 1px solid rgba(245, 246, 248, 0.12);
+  background: var(--background-secondary);
   text-align: center;
-  transition:
-    transform var(--transition-base) var(--ease-standard),
-    border-color var(--transition-base) var(--ease-standard);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: border-color var(--transition-base) var(--ease-standard), box-shadow var(--transition-base) var(--ease-standard);
 }
 
 .badge-tile-locked {
@@ -125,16 +127,21 @@
   opacity: 0.7;
 }
 
+/* Earned = a "lit up" indicator, so it gets a touch more presence than the
+   plain tile surface: a tight, small glow — not the big 0 0 24px blur the
+   old glass aesthetic used. */
 .badge-tile-earned {
   opacity: 1;
   border-color: rgba(255, 122, 26, 0.4);
-  background: linear-gradient(150deg, rgba(255, 122, 26, 0.16) 0%, rgba(22, 30, 39, 0.94) 60%);
-  box-shadow: 0 0 24px rgba(255, 122, 26, 0.25);
+  background: rgba(255, 122, 26, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 4px rgba(255, 122, 26, 0.35);
 }
 
-.badge-tile:hover,
 .badge-tile:focus-visible {
-  transform: translateY(-2px);
   outline: none;
 }
 
@@ -165,15 +172,16 @@
   width: 100%;
   height: 3px;
   margin-top: 2px;
-  border-radius: 999px;
-  background-color: var(--surface-glass-bg-strong);
+  border-radius: 2px;
+  background-color: rgba(245, 246, 248, 0.1);
   overflow: hidden;
 }
 
 .badge-tile-progress-fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 2px;
   background-color: var(--color-orange-500);
+  box-shadow: 0 0 4px rgba(255, 122, 26, 0.35);
   transition: width var(--transition-slow) var(--ease-standard);
 }
 
@@ -201,7 +209,7 @@
   color: var(--color-neutral-100);
   font-size: var(--font-size-xs);
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
+  border-radius: 4px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -215,24 +223,6 @@
 .badge-tile:focus-visible .badge-tile-tooltip {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
-}
-
-@keyframes badge-unlock {
-  0% {
-    transform: scale(0.85);
-    opacity: 0.4;
-  }
-  60% {
-    transform: scale(1.06);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.badge-tile-just-earned {
-  animation: badge-unlock 0.6s var(--ease-standard);
 }
 
 .achievements-grid-compact {

@@ -140,6 +140,11 @@ export function ExerciseDetailPage() {
             ))}
           </div>
         </div>
+        <div className="exercise-detail-scroll-hint" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M4 7L10 13L16 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
 
         {showInstructions && (
           <section className="exercise-detail-section">

@@ -169,7 +169,7 @@ export function DashboardCalendar() {
 
   return (
     <>
-      <GlassCard className="dashboard-calendar">
+      <GlassCard variant="flat" className="dashboard-calendar">
         <div className="dashboard-calendar-header">
           <span className="dashboard-calendar-label">Calendar</span>
           <Button variant="ghost" onClick={openLogActivity}>

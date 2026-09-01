@@ -4,12 +4,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { Location } from 'react-router-dom';
 import { AppShell } from '../../../../components/layout/AppShell/AppShell';
 import { Modal } from '../../../../components/common/Modal/Modal';
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { Spinner } from '../../../../components/common/Spinner/Spinner';
 import { Button } from '../../../../components/common/Button/Button';
 import { CategoryBadge } from '../../components/CategoryBadge/CategoryBadge';
 import { ExerciseMedia } from '../../../exercises/components/ExerciseMedia/ExerciseMedia';
-import { muscleLabel, equipmentLabel } from '../../../exercises/data/filterOptions';
+import { muscleLabel, equipmentLabel, muscleTagHue } from '../../../exercises/data/filterOptions';
 import { workoutGoalLabel } from '../../data/workoutOptions';
 import { getWorkoutTemplateById, deleteWorkoutTemplate } from '../../../../services/workouts/workoutTemplatesService';
 import { startWorkout } from '../../../../services/workouts/workoutSessionService';
@@ -92,7 +91,7 @@ export function WorkoutTemplateDetailPage() {
 
   if (isLoading) {
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="workout-detail-modal">
+      <Modal isOpen onClose={handleClose} variant="flat" className="workout-detail-modal">
         <div className="workout-detail-loading">
           <Spinner size="lg" />
         </div>
@@ -100,7 +99,7 @@ export function WorkoutTemplateDetailPage() {
     );
   } else if (notFound || !template) {
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="workout-detail-modal workout-detail-modal-compact">
+      <Modal isOpen onClose={handleClose} variant="flat" className="workout-detail-modal workout-detail-modal-compact">
         <div className="workout-detail-not-found">
           <h2>This workout couldn&apos;t be found.</h2>
           <Button variant="secondary" onClick={handleClose}>
@@ -111,16 +110,19 @@ export function WorkoutTemplateDetailPage() {
     );
   } else {
     modalContent = (
-      <Modal isOpen onClose={handleClose} className="workout-detail-modal">
+      <Modal isOpen onClose={handleClose} variant="flat" className="workout-detail-modal">
         <h1 className="workout-detail-name">{template.name}</h1>
+        <span className="workout-detail-underline" />
 
         <div className="workout-detail-tags">
           {template.category && <CategoryBadge category={template.category} />}
-          {template.difficulty && <Badge variant="achievement">{template.difficulty}</Badge>}
+          {template.difficulty && <span className="workout-detail-tag">{template.difficulty}</span>}
           {template.goal.map((g) => (
-            <Badge key={g}>{workoutGoalLabel(g)}</Badge>
+            <span key={g} className="workout-detail-tag">
+              {workoutGoalLabel(g)}
+            </span>
           ))}
-          {template.duration && <Badge>{template.duration} min</Badge>}
+          {template.duration && <span className="workout-detail-tag">{template.duration} min</span>}
         </div>
 
         {template.description && <p className="text-body workout-detail-description">{template.description}</p>}
@@ -139,12 +141,17 @@ export function WorkoutTemplateDetailPage() {
                 <span className="workout-detail-exercise-name">{entry.exercise.name}</span>
                 <div className="workout-detail-exercise-tags">
                   {entry.exercise.primaryMuscles.map((muscle) => (
-                    <Badge key={muscle} variant="accent">
+                    <span
+                      key={muscle}
+                      className={`workout-detail-exercise-tag workout-detail-exercise-tag-${muscleTagHue(muscle)}`}
+                    >
                       {muscleLabel(muscle)}
-                    </Badge>
+                    </span>
                   ))}
                   {entry.exercise.equipment.map((item) => (
-                    <Badge key={item}>{equipmentLabel(item)}</Badge>
+                    <span key={item} className="workout-detail-exercise-tag-equipment">
+                      {equipmentLabel(item)}
+                    </span>
                   ))}
                 </div>
                 <span className="workout-detail-exercise-scheme text-caption">

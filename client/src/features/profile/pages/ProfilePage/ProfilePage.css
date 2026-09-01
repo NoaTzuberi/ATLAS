@@ -22,14 +22,11 @@
 
 .profile-section-card {
   margin-bottom: var(--space-4);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
-  border-color: rgba(245, 246, 248, 0.14);
 }
 
 .profile-section-card h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-3);
 }
 
@@ -61,7 +58,6 @@
   padding: 0;
   overflow: hidden;
   margin-bottom: var(--space-4);
-  border-color: rgba(245, 246, 248, 0.14);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -110,7 +106,7 @@
   border: 2px solid var(--color-orange-500);
   background-color: var(--color-orange-soft);
   color: var(--color-orange-500);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 }
@@ -125,7 +121,8 @@
 }
 
 .profile-header-name {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-lg);
   color: var(--color-neutral-100);
 }
@@ -171,16 +168,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
-  border-color: rgba(245, 246, 248, 0.14);
   border-left-width: 3px;
-  transition: transform var(--transition-base) var(--ease-standard);
-}
-
-.training-block:hover {
-  transform: translateY(-2px);
 }
 
 .training-block-orange {
@@ -205,6 +193,34 @@
   gap: var(--space-2);
 }
 
+.training-block-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  color: var(--color-neutral-500);
+  transition:
+    border-color var(--transition-fast) var(--ease-standard),
+    color var(--transition-fast) var(--ease-standard),
+    background-color var(--transition-fast) var(--ease-standard);
+}
+
+.training-block-edit svg {
+  width: 13px;
+  height: 13px;
+}
+
+.training-block-edit:hover {
+  border-color: var(--color-orange-500);
+  background-color: var(--color-orange-soft);
+  color: var(--color-orange-500);
+}
+
 .training-block-icon {
   display: flex;
   align-items: center;
@@ -212,7 +228,7 @@
   width: 32px;
   height: 32px;
   flex-shrink: 0;
-  border-radius: 50%;
+  border-radius: 4px;
 }
 
 .training-block-icon svg {
@@ -221,32 +237,36 @@
 }
 
 .training-block-icon-orange {
+  border: 1px solid rgba(255, 122, 26, 0.3);
   background-color: var(--color-orange-soft);
   color: var(--color-orange-500);
 }
 
 .training-block-icon-blue {
+  border: 1px solid rgba(79, 143, 224, 0.3);
   background-color: var(--color-blue-soft);
   color: var(--color-blue-500);
 }
 
 .training-block-icon-teal {
+  border: 1px solid rgba(47, 191, 143, 0.3);
   background-color: var(--color-teal-soft);
   color: var(--color-teal-500);
 }
 
 .training-block-icon-gray {
-  background-color: var(--surface-glass-bg-strong);
+  border: 1px solid rgba(245, 246, 248, 0.2);
+  background-color: rgba(245, 246, 248, 0.06);
   color: var(--color-neutral-100);
 }
 
 .training-block-title {
-  font-family: var(--font-body);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-neutral-100);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
 .training-block-caption {
@@ -268,7 +288,6 @@
 
 .frequency-segment-filled {
   background-color: var(--color-blue-500);
-  box-shadow: 0 0 6px rgba(79, 143, 224, 0.45);
 }
 
 .frequency-segment-tinted {
@@ -281,13 +300,58 @@
   gap: var(--space-2);
 }
 
+/* Replaces the shared Badge component for this page's goal/equipment/
+   activity tags — same visual language (tinted bg + colored border) the
+   rest of the flat redesign uses for tags. */
+.profile-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 2px;
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.profile-tag-accent {
+  background-color: rgba(255, 122, 26, 0.1);
+  border: 1px solid rgba(255, 122, 26, 0.35);
+  color: var(--color-orange-hover);
+}
+
+.profile-tag-neutral {
+  background-color: rgba(245, 246, 248, 0.08);
+  border: 1px solid rgba(245, 246, 248, 0.2);
+  color: var(--color-neutral-100);
+}
+
+.profile-tag-success {
+  background-color: rgba(47, 191, 143, 0.1);
+  border: 1px solid rgba(47, 191, 143, 0.35);
+  color: var(--color-teal-hover);
+}
+
 .profile-summary-empty {
   color: var(--color-neutral-500);
   font-size: var(--font-size-sm);
 }
 
-.profile-onboarding-cta {
-  width: 100%;
+.profile-redo-onboarding-link {
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-neutral-500);
+  transition: color var(--transition-fast) var(--ease-standard);
+}
+
+.profile-redo-onboarding-link:hover {
+  color: var(--color-orange-500);
 }
 
 .profile-stats-card {
@@ -309,7 +373,7 @@
 }
 
 .profile-stat-value {
-  font-family: var(--font-display);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-lg);
   color: var(--color-neutral-100);
 }
@@ -321,7 +385,7 @@
 
 .profile-stat-block-value {
   display: block;
-  font-family: var(--font-display);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xl);
   color: var(--color-neutral-100);
   margin-top: 2px;

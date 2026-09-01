@@ -15,12 +15,19 @@
 }
 
 .streak-ring-value {
-  font-family: var(--font-display);
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-3xl);
   color: var(--color-orange-hover);
   line-height: 1;
+  animation: dashboard-stat-fade-in 200ms ease-out;
 }
 
 .streak-ring-value-compact {
   font-size: var(--font-size-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streak-ring-value {
+    animation: none;
+  }
 }

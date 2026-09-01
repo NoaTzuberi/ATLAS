@@ -1,9 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { GlassCard } from '../../../../components/common/GlassCard/GlassCard';
-import { Badge } from '../../../../components/common/Badge/Badge';
 import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
 import { workoutTemplatePath } from '../../../../app/config/routes';
-import { difficultyBadgeVariant } from '../../data/workoutOptions';
 import { getCategoryVisual } from '../../data/categoryVisuals';
 import type { WorkoutTemplate } from '../../types';
 import './TemplateCard.css';
@@ -27,7 +25,7 @@ export function TemplateCard({ template, completionCount }: TemplateCardProps) {
       state={{ backgroundLocation: location }}
       className="template-card-link"
     >
-      <GlassCard className={'template-card' + (isNew ? ' template-card-new' : '')}>
+      <GlassCard className="template-card" variant="flat">
         <div className="template-card-cover" style={{ backgroundImage: `url(${coverImage})` }}>
           {template.category && (
             <CategoryBadge
@@ -36,39 +34,24 @@ export function TemplateCard({ template, completionCount }: TemplateCardProps) {
               className="template-card-cover-badge"
             />
           )}
-          {completionCount ? (
-            <span className="template-card-completion-badge">
-              <CheckIcon />
-              Completed {completionCount}x
-            </span>
-          ) : null}
         </div>
         <div className="template-card-body">
-          {(!template.isSystemTemplate || isNew) && (
-            <div className="template-card-header">
-              {!template.isSystemTemplate && <span className="template-card-mine-badge">Mine</span>}
-              {isNew && <span className="template-card-new-badge">New</span>}
-            </div>
-          )}
-          <h3 className="template-card-name">{template.name}</h3>
+          <div className="template-card-name-row">
+            <h3 className="template-card-name">{template.name}</h3>
+            {isNew && <span className="template-card-new-dot" title="New" />}
+          </div>
+          <span className="template-card-underline" />
           {template.description && <p className="template-card-description text-body">{template.description}</p>}
           <div className="template-card-meta">
             <span>{template.exercises.length} exercises</span>
             {template.duration && <span>{template.duration} min</span>}
             {template.difficulty && (
-              <Badge variant={difficultyBadgeVariant(template.difficulty)}>{template.difficulty}</Badge>
+              <span className="template-card-difficulty-tag">{template.difficulty}</span>
             )}
+            {completionCount ? <span className="template-card-completion">Done {completionCount}x</span> : null}
           </div>
         </div>
       </GlassCard>
     </Link>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 12L10 18L20 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

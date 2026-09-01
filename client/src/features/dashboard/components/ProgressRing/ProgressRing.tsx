@@ -5,27 +5,17 @@ interface ProgressRingProps {
   progress: number;
   size?: number;
   strokeWidth?: number;
-  glow?: boolean;
   className?: string;
   children?: ReactNode;
 }
 
-export function ProgressRing({
-  progress,
-  size = 64,
-  strokeWidth = 5,
-  glow = false,
-  className,
-  children,
-}: ProgressRingProps) {
+export function ProgressRing({ progress, size = 64, strokeWidth = 5, className, children }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const clamped = Math.max(0, Math.min(1, progress));
   const offset = circumference * (1 - clamped);
 
-  const classNames = ['progress-ring', glow && clamped > 0 ? 'progress-ring-glow' : '', className]
-    .filter(Boolean)
-    .join(' ');
+  const classNames = ['progress-ring', className].filter(Boolean).join(' ');
 
   return (
     <div className={classNames} style={{ width: size, height: size }}>

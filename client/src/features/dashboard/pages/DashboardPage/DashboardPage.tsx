@@ -84,6 +84,27 @@ function buildWeightChartPoints(points: WeightTrendPoint[]): string {
     .join(' ');
 }
 
+/** Same coordinates as buildWeightChartPoints, closed down to the chart's
+ * baseline so the shape can be filled as an area instead of just stroked
+ * as a line. */
+function buildWeightChartArea(points: WeightTrendPoint[]): string {
+  const weights = points.map((p) => p.weight);
+  const min = Math.min(...weights);
+  const max = Math.max(...weights);
+  const range = max - min || 1;
+  const stepX = WEIGHT_CHART_WIDTH / (points.length - 1);
+
+  const linePoints = points.map((point, index) => {
+    const x = index * stepX;
+    const y = WEIGHT_CHART_HEIGHT - ((point.weight - min) / range) * (WEIGHT_CHART_HEIGHT - 16) - 8;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const firstX = 0;
+  const lastX = (points.length - 1) * stepX;
+  return `M${firstX},${WEIGHT_CHART_HEIGHT} L${linePoints.join(' L')} L${lastX},${WEIGHT_CHART_HEIGHT} Z`;
+}
+
 export function DashboardPage() {
   const { user } = useAuth();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -193,8 +214,7 @@ export function DashboardPage() {
               </div>
 
               <div className="bento-grid" ref={bentoRef}>
-                <GlassCard className="bento-tile bento-tile-streak">
-                  <div className="dashboard-stat-hero-glow" aria-hidden="true" />
+                <GlassCard variant="flat" className="bento-tile bento-tile-streak">
                   <StreakRing streak={summary.streak} />
                   <span className="dashboard-stat-label">Day Streak</span>
                   <span className="dashboard-stat-microcopy">
@@ -202,7 +222,7 @@ export function DashboardPage() {
                   </span>
                 </GlassCard>
 
-                <GlassCard className="bento-tile bento-tile-week">
+                <GlassCard variant="flat" className="bento-tile bento-tile-week">
                   <span className="dashboard-stat-badge" aria-hidden="true">
                     <CalendarIcon />
                   </span>
@@ -210,7 +230,7 @@ export function DashboardPage() {
                   <WeekDotStrip workoutsLast7Days={summary.workoutsLast7Days} />
                 </GlassCard>
 
-                <GlassCard className="bento-tile bento-tile-total">
+                <GlassCard variant="flat" className="bento-tile bento-tile-total">
                   <span className="dashboard-stat-badge" aria-hidden="true">
                     <TrophyIcon />
                   </span>
@@ -219,7 +239,7 @@ export function DashboardPage() {
                   <MilestoneBar totalWorkouts={summary.totalWorkouts} />
                 </GlassCard>
 
-                <GlassCard className="bento-tile bento-tile-weight">
+                <GlassCard variant="flat" className="bento-tile bento-tile-weight">
                   <div className="dashboard-weight-header">
                     <span className="dashboard-stat-badge" aria-hidden="true">
                       <ScaleIcon />
@@ -255,9 +275,18 @@ export function DashboardPage() {
                       preserveAspectRatio="none"
                       aria-hidden="true"
                     >
+                      <defs>
+                        <linearGradient id="weight-chart-gradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--color-orange-500)" stopOpacity="0.35" />
+                          <stop offset="100%" stopColor="var(--color-orange-500)" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
                       <line x1="0" y1="25" x2={WEIGHT_CHART_WIDTH} y2="25" className="weight-chart-gridline" />
                       <line x1="0" y1="50" x2={WEIGHT_CHART_WIDTH} y2="50" className="weight-chart-gridline" />
                       <line x1="0" y1="75" x2={WEIGHT_CHART_WIDTH} y2="75" className="weight-chart-gridline" />
+                      {summary.weightTrend.length >= 2 && (
+                        <path d={buildWeightChartArea(summary.weightTrend)} className="weight-chart-fill" />
+                      )}
                       {summary.weightTrend.length >= 2 ? (
                         <polyline
                           ref={weightPolylineRef}
@@ -282,7 +311,7 @@ export function DashboardPage() {
                 </GlassCard>
               </div>
 
-              <GlassCard className="dashboard-achievements">
+              <GlassCard variant="flat" className="dashboard-achievements">
                 <h2>Achievements</h2>
                 <AchievementBadges summary={summary} />
               </GlassCard>
@@ -290,7 +319,7 @@ export function DashboardPage() {
               <DashboardCalendar />
 
               {mergedPersonalRecords.length > 0 && (
-                <GlassCard className="dashboard-prs">
+                <GlassCard variant="flat" className="dashboard-prs">
                   <h2>Recent Personal Records</h2>
                   <div className="pr-card-grid">
                     {mergedPersonalRecords.map((pr) => (

@@ -138,6 +138,48 @@
 .exercise-detail-difficulty-bar.is-filled {
   background-color: var(--color-orange-500, #ff7a1a);
 }
+.exercise-detail-scroll-hint {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-3) 0;
+  margin-top: var(--space-4);
+  margin-bottom: calc(-1 * var(--space-5));
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--background-secondary) 40%
+  );
+  color: rgba(255, 122, 26, 0.7);
+  animation: exercise-detail-scroll-hint-bounce 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.exercise-detail-scroll-hint svg {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes exercise-detail-scroll-hint-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercise-detail-scroll-hint {
+    animation: none;
+  }
+}
 
 .exercise-detail-section {
   margin-top: var(--space-6);

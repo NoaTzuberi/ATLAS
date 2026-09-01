@@ -7,6 +7,7 @@ import {
   WORKOUT_EDIT_PATH,
   WORKOUT_SESSION_PATH,
   WORKOUT_SESSION_SUMMARY_PATH,
+  ONBOARDING_EDIT_PATH,
 } from '../config/routes';
 import { Landing } from '../../pages/Landing/Landing';
 import { Showcase } from '../../pages/Showcase/Showcase';
@@ -51,6 +52,7 @@ export function AppRouter() {
           <Route path={WORKOUT_SESSION_PATH} element={<ActiveWorkoutPage />} />
           <Route path={WORKOUT_SESSION_SUMMARY_PATH} element={<WorkoutSummaryPage />} />
           <Route path={ROUTES.ONBOARDING} element={<OnboardingPage />} />
+          <Route path={ONBOARDING_EDIT_PATH} element={<OnboardingPage />} />
           <Route path={ROUTES.EXERCISES} element={<ExerciseLibraryPage />} />
           {!backgroundLocation && (
             <>

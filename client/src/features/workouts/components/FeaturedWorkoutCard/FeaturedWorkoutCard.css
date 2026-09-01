@@ -4,10 +4,6 @@
   padding: 0;
   overflow: hidden;
   border-color: rgba(255, 122, 26, 0.3);
-  box-shadow:
-    inset 0 1px 0 rgba(245, 246, 248, 0.05),
-    0 0 32px rgba(255, 122, 26, 0.14),
-    var(--shadow-md);
 }
 
 .featured-workout-cover {
@@ -15,12 +11,9 @@
   flex: 0 0 42%;
   min-height: 220px;
   overflow: hidden;
-  /* Clean hard edge at the seam — no gradient/fade/blend of any kind. */
   border-right: 1px solid rgba(255, 255, 255, 0.09);
 }
 
-/* The photo itself: zero filter, zero blend-mode, zero overlay. Renders
-   exactly as the source file looks. */
 .featured-workout-cover-image {
   position: absolute;
   inset: 0;
@@ -43,14 +36,13 @@
   flex: 1;
   min-width: 0;
   padding: var(--space-5);
-  background:
-    var(--gradient-card-glow),
-    var(--background-secondary);
+  background: var(--background-secondary);
 }
 
 .featured-workout-label {
+  font-family: var(--font-mono, monospace);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-orange-hover);
@@ -62,8 +54,17 @@
 }
 
 .featured-workout-name {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xl);
+}
+
+.featured-workout-underline {
+  display: block;
+  height: 1px;
+  width: 28px;
+  margin-top: -4px;
+  background: var(--color-orange-500, #ff7a1a);
 }
 
 .featured-workout-description {
@@ -83,6 +84,19 @@
   font-size: var(--font-size-sm);
 }
 
+.featured-workout-difficulty-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border-radius: 2px;
+  border: 1px solid rgba(245, 246, 248, 0.14);
+  color: var(--color-neutral-300);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .featured-workout-cta {
   margin-top: var(--space-2);
 }
@@ -95,8 +109,6 @@
   .featured-workout-cover {
     flex: none;
     min-height: 140px;
-    /* Stacked layout — the hard edge runs along the bottom into the panel
-       below instead of the right edge into the panel beside it. */
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   }

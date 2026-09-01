@@ -32,6 +32,15 @@ export function CompassIcon() {
   );
 }
 
+export function EditIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21 5L27 11L12 26H6V20L21 5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M18 8L24 14" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function DumbbellIcon() {
   return (
     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,5 +1,4 @@
-import { Badge } from '../../../../components/common/Badge/Badge';
-import { workoutCategoryLabel, workoutGoalLabel, difficultyBadgeVariant } from '../../data/workoutOptions';
+import { workoutCategoryLabel, workoutGoalLabel } from '../../data/workoutOptions';
 import { DIFFICULTY_OPTIONS } from '../../../exercises/data/filterOptions';
 import type { WorkoutExerciseRowValue } from '../../components/WorkoutExerciseRow/WorkoutExerciseRow';
 import type { WorkoutCategory, WorkoutGoal } from '../../types';
@@ -33,17 +32,17 @@ export function ReviewWorkoutStep({
       </div>
 
       <div className="review-workout-badges">
-        {category && <Badge variant="neutral">{workoutCategoryLabel(category)}</Badge>}
+        {category && <span className="review-workout-tag">{workoutCategoryLabel(category)}</span>}
         {difficulty && (
-          <Badge variant={difficultyBadgeVariant(difficulty)}>
+          <span className="review-workout-tag">
             {DIFFICULTY_OPTIONS.find((option) => option.value === difficulty)?.label ?? difficulty}
-          </Badge>
+          </span>
         )}
-        {duration && <Badge variant="neutral">{duration} min</Badge>}
+        {duration && <span className="review-workout-tag">{duration} min</span>}
         {goal.map((value) => (
-          <Badge key={value} variant="accent">
+          <span key={value} className="review-workout-tag review-workout-tag-accent">
             {workoutGoalLabel(value)}
-          </Badge>
+          </span>
         ))}
       </div>
 

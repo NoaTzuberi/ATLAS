@@ -22,7 +22,7 @@ export function StreakRing({ streak, target = STREAK_RING_TARGET, compact = fals
   }, [streak, target]);
 
   return (
-    <ProgressRing progress={progress} size={compact ? 64 : 112} strokeWidth={compact ? 5 : 7} glow={!compact}>
+    <ProgressRing progress={progress} size={compact ? 64 : 112} strokeWidth={compact ? 5 : 7}>
       <span className={'streak-ring-icon' + (compact ? ' streak-ring-icon-compact' : '')}>
         <FlameIcon />
       </span>

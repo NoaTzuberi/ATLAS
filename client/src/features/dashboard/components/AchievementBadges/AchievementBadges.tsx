@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FlagIcon,
   FlameIcon,
@@ -264,8 +264,6 @@ interface AchievementBadgesProps {
 
 export function AchievementBadges({ summary, limit }: AchievementBadgesProps) {
   const gridRef = useStaggerReveal<HTMLDivElement>([summary]);
-  const previousEarnedRef = useRef<Set<string>>();
-  const [justEarnedIds, setJustEarnedIds] = useState<Set<string>>(new Set());
   const [activityTypeCount, setActivityTypeCount] = useState(0);
   const [personalRecordCount, setPersonalRecordCount] = useState(0);
   const [weighInCount, setWeighInCount] = useState(0);
@@ -353,33 +351,6 @@ export function AchievementBadges({ summary, limit }: AchievementBadgesProps) {
   }, [weeklyTargetDays]);
 
   useEffect(() => {
-    const ctx: BadgeContext = {
-      summary,
-      activityTypeCount,
-      personalRecordCount,
-      weighInCount,
-      weeklyTargetDays,
-      consecutiveWeeksHittingGoal,
-    };
-    const currentlyEarned = new Set(
-      BADGES.filter((badge) => {
-        const { current, target } = badge.getProgress(ctx);
-        return current >= target;
-      }).map((badge) => badge.id),
-    );
-    const previouslyEarned = previousEarnedRef.current;
-
-    if (previouslyEarned) {
-      const newlyEarned = new Set([...currentlyEarned].filter((id) => !previouslyEarned.has(id)));
-      if (newlyEarned.size > 0) {
-        setJustEarnedIds(newlyEarned);
-      }
-    }
-
-    previousEarnedRef.current = currentlyEarned;
-  }, [summary, activityTypeCount, personalRecordCount, weighInCount, weeklyTargetDays, consecutiveWeeksHittingGoal]);
-
-  useEffect(() => {
     const container = gridRef.current;
     if (!container) return;
 
@@ -438,7 +409,6 @@ export function AchievementBadges({ summary, limit }: AchievementBadgesProps) {
     : computedBadges;
 
   function renderTile({ badge, current, target, unitLabel, earned }: (typeof computedBadges)[number]) {
-    const justEarned = justEarnedIds.has(badge.id);
     const progressPct = Math.min(100, (current / target) * 100);
 
     return (
@@ -447,8 +417,7 @@ export function AchievementBadges({ summary, limit }: AchievementBadgesProps) {
         className={
           'badge-tile' +
           (limit ? ' badge-tile-compact' : '') +
-          (earned ? ' badge-tile-earned' : ' badge-tile-locked') +
-          (justEarned ? ' badge-tile-just-earned' : '')
+          (earned ? ' badge-tile-earned' : ' badge-tile-locked')
         }
         tabIndex={0}
       >

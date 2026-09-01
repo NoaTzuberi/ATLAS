@@ -14,7 +14,7 @@ import { GoalCategoryStep } from '../../steps/GoalCategoryStep/GoalCategoryStep'
 import { AddExercisesStep } from '../../steps/AddExercisesStep/AddExercisesStep';
 import { ReviewWorkoutStep } from '../../steps/ReviewWorkoutStep/ReviewWorkoutStep';
 import type { WorkoutExerciseRowValue } from '../../components/WorkoutExerciseRow/WorkoutExerciseRow';
-import { BasicInfoIcon, GoalCategoryStepIcon, AddExercisesIcon, ReviewStepIcon } from '../../components/icons';
+import { BasicInfoIcon, AddExercisesIcon } from '../../components/icons';
 import {
   getWorkoutTemplateById,
   createWorkoutTemplate,
@@ -27,9 +27,9 @@ import type { WorkoutCategory, WorkoutGoal } from '../../types';
 import type { Difficulty } from '../../../exercises/types';
 import './WorkoutBuilderPage.css';
 
-const STEP_COUNT = 4;
-const STEP_TITLES = ['Basics', 'Goal & Category', 'Add Exercises', 'Review & Save'];
-const STEP_ICONS = [BasicInfoIcon, GoalCategoryStepIcon, AddExercisesIcon, ReviewStepIcon];
+const STEP_COUNT = 2;
+const STEP_TITLES = ['Details', 'Exercises'];
+const STEP_ICONS = [BasicInfoIcon, AddExercisesIcon];
 
 export function WorkoutBuilderPage() {
   const { id } = useParams<{ id?: string }>();
@@ -99,10 +99,6 @@ export function WorkoutBuilderPage() {
     return { exercise, defaultSets: 3, defaultReps: '10', restTime: 60 };
   }
 
-  /** Fills in Sets/Reps/Weight from the user's most recent logged session for this
-   * exercise, if any — added as a follow-up patch so the row appears instantly with
-   * generic defaults and then "upgrades" once history resolves, rather than making
-   * every add wait on a network round-trip. */
   function applyExerciseHistory(exerciseId: string) {
     getExerciseHistory(exerciseId)
       .then((history) => {
@@ -164,7 +160,7 @@ export function WorkoutBuilderPage() {
     switch (index) {
       case 0:
         return name.trim().length > 0;
-      case 2:
+      case 1:
         return rows.length > 0;
       default:
         return true;
@@ -256,44 +252,46 @@ export function WorkoutBuilderPage() {
   const showSidePanel = rows.length > 0;
 
   const steps = [
-    <BasicsStep
-      key="basics"
-      name={name}
-      onNameChange={setName}
-      description={description}
-      onDescriptionChange={setDescription}
-      duration={duration}
-      onDurationChange={setDuration}
-    />,
-    <GoalCategoryStep
-      key="goal-category"
-      category={category}
-      onCategoryChange={setCategory}
-      difficulty={difficulty}
-      onDifficultyChange={setDifficulty}
-      goal={goal}
-      onToggleGoal={toggleGoal}
-    />,
-    <AddExercisesStep
-      key="add-exercises"
-      addedExerciseIds={addedExerciseIds}
-      onAdd={addExercise}
-      onToggle={toggleExercise}
-      rows={rows}
-      onChangeRow={updateRow}
-      onMoveRow={moveRow}
-      onRemoveRow={removeRow}
-    />,
-    <ReviewWorkoutStep
-      key="review"
-      name={name}
-      description={description}
-      category={category}
-      difficulty={difficulty}
-      duration={duration}
-      goal={goal}
-      rows={rows}
-    />,
+    <div className="workout-builder-step-group" key="details">
+      <BasicsStep
+        name={name}
+        onNameChange={setName}
+        description={description}
+        onDescriptionChange={setDescription}
+        duration={duration}
+        onDurationChange={setDuration}
+      />
+      <div className="workout-builder-step-divider" />
+      <GoalCategoryStep
+        category={category}
+        onCategoryChange={setCategory}
+        difficulty={difficulty}
+        onDifficultyChange={setDifficulty}
+        goal={goal}
+        onToggleGoal={toggleGoal}
+      />
+    </div>,
+    <div className="workout-builder-step-group" key="exercises">
+      <AddExercisesStep
+        addedExerciseIds={addedExerciseIds}
+        onAdd={addExercise}
+        onToggle={toggleExercise}
+        rows={rows}
+        onChangeRow={updateRow}
+        onMoveRow={moveRow}
+        onRemoveRow={removeRow}
+      />
+      <div className="workout-builder-step-divider" />
+      <ReviewWorkoutStep
+        name={name}
+        description={description}
+        category={category}
+        difficulty={difficulty}
+        duration={duration}
+        goal={goal}
+        rows={rows}
+      />
+    </div>,
   ];
 
   return (
@@ -304,15 +302,14 @@ export function WorkoutBuilderPage() {
 
           <div className="workout-builder-layout" ref={layoutRef}>
             <div className="workout-builder-main">
-              <GlassCard className="workout-builder-panel">
+              <GlassCard className="workout-builder-panel" variant="flat">
                 <div className="workout-builder-panel-header">
                   <span className="workout-builder-panel-icon" aria-hidden="true">
                     <StepIcon />
                   </span>
                   <h2>{STEP_TITLES[stepIndex]}</h2>
+                  <OnboardingProgress currentStep={stepIndex + 1} totalSteps={STEP_COUNT} />
                 </div>
-
-                <OnboardingProgress currentStep={stepIndex + 1} totalSteps={STEP_COUNT} />
 
                 {steps[stepIndex]}
 

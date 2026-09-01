@@ -22,6 +22,14 @@
   background-color: var(--color-orange-500);
 }
 
-.onboarding-progress-label {
+/* Scoped through .onboarding-progress (not just the label's own class) so
+   this reliably outranks the shared .text-caption utility class also
+   applied at the call site — same specificity otherwise, which would leave
+   the win to stylesheet import order. */
+.onboarding-progress .onboarding-progress-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--color-neutral-500);
 }
