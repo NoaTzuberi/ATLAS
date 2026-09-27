@@ -25,3 +25,7 @@ client/src/assets/onBoardingvid/
 render.yaml
 workdes.txt
 skills-lock.json
+AGENTS.md
+CLAUDE.md
+.agents/
+.claude/
