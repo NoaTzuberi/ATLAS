@@ -98,8 +98,7 @@ ATLAS/
 │                              #   dashboard, personalRecords, progress, activities,
 │                              #   aiCoach, knowledge (RAG), health
 │
-├── docs/                    # product/technical documentation + screenshots
-└── render.yaml              # Render.com deployment config
+└── docs/                    # product/technical documentation + screenshots
 ```
 
 ## Getting Started
