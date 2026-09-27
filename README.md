@@ -23,25 +23,33 @@ A fitness platform to plan your training, track your progress, and learn proper 
 
 It combines a scroll-driven anatomical hero experience on landing, an AI training coach with real conversational memory, a full exercise library sourced from real datasets, a custom workout builder with live muscle-coverage feedback, and a gamified dashboard that tracks streaks, milestones, and personal records. The result is a single cohesive product spanning onboarding, planning, execution, and progress tracking — not a collection of disconnected screens.
 
+## Demo
+
+<!--
+  Screen recording of the full website goes here.
+  To add it: edit this README on GitHub, drag the .mp4 (max 100MB) into the editor right below this comment,
+  and GitHub will insert a https://github.com/user-attachments/assets/... link that renders as an inline video player.
+-->
+
 ## Screenshots
 
 | Landing Page | Dashboard |
 |---|---|
-| ![Landing page hero](./docs/screenshots/landing.png) <!-- TODO: add screenshot --> | ![Dashboard](./docs/screenshots/dashboard.png) |
+| ![Landing page hero](./docs/screenshots/landing.png) | ![Dashboard](./docs/screenshots/dashboard.png) |
 
 | Workouts | Create Workout |
 |---|---|
-| ![Workouts page](./docs/screenshots/workouts.png) <!-- TODO: add screenshot --> | ![Create Workout flow](./docs/screenshots/create-workout.png) <!-- TODO: add screenshot --> |
+| ![Workouts page](./docs/screenshots/workouts.png) | ![Create Workout flow](./docs/screenshots/create-workout.png) |
 
 | Exercise Library | Profile |
 |---|---|
-| ![Exercise library](./docs/screenshots/exercises.png) <!-- TODO: add screenshot --> | ![Profile page](./docs/screenshots/profile.png) |
+| ![Exercise library](./docs/screenshots/exercises.png) | ![Profile page](./docs/screenshots/profile.png) |
 
 | AI Coach |
 |---|
-| ![AI Coach chat](./docs/screenshots/coach.png) <!-- TODO: add screenshot --> |
+| ![AI Coach chat](./docs/screenshots/coach.png) |
 
-*Dashboard and Profile screenshots above are from a live local run of the app. The remaining screens still need screenshots added at the paths marked `TODO` — capture them from a running instance and drop the images into `docs/screenshots/`.*
+*All screenshots above are captured from a live local run of the app.*
 
 ## Features
 
