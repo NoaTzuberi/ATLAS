@@ -23,14 +23,6 @@ A fitness platform to plan your training, track your progress, and learn proper 
 
 It combines a scroll-driven anatomical hero experience on landing, an AI training coach with real conversational memory, a full exercise library sourced from real datasets, a custom workout builder with live muscle-coverage feedback, and a gamified dashboard that tracks streaks, milestones, and personal records. The result is a single cohesive product spanning onboarding, planning, execution, and progress tracking — not a collection of disconnected screens.
 
-## Demo
-
-<!--
-  Screen recording of the full website goes here.
-  To add it: edit this README on GitHub, drag the .mp4 (max 100MB) into the editor right below this comment,
-  and GitHub will insert a https://github.com/user-attachments/assets/... link that renders as an inline video player.
--->
-
 ## Screenshots
 
 | Landing Page | Dashboard |
